@@ -17,13 +17,13 @@ export function ProductCard({ product, onAuthorize }: ProductCardProps) {
       exit={{ opacity: 0, y: -20, scale: 0.95 }}
       className="
         p-4 rounded-xl
-        bg-charcoal-800/60 border border-charcoal-600/20
+        bg-surface/60 border border-line/20
         backdrop-blur-md
       "
     >
       <div className="flex gap-4">
         {/* Product image */}
-        <div className="w-20 h-20 rounded-lg overflow-hidden shrink-0 bg-charcoal-700">
+        <div className="w-20 h-20 rounded-lg overflow-hidden shrink-0 bg-surface-bright">
           {product.imageUrl ? (
             <img
               src={product.imageUrl}
@@ -34,7 +34,7 @@ export function ProductCard({ product, onAuthorize }: ProductCardProps) {
               }}
             />
           ) : (
-            <div className="w-full h-full bg-copper-gradient opacity-30 flex items-center justify-center text-2xl">
+            <div className="w-full h-full bg-accent-gradient opacity-30 flex items-center justify-center text-2xl">
               📦
             </div>
           )}
@@ -51,10 +51,10 @@ export function ProductCard({ product, onAuthorize }: ProductCardProps) {
             </p>
           )}
           <div className="flex items-center gap-2 mt-2">
-            <span className="text-lg font-serif text-copper">
+            <span className="text-lg font-serif text-gold">
               {formatCurrency(product.price)}
             </span>
-            <span className="text-[10px] px-2 py-0.5 rounded-full bg-charcoal-600/50 text-white/40">
+            <span className="text-[10px] px-2 py-0.5 rounded-full bg-surface-bright/50 text-white/40">
               {ASSET_LABELS[product.assetClass] || product.assetClass}
             </span>
           </div>
@@ -73,8 +73,8 @@ export function ProductCard({ product, onAuthorize }: ProductCardProps) {
         whileTap={{ scale: 0.98 }}
         className="
           w-full mt-4 py-3 rounded-lg
-          bg-copper-gradient text-vanta font-semibold text-sm
-          hover:shadow-copper-lg transition-shadow
+          bg-accent-gradient text-white font-semibold text-sm
+          hover:shadow-accent-lg transition-shadow
         "
       >
         Authorize Purchase

@@ -89,7 +89,7 @@ export function CategoryBreakdown() {
 
   return (
     <div className="w-full">
-      <h2 className="text-xs uppercase tracking-[0.3em] text-copper/60 font-sans mb-4">
+      <h2 className="section-label mb-4">
         Portfolio Breakdown
       </h2>
 
@@ -172,9 +172,9 @@ export function CategoryBreakdown() {
 
       {/* Top spending stat */}
       {topCategory && (
-        <div className="mt-4 pt-3 border-t border-charcoal-600/10 text-[10px] text-white/25">
+        <div className="mt-4 pt-3 border-t border-line/10 text-[10px] text-white/25">
           Biggest category:{" "}
-          <span className="text-copper/60">
+          <span className="text-accent/60">
             {ASSET_LABELS[topCategory.assetClass] || topCategory.assetClass}
           </span>{" "}
           — {formatCurrency(topCategory.amount, true)} ({topCategory.count}{" "}

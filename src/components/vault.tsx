@@ -30,12 +30,12 @@ export function Vault() {
   return (
     <div className="w-full">
       <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
-        <h2 className="text-xs uppercase tracking-[0.3em] text-copper/60 font-sans">
+        <h2 className="section-label">
           {t("vault.title", locale)}
         </h2>
         <div className="flex items-center gap-4 text-[10px] uppercase tracking-[0.15em]">
           <span className="text-white/30">
-            {t("vault.deployed", locale)}: <span className="text-copper">{formatCurrency(totalSpent, true)}</span>
+            {t("vault.deployed", locale)}: <span className="text-gold">{formatCurrency(totalSpent, true)}</span>
           </span>
           {monthlyBurn > 0 && (
             <span className="text-white/30">
@@ -56,13 +56,13 @@ export function Vault() {
               exit={{ opacity: 0, x: 20 }}
               className="
                 group flex items-center gap-3 p-3 rounded-lg
-                bg-charcoal-800/30 border border-charcoal-600/10
-                hover:bg-charcoal-800/50 hover:border-charcoal-600/20
+                bg-surface/30 border border-line/10
+                hover:bg-surface/50 hover:border-line/20
                 transition-colors
               "
             >
               {/* Thumbnail */}
-              <div className="w-10 h-10 rounded-md overflow-hidden shrink-0 bg-charcoal-700">
+              <div className="w-10 h-10 rounded-md overflow-hidden shrink-0 bg-surface-bright">
                 {purchase.product.imageUrl ? (
                   <img
                     src={purchase.product.imageUrl}
@@ -73,7 +73,7 @@ export function Vault() {
                     }}
                   />
                 ) : (
-                  <div className="w-full h-full bg-copper-gradient opacity-20 flex items-center justify-center text-sm">
+                  <div className="w-full h-full bg-accent-gradient opacity-20 flex items-center justify-center text-sm">
                     📦
                   </div>
                 )}
@@ -85,10 +85,10 @@ export function Vault() {
                   {purchase.product.title}
                 </div>
                 <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-                  <span className="text-xs font-serif text-copper">
+                  <span className="text-xs font-serif text-gold">
                     {formatCurrency(purchase.product.price)}
                   </span>
-                  <span className="text-[9px] px-1.5 py-0.5 rounded bg-charcoal-600/30 text-white/25">
+                  <span className="text-[9px] px-1.5 py-0.5 rounded bg-surface-bright/30 text-white/25">
                     {ASSET_LABELS[purchase.product.assetClass] || purchase.product.assetClass}
                   </span>
                   {purchase.product.monthlyOverhead > 0 && (

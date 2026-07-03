@@ -125,7 +125,7 @@ export function BankruptOverlay() {
             className="w-full aspect-[1.586/1] max-w-xs mx-auto rounded-2xl overflow-hidden border-2 border-red-500/20 relative"
             style={{
               background:
-                "linear-gradient(145deg, #0a0a0c 0%, #050507 50%, #0a0a0c 100%)",
+                "linear-gradient(145deg, #18181B 0%, #09090B 50%, #18181B 100%)",
             }}
           >
             {/* Red overlay */}
@@ -194,7 +194,7 @@ export function BankruptOverlay() {
               className="text-[10px] text-white/20"
             >
               Most expensive acquisition:{" "}
-              <span className="text-copper/50">
+              <span className="text-accent/50">
                 {topPurchase.product.title} (
                 {formatCurrency(topPurchase.product.price, true)})
               </span>
@@ -213,7 +213,7 @@ export function BankruptOverlay() {
                 setDismissed(true);
                 setShow(false);
               }}
-              className="px-4 py-2 rounded-lg bg-charcoal-700/50 text-white/30 text-xs hover:text-white/50 transition-colors"
+              className="px-4 py-2 rounded-lg bg-surface-bright/50 text-white/30 text-xs hover:text-white/50 transition-colors"
             >
               Keep Going (Debt Mode)
             </button>
@@ -223,7 +223,7 @@ export function BankruptOverlay() {
                 setShow(false);
                 reset();
               }}
-              className="px-4 py-2 rounded-lg bg-copper/15 text-copper text-xs hover:bg-copper/25 transition-colors"
+              className="px-4 py-2 rounded-lg bg-accent/15 text-accent text-xs hover:bg-accent/25 transition-colors"
             >
               New Identity
             </button>

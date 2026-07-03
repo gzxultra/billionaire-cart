@@ -139,13 +139,13 @@ export function WealthContext() {
 
   return (
     <div className="w-full space-y-4">
-      <h2 className="text-xs uppercase tracking-[0.3em] text-copper/60 font-sans">
+      <h2 className="section-label">
         {t("wealth.title", locale)}
       </h2>
 
       {/* Progress bar with milestones */}
       <div className="relative">
-        <div className="w-full h-2 bg-charcoal-700/50 rounded-full overflow-hidden">
+        <div className="w-full h-2 bg-surface-bright/50 rounded-full overflow-hidden">
           <motion.div
             className="h-full rounded-full"
             style={{
@@ -153,8 +153,8 @@ export function WealthContext() {
                 spentPercent >= 100
                   ? "linear-gradient(90deg, #ef4444, #dc2626)"
                   : spentPercent >= 50
-                  ? "linear-gradient(90deg, #B87333, #D4956B, #eab308)"
-                  : "linear-gradient(90deg, #8B5A2B, #B87333, #D4956B)",
+                  ? "linear-gradient(90deg, #818CF8, #A5B4FC, #FCD34D)"
+                  : "linear-gradient(90deg, #6366F1, #818CF8, #A5B4FC)",
             }}
             initial={{ width: 0 }}
             animate={{ width: `${Math.min(spentPercent, 100)}%` }}
@@ -185,7 +185,7 @@ export function WealthContext() {
           {passedMilestones.map((m) => (
             <span
               key={m.label}
-              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-copper/10 border border-copper/15 text-[9px] text-copper/70"
+              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent/10 border border-accent/15 text-[9px] text-accent/70"
             >
               {m.emoji} {locale === "zh" ? m.labelZh : m.label}
             </span>
@@ -197,7 +197,7 @@ export function WealthContext() {
       {nextMilestone && (
         <div className="text-[10px] text-white/25">
           {t("wealth.nextMilestone", locale)}:{" "}
-          <span className="text-copper/50">
+          <span className="text-accent/50">
             {nextMilestone.emoji} {locale === "zh" ? nextMilestone.labelZh : nextMilestone.label} (
             {formatCurrency(nextMilestone.amount, true)})
           </span>
@@ -210,7 +210,7 @@ export function WealthContext() {
 
       {/* Absurdity comparisons */}
       {topComparisons.length > 0 && (
-        <div className="space-y-1.5 pt-2 border-t border-charcoal-600/10">
+        <div className="space-y-1.5 pt-2 border-t border-line/10">
           <div className="text-[10px] uppercase tracking-[0.2em] text-white/20 mb-1">
             {t("wealth.equivalentTo", locale)}
           </div>
@@ -224,7 +224,7 @@ export function WealthContext() {
               >
                 <span className="text-sm">{c.emoji}</span>
                 <span className="text-white/50">
-                  <span className="text-copper font-serif">
+                  <span className="text-accent font-serif">
                     {c.count.toLocaleString()}
                   </span>{" "}
                   {c.displayUnit}
@@ -237,9 +237,9 @@ export function WealthContext() {
 
       {/* Earn-back context */}
       {earnBackTime && (
-        <div className="text-[10px] text-white/25 pt-2 border-t border-charcoal-600/10">
+        <div className="text-[10px] text-white/25 pt-2 border-t border-line/10">
           ⏱ {selectedBillionaire.name} {t("wealth.earnBack", locale)}{" "}
-          <span className="text-copper/60">{earnBackTime}</span>
+          <span className="text-accent/60">{earnBackTime}</span>
         </div>
       )}
     </div>

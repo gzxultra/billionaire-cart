@@ -38,7 +38,7 @@ export function BalanceDisplay() {
 
   return (
     <div className="w-full">
-      <div className="text-xs uppercase tracking-[0.3em] text-copper/60 mb-2 font-sans">
+      <div className="section-label mb-2">
         {t("balance.title", locale)}
       </div>
       <AnimatedNumber value={displayBalance} className="text-3xl sm:text-5xl lg:text-6xl font-serif text-white/95 tracking-tight" />
@@ -46,7 +46,7 @@ export function BalanceDisplay() {
       <div className="grid grid-cols-3 gap-4 mt-6">
         <div>
           <div className="text-[10px] uppercase tracking-[0.2em] text-white/25 mb-1">{t("balance.spent", locale)}</div>
-          <div className="text-sm font-serif text-copper">
+          <div className="text-sm font-serif text-gold">
             {formatCurrency(totalSpent, true)}
           </div>
         </div>

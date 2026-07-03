@@ -181,7 +181,7 @@ export function GuiltMeter() {
 
   return (
     <div className="w-full space-y-4">
-      <h2 className="text-xs uppercase tracking-[0.3em] text-copper/60 font-sans">
+      <h2 className="section-label">
         Real-World Impact
       </h2>
 
@@ -197,7 +197,7 @@ export function GuiltMeter() {
             initial={{ opacity: 0, x: -15 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: i * 0.08 }}
-            className="flex items-start gap-3 p-2.5 rounded-lg bg-charcoal-800/30 border border-charcoal-600/8"
+            className="flex items-start gap-3 p-2.5 rounded-lg bg-surface/30 border border-line/8"
           >
             <span className="text-xl shrink-0">{item.emoji}</span>
             <div className="min-w-0">
@@ -212,7 +212,7 @@ export function GuiltMeter() {
 
       {/* GDP comparison */}
       {(countryBeaten || countryNext) && (
-        <div className="pt-3 border-t border-charcoal-600/10 space-y-1.5">
+        <div className="pt-3 border-t border-line/10 space-y-1.5">
           {countryBeaten && (
             <motion.div
               initial={{ opacity: 0 }}
@@ -220,7 +220,7 @@ export function GuiltMeter() {
               className="text-[11px] text-white/40"
             >
               {countryBeaten.flag} You&apos;ve spent more than the entire GDP of{" "}
-              <span className="text-copper/70 font-medium">
+              <span className="text-accent/70 font-medium">
                 {countryBeaten.name}
               </span>
             </motion.div>
@@ -236,7 +236,7 @@ export function GuiltMeter() {
       )}
 
       {/* Guilt-o-meter */}
-      <div className="pt-3 border-t border-charcoal-600/10">
+      <div className="pt-3 border-t border-line/10">
         <div className="flex items-center justify-between mb-1.5">
           <span className="text-[10px] text-white/20 uppercase tracking-wider">
             Guilt Level

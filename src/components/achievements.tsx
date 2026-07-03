@@ -11,7 +11,7 @@ export function Achievements() {
   return (
     <div className="w-full">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xs uppercase tracking-[0.3em] text-copper/60 font-sans">
+        <h2 className="section-label">
           Achievements
         </h2>
         <span className="text-[10px] text-white/20">
@@ -27,13 +27,13 @@ export function Achievements() {
             animate={{ scale: 1, opacity: 1 }}
             className="
               flex flex-col items-center gap-1 p-3 rounded-lg
-              bg-copper/10 border border-copper/20
-              shadow-copper-sm
+              bg-accent/10 border border-accent/20
+              shadow-accent-sm
             "
             title={`${a.name}: ${a.description}`}
           >
             <span className="text-2xl">{a.icon}</span>
-            <span className="text-[9px] text-copper text-center leading-tight">
+            <span className="text-[9px] text-accent text-center leading-tight">
               {a.name}
             </span>
             <span
@@ -44,7 +44,7 @@ export function Achievements() {
                     ? "text-amber-400"
                     : a.rarity === "rare"
                     ? "text-slate-300"
-                    : "text-copper/60"
+                    : "text-accent/60"
                 }
               `}
             >
@@ -58,7 +58,7 @@ export function Achievements() {
             key={a.id}
             className="
               flex flex-col items-center gap-1 p-3 rounded-lg
-              bg-charcoal-800/30 border border-charcoal-600/10
+              bg-surface/30 border border-line/10
               opacity-40
             "
             title={a.description}

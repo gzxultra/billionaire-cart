@@ -51,16 +51,16 @@ export function Atmosphere() {
     window.addEventListener("resize", handleResize);
 
     function spawnParticle(pct: number) {
-      // Color shifts with spending
+      // Color shifts with spending — indigo → violet → amber → red
       let hue: number;
       if (pct < 20) {
-        hue = 30 + Math.random() * 15; // Copper/gold
+        hue = 230 + Math.random() * 20; // Indigo/blue
       } else if (pct < 50) {
-        hue = 25 + Math.random() * 20; // Warm amber
+        hue = 250 + Math.random() * 20; // Violet
       } else if (pct < 80) {
-        hue = 15 + Math.random() * 20; // Orange
+        hue = 35 + Math.random() * 15; // Amber/warm
       } else {
-        hue = Math.random() * 15; // Red
+        hue = Math.random() * 15; // Red/danger
       }
 
       const speed = 0.2 + (pct / 100) * 0.8;

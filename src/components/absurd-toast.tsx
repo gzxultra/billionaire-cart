@@ -171,7 +171,7 @@ export function AbsurdToast({
           transition={{ type: "spring", stiffness: 400, damping: 25 }}
           className="fixed bottom-20 left-1/2 -translate-x-1/2 z-[60] max-w-sm w-[90%]"
         >
-          <div className="px-5 py-3 rounded-2xl bg-charcoal-800/95 border border-copper/30 backdrop-blur-xl shadow-copper-lg">
+          <div className="px-5 py-3 rounded-2xl bg-surface/95 border border-accent/30 backdrop-blur-xl shadow-accent-lg">
             <div className="flex items-center gap-3">
               <span className="text-2xl shrink-0">{toast.emoji}</span>
               <p className="text-xs text-white/70 leading-relaxed">

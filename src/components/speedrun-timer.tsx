@@ -156,11 +156,11 @@ export function SpeedrunTimer() {
   return (
     <div className="w-full space-y-3">
       <div className="flex items-center justify-between">
-        <h2 className="text-xs uppercase tracking-[0.3em] text-copper/60 font-sans">
+        <h2 className="section-label">
           ⚡ Speedrun Mode
         </h2>
         {bestTime !== null && !active && (
-          <span className="text-[10px] text-copper/40">
+          <span className="text-[10px] text-accent/40">
             Best: {formatTimer(bestTime)}
           </span>
         )}
@@ -173,7 +173,7 @@ export function SpeedrunTimer() {
           </p>
           <button
             onClick={startTimer}
-            className="px-6 py-2.5 rounded-xl bg-copper/15 text-copper text-sm font-medium hover:bg-copper/25 transition-all border border-copper/20 hover:border-copper/40"
+            className="px-6 py-2.5 rounded-xl bg-accent/15 text-accent text-sm font-medium hover:bg-accent/25 transition-all border border-accent/20 hover:border-accent/40"
           >
             🏁 Start Speedrun
           </button>
@@ -184,7 +184,7 @@ export function SpeedrunTimer() {
         <div className="space-y-2">
           {/* Timer display */}
           <div className="text-center">
-            <div className="text-3xl font-serif text-copper tabular-nums tracking-wide">
+            <div className="text-3xl font-serif text-accent tabular-nums tracking-wide">
               {formatTimer(elapsed)}
             </div>
             <div className="text-[10px] text-white/20 mt-1">
@@ -194,7 +194,7 @@ export function SpeedrunTimer() {
           </div>
 
           {/* Progress bar */}
-          <div className="relative w-full h-3 bg-charcoal-700/50 rounded-full overflow-hidden">
+          <div className="relative w-full h-3 bg-surface-bright/50 rounded-full overflow-hidden">
             <motion.div
               className="h-full rounded-full"
               style={{
@@ -203,7 +203,7 @@ export function SpeedrunTimer() {
                     ? "linear-gradient(90deg, #ef4444, #dc2626)"
                     : spentPct >= 50
                     ? "linear-gradient(90deg, #f59e0b, #ef4444)"
-                    : "linear-gradient(90deg, #B87333, #D4956B)",
+                    : "linear-gradient(90deg, #818CF8, #A5B4FC)",
               }}
               animate={{ width: `${Math.min(spentPct, 100)}%` }}
               transition={{ duration: 0.2 }}
@@ -248,10 +248,10 @@ export function SpeedrunTimer() {
             <div className="text-4xl mb-2">
               {isNewRecord ? "🏆" : "🏁"}
             </div>
-            <div className="text-[10px] uppercase tracking-[0.4em] text-copper/60">
+            <div className="text-[10px] uppercase tracking-[0.4em] text-accent/60">
               {isNewRecord ? "New Record!" : "Speedrun Complete"}
             </div>
-            <div className="text-3xl font-serif text-copper tabular-nums">
+            <div className="text-3xl font-serif text-accent tabular-nums">
               {formatTimer(finalTime)}
             </div>
             <div className="text-xs text-white/30">
@@ -262,7 +262,7 @@ export function SpeedrunTimer() {
             <div className="flex gap-2 justify-center pt-2">
               <button
                 onClick={startTimer}
-                className="px-4 py-2 rounded-lg bg-copper/15 text-copper text-xs hover:bg-copper/25 transition-colors"
+                className="px-4 py-2 rounded-lg bg-accent/15 text-accent text-xs hover:bg-accent/25 transition-colors"
               >
                 🔄 Try Again
               </button>
@@ -277,7 +277,7 @@ export function SpeedrunTimer() {
                     await navigator.clipboard.writeText(text);
                   } catch {}
                 }}
-                className="px-4 py-2 rounded-lg bg-charcoal-700 text-white/40 text-xs hover:text-white/60 transition-colors"
+                className="px-4 py-2 rounded-lg bg-surface-bright text-white/40 text-xs hover:text-white/60 transition-colors"
               >
                 📋 Copy Result
               </button>

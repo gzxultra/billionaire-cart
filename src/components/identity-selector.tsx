@@ -20,35 +20,35 @@ export function IdentitySelector() {
 
   return (
     <div className="w-full">
-      <h2 className="text-xs uppercase tracking-[0.3em] text-copper/60 mb-4 font-sans">
+      <h2 className="section-label mb-5">
         {t("identity.title", locale)}
       </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {billionaires.map((b) => {
           const isSelected = selectedBillionaire?.id === b.id;
           return (
             <motion.button
               key={b.id}
               onClick={() => handleSelect(b.id)}
-              whileHover={{ scale: 1.02 }}
+              whileHover={{ scale: 1.015 }}
               whileTap={{ scale: 0.98 }}
               className={`
-                flex items-center gap-3 p-3 rounded-lg text-left transition-all duration-300
+                flex items-center gap-3.5 p-3.5 rounded-xl text-left transition-all duration-200
                 ${
                   isSelected
-                    ? "bg-copper/10 border border-copper/40 shadow-copper-sm"
-                    : "bg-charcoal-800/50 border border-charcoal-600/20 hover:border-copper/20 hover:bg-charcoal-700/50"
+                    ? "bg-accent/10 border border-accent/30 shadow-accent-sm ring-1 ring-accent/10"
+                    : "bg-surface-dim/50 border border-line/10 hover:border-accent/15 hover:bg-surface/40"
                 }
               `}
             >
               {/* Initials avatar */}
               <div
                 className={`
-                  w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold shrink-0
+                  w-11 h-11 rounded-xl flex items-center justify-center text-sm font-bold shrink-0
                   ${
                     isSelected
-                      ? "bg-copper-gradient text-vanta"
-                      : "bg-charcoal-600 text-copper/70"
+                      ? "bg-accent-gradient text-white shadow-accent-sm"
+                      : "bg-surface-bright text-white/50"
                   }
                 `}
               >
@@ -57,16 +57,16 @@ export function IdentitySelector() {
 
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1.5">
-                  <span className="text-sm font-medium text-white/90 truncate">
+                  <span className="text-[13px] font-semibold text-white/90 truncate">
                     {b.name}
                   </span>
                   <span className="text-xs">{b.emoji}</span>
                 </div>
-                <div className="flex items-center justify-between gap-2">
-                  <span className="text-xs text-white/30 truncate">
+                <div className="flex items-center justify-between gap-2 mt-0.5">
+                  <span className="text-[11px] text-white/35 truncate">
                     {b.company}
                   </span>
-                  <span className="text-xs font-serif text-copper shrink-0">
+                  <span className="text-[12px] font-serif text-gold/80 shrink-0 font-medium">
                     {formatNetWorth(b.netWorthB)}
                   </span>
                 </div>

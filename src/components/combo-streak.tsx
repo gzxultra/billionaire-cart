@@ -208,7 +208,7 @@ export function ComboStreak() {
       {/* Session stats — inline in page, shows max combo */}
       {maxCombo >= 2 && (
         <div className="w-full">
-          <h2 className="text-xs uppercase tracking-[0.3em] text-copper/60 font-sans mb-3">
+          <h2 className="section-label mb-3">
             Combo Stats
           </h2>
           <div className="flex items-center gap-4">
@@ -216,7 +216,7 @@ export function ComboStreak() {
               <div className="text-[10px] uppercase tracking-[0.2em] text-white/25 mb-0.5">
                 Best Combo
               </div>
-              <div className="text-xl font-serif text-copper tabular-nums">
+              <div className="text-xl font-serif text-accent tabular-nums">
                 {maxCombo}x
               </div>
             </div>
@@ -226,7 +226,7 @@ export function ComboStreak() {
               </div>
               <div
                 className={`text-xl font-serif tabular-nums ${
-                  combo >= 2 ? tier?.color || "text-copper" : "text-white/20"
+                  combo >= 2 ? tier?.color || "text-accent" : "text-white/20"
                 }`}
               >
                 {combo >= 2 ? `${combo}x` : "—"}

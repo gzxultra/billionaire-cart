@@ -58,15 +58,15 @@ export function EasterEggOverlay({ egg, onDismiss }: EasterEggOverlayProps) {
             transition={{ type: "spring", stiffness: 300, damping: 15 }}
             className="pointer-events-auto"
           >
-            <div className="relative px-8 py-6 rounded-2xl bg-charcoal-800/95 border-2 border-copper/50 backdrop-blur-xl shadow-copper-lg text-center">
+            <div className="relative px-8 py-6 rounded-2xl bg-surface/95 border-2 border-accent/50 backdrop-blur-xl shadow-accent-lg text-center">
               {/* Glow ring */}
-              <div className="absolute inset-0 rounded-2xl border border-copper/30 animate-pulse" />
+              <div className="absolute inset-0 rounded-2xl border border-accent/30 animate-pulse" />
 
               <div className="text-5xl mb-3">{egg.emoji}</div>
-              <div className="text-[10px] uppercase tracking-[0.4em] text-copper/60 mb-1">
+              <div className="text-[10px] uppercase tracking-[0.4em] text-accent/60 mb-1">
                 Easter Egg Discovered
               </div>
-              <div className="text-lg font-serif text-copper">{egg.name}</div>
+              <div className="text-lg font-serif text-accent">{egg.name}</div>
               <div className="text-xs text-white/40 mt-1.5 max-w-[200px]">
                 {egg.description}
               </div>

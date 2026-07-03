@@ -138,7 +138,7 @@ export function Catalog({ onPurchase }: CatalogProps) {
 
   return (
     <div className="w-full">
-      <h2 className="text-xs uppercase tracking-[0.3em] text-copper/60 font-sans mb-4">
+      <h2 className="section-label mb-4">
         {t("catalog.title", locale)}
       </h2>
 
@@ -153,7 +153,7 @@ export function Catalog({ onPurchase }: CatalogProps) {
               if (e.target.value.trim()) setActiveTier("all");
             }}
             placeholder={t("catalog.search", locale)}
-            className="w-full px-3 py-2 pl-8 rounded-lg bg-charcoal-800/60 border border-charcoal-600/20 text-white/80 placeholder:text-white/15 text-xs focus:outline-none focus:border-copper/40 transition-colors"
+            className="w-full px-3 py-2 pl-8 rounded-lg bg-surface/60 border border-line/20 text-white/80 placeholder:text-white/15 text-xs focus:outline-none focus:border-accent/40 transition-colors"
           />
           <svg
             className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/20"
@@ -179,7 +179,7 @@ export function Catalog({ onPurchase }: CatalogProps) {
         <select
           value={sortMode}
           onChange={(e) => setSortMode(e.target.value as SortMode)}
-          className="px-2 py-2 rounded-lg bg-charcoal-800/60 border border-charcoal-600/20 text-white/50 text-xs focus:outline-none focus:border-copper/40 cursor-pointer"
+          className="px-2 py-2 rounded-lg bg-surface/60 border border-line/20 text-white/50 text-xs focus:outline-none focus:border-accent/40 cursor-pointer"
         >
           <option value="default">{t("catalog.sort.default", locale)}</option>
           <option value="priceAsc">{t("catalog.sort.priceAsc", locale)}</option>
@@ -201,8 +201,8 @@ export function Catalog({ onPurchase }: CatalogProps) {
               px-3 py-1.5 rounded-lg text-xs whitespace-nowrap transition-all
               ${
                 activeTier === tier
-                  ? "bg-copper/15 text-copper border border-copper/30"
-                  : "bg-charcoal-800/40 text-white/30 border border-charcoal-600/10 hover:text-white/50"
+                  ? "bg-accent/15 text-accent border border-accent/30"
+                  : "bg-surface/40 text-white/30 border border-line/10 hover:text-white/50"
               }
             `}
           >
@@ -232,10 +232,10 @@ export function Catalog({ onPurchase }: CatalogProps) {
                   relative p-3 rounded-xl border transition-all duration-200
                   ${
                     isBuying
-                      ? "bg-copper/10 border-copper/40 scale-95"
+                      ? "bg-accent/10 border-accent/40 scale-95"
                       : canAfford
-                      ? "bg-charcoal-800/50 border-charcoal-600/15 hover:border-copper/20 hover:bg-charcoal-800/70"
-                      : "bg-charcoal-800/20 border-charcoal-600/5 opacity-40"
+                      ? "bg-surface/50 border-line/15 hover:border-accent/20 hover:bg-surface/70"
+                      : "bg-surface/20 border-line/5 opacity-40"
                   }
                 `}
               >
@@ -249,7 +249,7 @@ export function Catalog({ onPurchase }: CatalogProps) {
                 </div>
 
                 {/* Price */}
-                <div className="text-sm font-serif text-copper mt-2">
+                <div className="text-sm font-serif text-accent mt-2">
                   {formatCurrency(item.price)}
                 </div>
 
@@ -269,7 +269,7 @@ export function Catalog({ onPurchase }: CatalogProps) {
                             ${
                               currentQtySelection === "MAX"
                                 ? "bg-red-500/20 text-red-400 border border-red-500/30"
-                                : "bg-charcoal-700/50 text-white/20 hover:text-red-400/60"
+                                : "bg-surface-bright/50 text-white/20 hover:text-red-400/60"
                             }
                           `}
                         >
@@ -288,8 +288,8 @@ export function Catalog({ onPurchase }: CatalogProps) {
                           px-1.5 py-0.5 rounded text-[9px] transition-colors
                           ${
                             currentQtySelection === q
-                              ? "bg-copper/20 text-copper"
-                              : "bg-charcoal-700/50 text-white/20 hover:text-white/40"
+                              ? "bg-accent/20 text-accent"
+                              : "bg-surface-bright/50 text-white/20 hover:text-white/40"
                           }
                         `}
                       >
@@ -309,8 +309,8 @@ export function Catalog({ onPurchase }: CatalogProps) {
                       canAfford
                         ? currentQtySelection === "MAX"
                           ? "bg-red-500/10 text-red-400 hover:bg-red-500/20 border border-red-500/20"
-                          : "bg-copper/10 text-copper hover:bg-copper/20"
-                        : "bg-charcoal-700/30 text-white/10 cursor-not-allowed"
+                          : "bg-accent/10 text-accent hover:bg-accent/20"
+                        : "bg-surface-bright/30 text-white/10 cursor-not-allowed"
                     }
                   `}
                 >
@@ -346,7 +346,7 @@ export function Catalog({ onPurchase }: CatalogProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="fixed bottom-8 left-1/2 -translate-x-1/2 px-6 py-3 rounded-xl bg-copper/20 border border-copper/40 text-copper text-sm backdrop-blur-md z-50"
+            className="fixed bottom-8 left-1/2 -translate-x-1/2 px-6 py-3 rounded-xl bg-accent/20 border border-accent/40 text-accent text-sm backdrop-blur-md z-50"
           >
             {toast}
           </motion.div>

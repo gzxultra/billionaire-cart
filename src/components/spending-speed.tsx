@@ -93,14 +93,14 @@ export function SpendingSpeed() {
 
   return (
     <div className="w-full space-y-3">
-      <h2 className="text-xs uppercase tracking-[0.3em] text-copper/60 font-sans">
+      <h2 className="section-label">
         {t("speed.title", locale)}
       </h2>
 
       {/* Speed gauge */}
       <div className="flex items-end gap-4">
         <div>
-          <div className="text-2xl font-serif text-copper tabular-nums">
+          <div className="text-2xl font-serif text-accent tabular-nums">
             {formatCurrency(spendRate)}
             <span className="text-[10px] text-white/25 ml-1">{t("speed.perSec", locale)}</span>
           </div>
@@ -156,7 +156,7 @@ export function SpendingSpeed() {
 
       {/* Time to bankruptcy */}
       {timeToBankrupt && timeToBankrupt > 0 && remaining > 0 && (
-        <div className="text-[10px] text-red-400/40 pt-1 border-t border-charcoal-600/10">
+        <div className="text-[10px] text-red-400/40 pt-1 border-t border-line/10">
           ⚠ {t("speed.bankruptIn", locale)}{" "}
           <span className="text-red-400/60">{formatTime(timeToBankrupt)}</span>
         </div>

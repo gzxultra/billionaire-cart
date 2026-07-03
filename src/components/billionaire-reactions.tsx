@@ -164,7 +164,7 @@ export function BillionaireReactions() {
 
   return (
     <div className="w-full">
-      <h2 className="text-xs uppercase tracking-[0.3em] text-copper/60 font-sans mb-4">
+      <h2 className="section-label mb-4">
         {selectedBillionaire.name}&apos;s Reaction
       </h2>
 

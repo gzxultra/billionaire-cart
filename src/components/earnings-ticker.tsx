@@ -97,7 +97,7 @@ export function EarningsTicker() {
 
   return (
     <div className="w-full space-y-4">
-      <div className="text-xs uppercase tracking-[0.3em] text-copper/60 font-sans">
+      <div className="section-label">
         {t("earnings.title", locale)}
       </div>
 
@@ -105,7 +105,7 @@ export function EarningsTicker() {
         <div className="text-[10px] uppercase tracking-[0.2em] text-white/25 mb-1">
           {t("earnings.rate", locale)}
         </div>
-        <div className="text-lg font-serif text-copper tabular-nums">
+        <div className="text-lg font-serif text-gold tabular-nums">
           {formatCurrency(eps)}<span className="text-[10px] text-white/25 ml-1">{t("speed.perSec", locale)}</span>
         </div>
       </div>
@@ -114,7 +114,7 @@ export function EarningsTicker() {
         <div className="text-[10px] uppercase tracking-[0.2em] text-white/25 mb-1">
           {t("earnings.since", locale)}
         </div>
-        <div className="text-2xl font-serif text-copper tabular-nums">
+        <div className="text-2xl font-serif text-gold tabular-nums">
           {formatCurrency(earnedSinceStart, earnedSinceStart >= 1_000_000)}
         </div>
       </div>
@@ -123,7 +123,7 @@ export function EarningsTicker() {
         <div className={`rounded-xl px-4 py-3 transition-colors duration-300 ${
           earnedBack
             ? "bg-emerald-500/10 border border-emerald-500/20"
-            : "bg-copper/5 border border-copper/10"
+            : "bg-accent/5 border border-accent/10"
         }`}>
           {earnedBack ? (
             <div className="text-emerald-400 text-sm font-medium animate-pulse">
@@ -134,7 +134,7 @@ export function EarningsTicker() {
               <div className="text-[10px] uppercase tracking-[0.2em] text-white/25 mb-1">
                 ⏱ {t("earnings.earnBack", locale)}
               </div>
-              <div className="text-lg font-serif text-copper tabular-nums">
+              <div className="text-lg font-serif text-gold tabular-nums">
                 {formatEarnBackTime(earnBackRemaining, locale)}
               </div>
             </>
