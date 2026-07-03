@@ -62,6 +62,31 @@ export function playAuthorize() {
   }
 }
 
+export function playSparkle() {
+  try {
+    const ctx = getContext();
+    const now = ctx.currentTime;
+
+    // High-frequency sine sweep 2000→4000Hz
+    const osc = ctx.createOscillator();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(2000, now);
+    osc.frequency.exponentialRampToValueAtTime(4000, now + 0.2);
+
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(0.1, now + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.25);
+  } catch {
+    // Audio not supported
+  }
+}
+
 export function playAchievement() {
   try {
     const ctx = getContext();

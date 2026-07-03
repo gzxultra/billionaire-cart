@@ -24,6 +24,7 @@ export interface Billionaire {
   initials: string;
   emoji: string;
   sector: string;
+  earningsPerSecond: number; // USD per second
 }
 
 export interface ParsedProduct {

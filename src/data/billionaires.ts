@@ -9,6 +9,7 @@ export const billionaires: Billionaire[] = [
     initials: "EM",
     emoji: "🚀",
     sector: "Tech / Automotive",
+    earningsPerSecond: 1585,
   },
   {
     id: "bernard-arnault",
@@ -18,6 +19,7 @@ export const billionaires: Billionaire[] = [
     initials: "BA",
     emoji: "👜",
     sector: "Luxury Goods",
+    earningsPerSecond: 1268,
   },
   {
     id: "jeff-bezos",
@@ -27,6 +29,7 @@ export const billionaires: Billionaire[] = [
     initials: "JB",
     emoji: "📦",
     sector: "E-Commerce / Space",
+    earningsPerSecond: 1110,
   },
   {
     id: "mark-zuckerberg",
@@ -36,6 +39,7 @@ export const billionaires: Billionaire[] = [
     initials: "MZ",
     emoji: "👓",
     sector: "Social / AI",
+    earningsPerSecond: 951,
   },
   {
     id: "larry-page",
@@ -45,6 +49,7 @@ export const billionaires: Billionaire[] = [
     initials: "LP",
     emoji: "🔍",
     sector: "Search / AI",
+    earningsPerSecond: 793,
   },
   {
     id: "larry-ellison",
@@ -54,6 +59,7 @@ export const billionaires: Billionaire[] = [
     initials: "LE",
     emoji: "🏝️",
     sector: "Enterprise / Cloud",
+    earningsPerSecond: 888,
   },
   {
     id: "warren-buffett",
@@ -63,6 +69,7 @@ export const billionaires: Billionaire[] = [
     initials: "WB",
     emoji: "🥤",
     sector: "Finance / Investing",
+    earningsPerSecond: 476,
   },
   {
     id: "bill-gates",
@@ -72,6 +79,7 @@ export const billionaires: Billionaire[] = [
     initials: "BG",
     emoji: "💻",
     sector: "Tech / Philanthropy",
+    earningsPerSecond: 380,
   },
   {
     id: "steve-ballmer",
@@ -81,6 +89,7 @@ export const billionaires: Billionaire[] = [
     initials: "SB",
     emoji: "🏀",
     sector: "Tech / Sports",
+    earningsPerSecond: 317,
   },
   {
     id: "mukesh-ambani",
@@ -90,6 +99,7 @@ export const billionaires: Billionaire[] = [
     initials: "MA",
     emoji: "🏗️",
     sector: "Conglomerate",
+    earningsPerSecond: 254,
   },
   {
     id: "jensen-huang",
@@ -99,6 +109,7 @@ export const billionaires: Billionaire[] = [
     initials: "JH",
     emoji: "🎮",
     sector: "Semiconductors / AI",
+    earningsPerSecond: 1268,
   },
   {
     id: "zhong-shanshan",
@@ -108,5 +119,6 @@ export const billionaires: Billionaire[] = [
     initials: "ZS",
     emoji: "💧",
     sector: "Beverages",
+    earningsPerSecond: 95,
   },
 ];

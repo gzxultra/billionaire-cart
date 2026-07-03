@@ -4,8 +4,9 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { ParsedProduct, Billionaire } from "@/lib/types";
 import { formatCurrency } from "@/lib/format";
-import { playAuthorize } from "@/lib/sounds";
+import { playAuthorize, playSparkle } from "@/lib/sounds";
 import { useCartStore } from "@/lib/store";
+import { ParticleBurst } from "@/components/particle-burst";
 
 interface CheckoutAnimationProps {
   product: ParsedProduct;
@@ -25,7 +26,10 @@ export function CheckoutAnimation({
     // Phase 1: Show card (0.6s)
     const t1 = setTimeout(() => {
       setPhase("authorize");
-      if (soundEnabled) playAuthorize();
+      if (soundEnabled) {
+        playAuthorize();
+        playSparkle();
+      }
     }, 600);
 
     // Phase 2: Show authorized (1.5s after)
@@ -135,6 +139,9 @@ export function CheckoutAnimation({
           />
         )}
       </motion.div>
+
+      {/* Particle burst on authorize */}
+      {phase === "authorize" && <ParticleBurst />}
     </motion.div>
   );
 }

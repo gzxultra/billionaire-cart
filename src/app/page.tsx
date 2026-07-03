@@ -3,6 +3,7 @@
 import { useCartStore } from "@/lib/store";
 import { IdentitySelector } from "@/components/identity-selector";
 import { BalanceDisplay } from "@/components/balance-display";
+import { EarningsTicker } from "@/components/earnings-ticker";
 import { BlackCard } from "@/components/black-card";
 import { OmniBox } from "@/components/omni-box";
 import { Vault } from "@/components/vault";
@@ -66,6 +67,11 @@ export default function Home() {
             {/* Balance */}
             <section className="glass-panel p-6">
               <BalanceDisplay />
+            </section>
+
+            {/* Earnings Velocity */}
+            <section className="glass-panel p-6">
+              <EarningsTicker />
             </section>
 
             {/* Omni-Box */}
