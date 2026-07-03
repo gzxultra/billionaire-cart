@@ -8,9 +8,14 @@ import { formatCurrency, generateId } from "@/lib/format";
 import { playAuthorize, playSparkle } from "@/lib/sounds";
 import { ParticleBurst } from "./particle-burst";
 
-const QUANTITY_OPTIONS = [1, 10, 100, 1000];
+const QUANTITY_OPTIONS = [1, 10, 100, 1000, "MAX"] as const;
+type QuantityOption = (typeof QUANTITY_OPTIONS)[number];
 
-export function Catalog() {
+interface CatalogProps {
+  onPurchase?: (totalPrice: number) => void;
+}
+
+export function Catalog({ onPurchase }: CatalogProps) {
   const selectedBillionaire = useCartStore((s) => s.selectedBillionaire);
   const addPurchase = useCartStore((s) => s.addPurchase);
   const soundEnabled = useCartStore((s) => s.soundEnabled);
@@ -18,20 +23,26 @@ export function Catalog() {
 
   const [activeTier, setActiveTier] = useState<CatalogItem["tier"]>("everyday");
   const [buyingId, setBuyingId] = useState<string | null>(null);
-  const [quantities, setQuantities] = useState<Record<string, number>>({});
+  const [quantities, setQuantities] = useState<Record<string, number | "MAX">>({});
   const [toast, setToast] = useState<string | null>(null);
   const [showBurst, setShowBurst] = useState(false);
 
-  const getQty = (id: string) => quantities[id] || 1;
+  const getQty = (id: string, price: number) => {
+    const q = quantities[id] || 1;
+    if (q === "MAX") {
+      return Math.max(1, Math.floor(remaining / price));
+    }
+    return typeof q === "number" ? q : 1;
+  };
 
-  const setQty = useCallback((id: string, qty: number) => {
+  const setQty = useCallback((id: string, qty: number | "MAX") => {
     setQuantities((prev) => ({ ...prev, [id]: qty }));
   }, []);
 
   const handleBuy = useCallback(
     (item: CatalogItem) => {
       if (!selectedBillionaire) return;
-      const qty = getQty(item.id);
+      const qty = getQty(item.id, item.price);
 
       setBuyingId(item.id);
       if (soundEnabled) {
@@ -40,6 +51,8 @@ export function Catalog() {
       }
       setShowBurst(true);
       setTimeout(() => setShowBurst(false), 1500);
+
+      const totalPrice = item.price * qty;
 
       // Add purchases
       let newlyUnlockedAll: string[] = [];
@@ -61,6 +74,8 @@ export function Catalog() {
         newlyUnlockedAll = [...newlyUnlockedAll, ...unlocked];
       }
 
+      onPurchase?.(totalPrice);
+
       if (newlyUnlockedAll.length > 0) {
         const unique = Array.from(new Set(newlyUnlockedAll));
         setToast(`🏆 ${unique.join(", ")}`);
@@ -70,7 +85,7 @@ export function Catalog() {
       setTimeout(() => setBuyingId(null), 600);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [selectedBillionaire, soundEnabled, addPurchase, quantities]
+    [selectedBillionaire, soundEnabled, addPurchase, quantities, remaining, onPurchase]
   );
 
   if (!selectedBillionaire) return null;
@@ -108,10 +123,11 @@ export function Catalog() {
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
         <AnimatePresence mode="popLayout">
           {filteredItems.map((item) => {
-            const qty = getQty(item.id);
+            const qty = getQty(item.id, item.price);
             const totalPrice = item.price * qty;
-            const canAfford = totalPrice <= remaining;
+            const canAfford = item.price <= remaining;
             const isBuying = buyingId === item.id;
+            const currentQtySelection = quantities[item.id] || 1;
 
             return (
               <motion.div
@@ -146,8 +162,29 @@ export function Catalog() {
                 </div>
 
                 {/* Quantity selector */}
-                <div className="flex gap-1 mt-2">
+                <div className="flex gap-1 mt-2 flex-wrap">
                   {QUANTITY_OPTIONS.map((q) => {
+                    if (q === "MAX") {
+                      if (!canAfford) return null;
+                      const maxQty = Math.floor(remaining / item.price);
+                      if (maxQty <= 1) return null;
+                      return (
+                        <button
+                          key="MAX"
+                          onClick={() => setQty(item.id, "MAX")}
+                          className={`
+                            px-1.5 py-0.5 rounded text-[9px] transition-colors
+                            ${
+                              currentQtySelection === "MAX"
+                                ? "bg-red-500/20 text-red-400 border border-red-500/30"
+                                : "bg-charcoal-700/50 text-white/20 hover:text-red-400/60"
+                            }
+                          `}
+                        >
+                          MAX
+                        </button>
+                      );
+                    }
                     const qTotal = item.price * q;
                     const qAfford = qTotal <= remaining;
                     if (!qAfford && q > 1) return null;
@@ -158,7 +195,7 @@ export function Catalog() {
                         className={`
                           px-1.5 py-0.5 rounded text-[9px] transition-colors
                           ${
-                            qty === q
+                            currentQtySelection === q
                               ? "bg-copper/20 text-copper"
                               : "bg-charcoal-700/50 text-white/20 hover:text-white/40"
                           }
@@ -178,13 +215,17 @@ export function Catalog() {
                     w-full mt-2 py-1.5 rounded-lg text-[10px] font-medium uppercase tracking-wider transition-all
                     ${
                       canAfford
-                        ? "bg-copper/10 text-copper hover:bg-copper/20"
+                        ? currentQtySelection === "MAX"
+                          ? "bg-red-500/10 text-red-400 hover:bg-red-500/20 border border-red-500/20"
+                          : "bg-copper/10 text-copper hover:bg-copper/20"
                         : "bg-charcoal-700/30 text-white/10 cursor-not-allowed"
                     }
                   `}
                 >
                   {isBuying
                     ? "✓"
+                    : currentQtySelection === "MAX"
+                    ? `BUY MAX (${qty.toLocaleString()}) — ${formatCurrency(totalPrice, true)}`
                     : qty > 1
                     ? `Buy ${qty} — ${formatCurrency(totalPrice, totalPrice >= 1000000)}`
                     : "Buy"}

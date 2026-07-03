@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useCallback } from "react";
 import { useCartStore } from "@/lib/store";
 import { IdentitySelector } from "@/components/identity-selector";
 import { BalanceDisplay } from "@/components/balance-display";
@@ -13,6 +14,15 @@ import { Catalog } from "@/components/catalog";
 import { WealthContext } from "@/components/wealth-context";
 import { SpendingSpeed } from "@/components/spending-speed";
 import { BankruptOverlay } from "@/components/bankrupt-overlay";
+import { AbsurdToast } from "@/components/absurd-toast";
+import { Atmosphere } from "@/components/atmosphere";
+import { EasterEggOverlay } from "@/components/easter-egg-overlay";
+import { SpeedrunTimer } from "@/components/speedrun-timer";
+import {
+  checkEasterEggs,
+  resetEasterEggs,
+  type EasterEgg,
+} from "@/data/easter-eggs";
 
 export default function Home() {
   const selectedBillionaire = useCartStore((s) => s.selectedBillionaire);
@@ -20,10 +30,37 @@ export default function Home() {
   const toggleSound = useCartStore((s) => s.toggleSound);
   const reset = useCartStore((s) => s.reset);
 
+  // Absurd toast state
+  const [lastPurchasePrice, setLastPurchasePrice] = useState(0);
+  const [toastTriggerId, setToastTriggerId] = useState(0);
+
+  // Easter egg state
+  const [activeEgg, setActiveEgg] = useState<EasterEgg | null>(null);
+
+  const handlePurchase = useCallback((totalPrice: number) => {
+    setLastPurchasePrice(totalPrice);
+    setToastTriggerId((prev) => prev + 1);
+
+    // Check easter eggs
+    const currentPurchases = useCartStore.getState().purchases;
+    const egg = checkEasterEggs(currentPurchases);
+    if (egg) {
+      setTimeout(() => setActiveEgg(egg), 800);
+    }
+  }, []);
+
+  const handleReset = useCallback(() => {
+    reset();
+    resetEasterEggs();
+  }, [reset]);
+
   return (
-    <main className="min-h-screen bg-vanta">
+    <main className="min-h-screen bg-vanta relative">
+      {/* Dynamic atmosphere background */}
+      <Atmosphere />
+
       {/* Header */}
-      <header className="border-b border-charcoal-600/10">
+      <header className="border-b border-charcoal-600/10 relative z-10">
         <div className="max-w-3xl mx-auto px-4 py-6 flex items-center justify-between">
           <div>
             <h1 className="text-sm font-medium text-white/80 tracking-wide">
@@ -44,7 +81,7 @@ export default function Home() {
             </button>
             {selectedBillionaire && (
               <button
-                onClick={reset}
+                onClick={handleReset}
                 className="text-[10px] text-white/15 hover:text-red-400/50 transition-colors uppercase tracking-wider"
               >
                 Reset
@@ -54,7 +91,7 @@ export default function Home() {
         </div>
       </header>
 
-      <div className="max-w-3xl mx-auto px-4 py-8 space-y-8">
+      <div className="max-w-3xl mx-auto px-4 py-8 space-y-8 relative z-10">
         {/* Identity selector — always visible */}
         <section className="glass-panel p-6">
           <IdentitySelector />
@@ -90,7 +127,12 @@ export default function Home() {
 
             {/* Quick Buy Catalog */}
             <section className="glass-panel p-6">
-              <Catalog />
+              <Catalog onPurchase={handlePurchase} />
+            </section>
+
+            {/* Speedrun Mode */}
+            <section className="glass-panel p-6">
+              <SpeedrunTimer />
             </section>
 
             {/* Omni-Box */}
@@ -112,7 +154,7 @@ export default function Home() {
       </div>
 
       {/* Footer */}
-      <footer className="border-t border-charcoal-600/5 mt-16">
+      <footer className="border-t border-charcoal-600/5 mt-16 relative z-10">
         <div className="max-w-3xl mx-auto px-4 py-6 text-center">
           <p className="text-[9px] text-white/10 uppercase tracking-[0.2em]">
             Simulation only — no real purchases are made
@@ -120,8 +162,21 @@ export default function Home() {
         </div>
       </footer>
 
-      {/* Bankrupt overlay */}
+      {/* Overlays */}
       <BankruptOverlay />
+
+      {/* Absurd purchase toasts */}
+      {selectedBillionaire && (
+        <AbsurdToast
+          price={lastPurchasePrice}
+          billionaireName={selectedBillionaire.name}
+          earningsPerSecond={selectedBillionaire.earningsPerSecond}
+          triggerId={toastTriggerId}
+        />
+      )}
+
+      {/* Easter egg overlay */}
+      <EasterEggOverlay egg={activeEgg} onDismiss={() => setActiveEgg(null)} />
     </main>
   );
 }
