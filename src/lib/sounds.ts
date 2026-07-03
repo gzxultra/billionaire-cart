@@ -87,6 +87,54 @@ export function playSparkle() {
   }
 }
 
+export function playComboTick(comboCount: number) {
+  try {
+    const ctx = getContext();
+    const now = ctx.currentTime;
+
+    // Base frequency rises with combo
+    const baseFreq = 300 + Math.min(comboCount * 40, 800);
+
+    // Quick percussive blip
+    const osc = ctx.createOscillator();
+    osc.type = comboCount >= 10 ? "sawtooth" : "triangle";
+    osc.frequency.setValueAtTime(baseFreq, now);
+    osc.frequency.exponentialRampToValueAtTime(baseFreq * 1.5, now + 0.05);
+    osc.frequency.exponentialRampToValueAtTime(baseFreq * 0.8, now + 0.12);
+
+    const gain = ctx.createGain();
+    const volume = Math.min(0.15 + comboCount * 0.01, 0.35);
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(volume, now + 0.005);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.2);
+
+    // Add harmonic for high combos
+    if (comboCount >= 5) {
+      const osc2 = ctx.createOscillator();
+      osc2.type = "sine";
+      osc2.frequency.setValueAtTime(baseFreq * 2, now);
+      osc2.frequency.exponentialRampToValueAtTime(baseFreq * 3, now + 0.08);
+
+      const gain2 = ctx.createGain();
+      gain2.gain.setValueAtTime(0, now);
+      gain2.gain.linearRampToValueAtTime(0.08, now + 0.005);
+      gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+
+      osc2.connect(gain2);
+      gain2.connect(ctx.destination);
+      osc2.start(now);
+      osc2.stop(now + 0.15);
+    }
+  } catch {
+    // Audio not supported
+  }
+}
+
 export function playAchievement() {
   try {
     const ctx = getContext();

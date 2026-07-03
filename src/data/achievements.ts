@@ -196,6 +196,52 @@ const achievementDefs: Omit<Achievement, "unlocked">[] = [
     rarity: "legendary",
     checkFn: (p) => totalSpent(p) >= 230_000_000_000, // Elon's net worth
   },
+  {
+    id: "diversified-portfolio",
+    name: "Diversified Portfolio",
+    description: "Own items in 5+ different asset categories",
+    icon: "📊",
+    rarity: "rare",
+    checkFn: (p) => {
+      const classes = new Set(p.map((x) => x.product.assetClass));
+      return classes.size >= 5;
+    },
+  },
+  {
+    id: "speed-shopper",
+    name: "Speed Shopper",
+    description: "Make 5 purchases in 10 seconds",
+    icon: "⚡",
+    rarity: "rare",
+    checkFn: (p) => {
+      if (p.length < 5) return false;
+      const sorted = [...p].sort((a, b) => a.timestamp - b.timestamp);
+      for (let i = 0; i <= sorted.length - 5; i++) {
+        if (sorted[i + 4].timestamp - sorted[i].timestamp < 10000) return true;
+      }
+      return false;
+    },
+  },
+  {
+    id: "guilt-trip",
+    name: "Guilt Trip",
+    description: "Spend enough to build 100 schools ($5M+)",
+    icon: "🏫",
+    rarity: "legendary",
+    checkFn: (p) => totalSpent(p) >= 5_000_000,
+  },
+  {
+    id: "entire-fleet",
+    name: "Entire Fleet",
+    description: "Own a car, yacht, jet, and property",
+    icon: "🌐",
+    rarity: "legendary",
+    checkFn: (p) =>
+      p.some((x) => x.product.assetClass === "supercar") &&
+      p.some((x) => x.product.assetClass === "yacht") &&
+      p.some((x) => x.product.assetClass === "aircraft") &&
+      p.some((x) => x.product.assetClass === "real_estate"),
+  },
 ];
 
 export const achievements: Achievement[] = achievementDefs.map((a) => ({

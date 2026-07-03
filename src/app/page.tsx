@@ -18,6 +18,10 @@ import { AbsurdToast } from "@/components/absurd-toast";
 import { Atmosphere } from "@/components/atmosphere";
 import { EasterEggOverlay } from "@/components/easter-egg-overlay";
 import { SpeedrunTimer } from "@/components/speedrun-timer";
+import { BillionaireReactions } from "@/components/billionaire-reactions";
+import { ComboStreak } from "@/components/combo-streak";
+import { CategoryBreakdown } from "@/components/category-breakdown";
+import { GuiltMeter } from "@/components/guilt-meter";
 import {
   checkEasterEggs,
   resetEasterEggs,
@@ -58,6 +62,9 @@ export default function Home() {
     <main className="min-h-screen bg-vanta relative">
       {/* Dynamic atmosphere background */}
       <Atmosphere />
+
+      {/* Combo streak floating indicator */}
+      <ComboStreak />
 
       {/* Header */}
       <header className="border-b border-charcoal-600/10 relative z-10">
@@ -115,6 +122,11 @@ export default function Home() {
               <WealthContext />
             </section>
 
+            {/* Billionaire Reactions */}
+            <section className="glass-panel p-6">
+              <BillionaireReactions />
+            </section>
+
             {/* Spending Speed */}
             <section className="glass-panel p-6">
               <SpendingSpeed />
@@ -133,6 +145,16 @@ export default function Home() {
             {/* Speedrun Mode */}
             <section className="glass-panel p-6">
               <SpeedrunTimer />
+            </section>
+
+            {/* Category Breakdown */}
+            <section className="glass-panel p-6">
+              <CategoryBreakdown />
+            </section>
+
+            {/* Real-World Impact */}
+            <section className="glass-panel p-6">
+              <GuiltMeter />
             </section>
 
             {/* Omni-Box */}

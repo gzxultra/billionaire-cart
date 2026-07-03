@@ -140,6 +140,36 @@ export const easterEggs: EasterEgg[] = [
     },
     effect: "fire",
   },
+  {
+    id: "art-banana-paradox",
+    name: "The Art Banana Paradox",
+    emoji: "🍌",
+    description: "Buy a $6.2M banana AND a $5.69 Big Mac",
+    checkFn: (p) =>
+      p.some((x) => x.product.title.toLowerCase().includes("cattelan") || x.product.title.toLowerCase().includes("banana")) &&
+      p.some((x) => x.product.title.toLowerCase().includes("big mac")),
+    effect: "gold_rain" as const,
+  },
+  {
+    id: "speed-vs-luxury",
+    name: "Speed vs Luxury",
+    emoji: "🏆",
+    description: "Own a Bugatti AND a Rolls-Royce",
+    checkFn: (p) =>
+      p.some((x) => x.product.title.toLowerCase().includes("bugatti")) &&
+      p.some((x) => x.product.title.toLowerCase().includes("rolls")),
+    effect: "shake" as const,
+  },
+  {
+    id: "space-race",
+    name: "Space Race",
+    emoji: "🌌",
+    description: "Fund a Mars mission AND buy the ISS",
+    checkFn: (p) =>
+      p.some((x) => x.product.title.toLowerCase().includes("mars")) &&
+      p.some((x) => x.product.title.toLowerCase().includes("space station")),
+    effect: "matrix" as const,
+  },
 ];
 
 // Track which easter eggs have been triggered this session
