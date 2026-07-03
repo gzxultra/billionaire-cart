@@ -185,7 +185,7 @@ export function GuiltMeter() {
         Real-World Impact
       </h2>
 
-      <p className="text-[10px] text-white/20 italic">
+      <p className="text-[10px] text-ash/30 italic">
         What {formatCurrency(totalSpent, true)} could have done instead…
       </p>
 
@@ -201,8 +201,8 @@ export function GuiltMeter() {
           >
             <span className="text-xl shrink-0">{item.emoji}</span>
             <div className="min-w-0">
-              <div className="text-xs text-white/60">{item.label}</div>
-              <div className="text-[10px] text-white/25 mt-0.5">
+              <div className="text-xs text-ash">{item.label}</div>
+              <div className="text-[10px] text-ash/40 mt-0.5">
                 {item.description}
               </div>
             </div>
@@ -217,18 +217,18 @@ export function GuiltMeter() {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="text-[11px] text-white/40"
+              className="text-[11px] text-ash/60"
             >
               {countryBeaten.flag} You&apos;ve spent more than the entire GDP of{" "}
-              <span className="text-accent/70 font-medium">
+              <span className="text-stone/70 font-medium">
                 {countryBeaten.name}
               </span>
             </motion.div>
           )}
           {countryNext && (
-            <div className="text-[10px] text-white/20">
+            <div className="text-[10px] text-ash/30">
               {countryNext.flag} Next:{" "}
-              <span className="text-white/30">{countryNext.name}</span> —{" "}
+              <span className="text-ash/50">{countryNext.name}</span> —{" "}
               {formatCurrency(countryNext.gdp - totalSpent, true)} to go
             </div>
           )}
@@ -238,10 +238,10 @@ export function GuiltMeter() {
       {/* Guilt-o-meter */}
       <div className="pt-3 border-t border-line/10">
         <div className="flex items-center justify-between mb-1.5">
-          <span className="text-[10px] text-white/20 uppercase tracking-wider">
+          <span className="text-[10px] text-ash/30 uppercase tracking-wider">
             Guilt Level
           </span>
-          <span className="text-[10px] text-white/30">
+          <span className="text-[10px] text-ash/50">
             {guiltLevel >= 9
               ? "😈 Beyond Redemption"
               : guiltLevel >= 7
@@ -262,7 +262,7 @@ export function GuiltMeter() {
                 backgroundColor:
                   i < guiltLevel
                     ? i < 3
-                      ? "rgba(52, 211, 153, 0.3)"
+                      ? "rgba(125, 155, 138, 0.3)"
                       : i < 5
                       ? "rgba(251, 191, 36, 0.4)"
                       : i < 7

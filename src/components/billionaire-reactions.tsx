@@ -111,15 +111,15 @@ const DEFAULT_QUOTES: BillionaireQuote[] = [
 ];
 
 const REACTIONS: Reaction[] = [
-  { emoji: "😎", mood: "Unfazed", color: "text-emerald-400/80" },
-  { emoji: "🙂", mood: "Calm", color: "text-emerald-400/60" },
-  { emoji: "😏", mood: "Amused", color: "text-emerald-400/40" },
-  { emoji: "🤨", mood: "Noticing", color: "text-yellow-400/60" },
-  { emoji: "😐", mood: "Concerned", color: "text-yellow-400/70" },
-  { emoji: "😰", mood: "Worried", color: "text-orange-400/70" },
-  { emoji: "😱", mood: "Panicking", color: "text-orange-400/80" },
-  { emoji: "😭", mood: "Desperate", color: "text-red-400/80" },
-  { emoji: "💀", mood: "Ruined", color: "text-red-500" },
+  { emoji: "😎", mood: "Unfazed", color: "text-sage/80" },
+  { emoji: "🙂", mood: "Calm", color: "text-sage/60" },
+  { emoji: "😏", mood: "Amused", color: "text-sage/40" },
+  { emoji: "🤨", mood: "Noticing", color: "text-champagne/50" },
+  { emoji: "😐", mood: "Concerned", color: "text-champagne/60" },
+  { emoji: "😰", mood: "Worried", color: "text-stone/60" },
+  { emoji: "😱", mood: "Panicking", color: "text-stone/70" },
+  { emoji: "😭", mood: "Desperate", color: "text-[#9B6B6B]/80" },
+  { emoji: "💀", mood: "Ruined", color: "text-[#9B6B6B]" },
 ];
 
 function getReaction(percent: number): Reaction {
@@ -232,7 +232,7 @@ export function BillionaireReactions() {
               initial={{ opacity: 0, y: 5 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -5 }}
-              className="text-sm text-white/50 italic leading-relaxed"
+              className="text-sm text-ash/80 italic leading-relaxed"
             >
               &ldquo;{quote}&rdquo;
             </motion.p>
@@ -249,7 +249,7 @@ export function BillionaireReactions() {
                   animate={{
                     backgroundColor: segmentFilled
                       ? i < 3
-                        ? "rgba(52, 211, 153, 0.4)"
+                        ? "rgba(125, 155, 138, 0.4)"
                         : i < 5
                         ? "rgba(251, 191, 36, 0.4)"
                         : i < 7
@@ -262,7 +262,7 @@ export function BillionaireReactions() {
               );
             })}
           </div>
-          <div className="text-[9px] text-white/15 mt-1">
+          <div className="text-[9px] text-ash/25 mt-1">
             Stress Level: {Math.min(spentPercent, 100).toFixed(1)}%
           </div>
         </div>

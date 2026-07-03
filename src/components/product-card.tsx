@@ -34,7 +34,7 @@ export function ProductCard({ product, onAuthorize }: ProductCardProps) {
               }}
             />
           ) : (
-            <div className="w-full h-full bg-accent-gradient opacity-30 flex items-center justify-center text-2xl">
+            <div className="w-full h-full bg-stone-gradient opacity-30 flex items-center justify-center text-2xl">
               📦
             </div>
           )}
@@ -42,24 +42,24 @@ export function ProductCard({ product, onAuthorize }: ProductCardProps) {
 
         {/* Product info */}
         <div className="flex-1 min-w-0">
-          <h3 className="text-sm font-medium text-white/90 truncate">
+          <h3 className="text-sm font-medium text-sand/90 truncate">
             {product.title}
           </h3>
           {product.description && (
-            <p className="text-xs text-white/30 mt-0.5 line-clamp-2">
+            <p className="text-xs text-ash/50 mt-0.5 line-clamp-2">
               {product.description}
             </p>
           )}
           <div className="flex items-center gap-2 mt-2">
-            <span className="text-lg font-serif text-gold">
+            <span className="text-lg font-serif text-champagne">
               {formatCurrency(product.price)}
             </span>
-            <span className="text-[10px] px-2 py-0.5 rounded-full bg-surface-bright/50 text-white/40">
+            <span className="text-[10px] px-2 py-0.5 rounded-full bg-surface-bright/50 text-ash/60">
               {ASSET_LABELS[product.assetClass] || product.assetClass}
             </span>
           </div>
           {product.monthlyOverhead > 0 && (
-            <div className="text-[10px] text-red-400/60 mt-1">
+            <div className="text-[10px] text-[#9B6B6B]/60 mt-1">
               + {formatCurrency(product.monthlyOverhead)}/mo hidden costs
             </div>
           )}
@@ -73,8 +73,8 @@ export function ProductCard({ product, onAuthorize }: ProductCardProps) {
         whileTap={{ scale: 0.98 }}
         className="
           w-full mt-4 py-3 rounded-lg
-          bg-accent-gradient text-white font-semibold text-sm
-          hover:shadow-accent-lg transition-shadow
+          bg-stone-gradient text-sand font-semibold text-sm
+          hover:shadow-stone-lg transition-shadow
         "
       >
         Authorize Purchase

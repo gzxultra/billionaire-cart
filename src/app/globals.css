@@ -8,7 +8,7 @@
   }
 
   body {
-    @apply bg-midnight text-white antialiased;
+    @apply bg-base text-sand antialiased;
     font-feature-settings: "ss01", "ss02", "cv01";
   }
 
@@ -20,17 +20,17 @@
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: rgba(129, 140, 248, 0.15);
+    background: rgba(155, 139, 122, 0.12);
     border-radius: 2px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(129, 140, 248, 0.3);
+    background: rgba(155, 139, 122, 0.25);
   }
 
   /* Selection */
   ::selection {
-    background: rgba(129, 140, 248, 0.3);
-    color: white;
+    background: rgba(155, 139, 122, 0.25);
+    color: #E8E4DF;
   }
 }
 
@@ -40,19 +40,19 @@
   }
 
   .card-panel-hover {
-    @apply card-panel hover:border-accent/15 hover:bg-surface/80 transition-all duration-300;
+    @apply card-panel hover:border-stone/10 hover:bg-surface/80 transition-all duration-300;
   }
 
   .card-panel-accent {
-    @apply bg-surface/60 border-l-2 border-l-accent/50 border border-line/10 rounded-xl shadow-card;
+    @apply bg-surface/60 border-l-2 border-l-stone/30 border border-line/10 rounded-xl shadow-card;
   }
 
-  .card-panel-gold {
-    @apply bg-surface/60 border-l-2 border-l-gold/50 border border-line/10 rounded-xl shadow-card;
+  .card-panel-champagne {
+    @apply bg-surface/60 border-l-2 border-l-champagne/30 border border-line/10 rounded-xl shadow-card;
   }
 
   .section-label {
-    @apply text-[11px] uppercase tracking-[0.2em] text-accent/60 font-semibold font-sans;
+    @apply text-[11px] uppercase tracking-[0.2em] text-stone/50 font-medium font-sans;
   }
 
   .mono-number {
@@ -60,7 +60,7 @@
   }
 
   .money-amount {
-    @apply font-serif text-gold tabular-nums;
+    @apply font-serif text-champagne tabular-nums;
   }
 }
 

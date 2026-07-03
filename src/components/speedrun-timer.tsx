@@ -160,7 +160,7 @@ export function SpeedrunTimer() {
           ⚡ Speedrun Mode
         </h2>
         {bestTime !== null && !active && (
-          <span className="text-[10px] text-accent/40">
+          <span className="text-[10px] text-stone/40">
             Best: {formatTimer(bestTime)}
           </span>
         )}
@@ -168,12 +168,12 @@ export function SpeedrunTimer() {
 
       {!active && !finished && (
         <div className="text-center py-3">
-          <p className="text-xs text-white/30 mb-3">
+          <p className="text-xs text-ash/50 mb-3">
             Bankrupt {selectedBillionaire.name} as fast as you can!
           </p>
           <button
             onClick={startTimer}
-            className="px-6 py-2.5 rounded-xl bg-accent/15 text-accent text-sm font-medium hover:bg-accent/25 transition-all border border-accent/20 hover:border-accent/40"
+            className="px-6 py-2.5 rounded-xl bg-stone/15 text-stone text-sm font-medium hover:bg-stone/25 transition-all border border-stone/20 hover:border-stone/40"
           >
             🏁 Start Speedrun
           </button>
@@ -184,10 +184,10 @@ export function SpeedrunTimer() {
         <div className="space-y-2">
           {/* Timer display */}
           <div className="text-center">
-            <div className="text-3xl font-serif text-accent tabular-nums tracking-wide">
+            <div className="text-3xl font-serif text-stone tabular-nums tracking-wide">
               {formatTimer(elapsed)}
             </div>
-            <div className="text-[10px] text-white/20 mt-1">
+            <div className="text-[10px] text-ash/30 mt-1">
               {purchases.length - startPurchasesRef.current} items ·{" "}
               {formatCurrency(totalSpent, true)} spent
             </div>
@@ -203,13 +203,13 @@ export function SpeedrunTimer() {
                     ? "linear-gradient(90deg, #ef4444, #dc2626)"
                     : spentPct >= 50
                     ? "linear-gradient(90deg, #f59e0b, #ef4444)"
-                    : "linear-gradient(90deg, #818CF8, #A5B4FC)",
+                    : "linear-gradient(90deg, #9B8B7A, #B8A898)",
               }}
               animate={{ width: `${Math.min(spentPct, 100)}%` }}
               transition={{ duration: 0.2 }}
             />
             <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-[8px] text-white/60 font-medium tabular-nums">
+              <span className="text-[8px] text-ash font-medium tabular-nums">
                 {spentPct.toFixed(1)}%
               </span>
             </div>
@@ -217,9 +217,9 @@ export function SpeedrunTimer() {
 
           {/* Remaining */}
           <div className="flex justify-between text-[10px]">
-            <span className="text-white/20">
+            <span className="text-ash/30">
               Remaining:{" "}
-              <span className={remaining < netWorth * 0.1 ? "text-red-400/60" : "text-white/40"}>
+              <span className={remaining < netWorth * 0.1 ? "text-[#9B6B6B]/60" : "text-ash/60"}>
                 {formatCurrency(remaining, true)}
               </span>
             </span>
@@ -229,7 +229,7 @@ export function SpeedrunTimer() {
                 finishedRef.current = true;
                 cancelAnimationFrame(rafRef.current);
               }}
-              className="text-white/20 hover:text-red-400/60 transition-colors"
+              className="text-ash/30 hover:text-[#9B6B6B]/60 transition-colors"
             >
               ✕ Abort
             </button>
@@ -248,13 +248,13 @@ export function SpeedrunTimer() {
             <div className="text-4xl mb-2">
               {isNewRecord ? "🏆" : "🏁"}
             </div>
-            <div className="text-[10px] uppercase tracking-[0.4em] text-accent/60">
+            <div className="text-[10px] uppercase tracking-[0.4em] text-stone/60">
               {isNewRecord ? "New Record!" : "Speedrun Complete"}
             </div>
-            <div className="text-3xl font-serif text-accent tabular-nums">
+            <div className="text-3xl font-serif text-stone tabular-nums">
               {formatTimer(finalTime)}
             </div>
-            <div className="text-xs text-white/30">
+            <div className="text-xs text-ash/50">
               {purchases.length} items ·{" "}
               {formatCurrency(totalSpent, true)} spent
             </div>
@@ -262,7 +262,7 @@ export function SpeedrunTimer() {
             <div className="flex gap-2 justify-center pt-2">
               <button
                 onClick={startTimer}
-                className="px-4 py-2 rounded-lg bg-accent/15 text-accent text-xs hover:bg-accent/25 transition-colors"
+                className="px-4 py-2 rounded-lg bg-stone/15 text-stone text-xs hover:bg-stone/25 transition-colors"
               >
                 🔄 Try Again
               </button>
@@ -277,7 +277,7 @@ export function SpeedrunTimer() {
                     await navigator.clipboard.writeText(text);
                   } catch {}
                 }}
-                className="px-4 py-2 rounded-lg bg-surface-bright text-white/40 text-xs hover:text-white/60 transition-colors"
+                className="px-4 py-2 rounded-lg bg-surface-bright text-ash/60 text-xs hover:text-ash transition-colors"
               >
                 📋 Copy Result
               </button>

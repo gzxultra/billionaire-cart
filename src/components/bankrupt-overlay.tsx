@@ -109,10 +109,10 @@ export function BankruptOverlay() {
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.5 }}
           >
-            <div className="text-red-500/80 text-[10px] uppercase tracking-[0.5em] mb-2">
+            <div className="text-[#9B6B6B]/80 text-[10px] uppercase tracking-[0.5em] mb-2">
               Account Status
             </div>
-            <h2 className="text-4xl sm:text-5xl font-serif text-red-400/90 tracking-tight">
+            <h2 className="text-4xl sm:text-5xl font-serif text-[#9B6B6B]/90 tracking-tight">
               DEPLETED
             </h2>
           </motion.div>
@@ -122,33 +122,33 @@ export function BankruptOverlay() {
             initial={{ rotateX: -20, opacity: 0 }}
             animate={{ rotateX: 0, opacity: 1 }}
             transition={{ delay: 0.8 }}
-            className="w-full aspect-[1.586/1] max-w-xs mx-auto rounded-2xl overflow-hidden border-2 border-red-500/20 relative"
+            className="w-full aspect-[1.586/1] max-w-xs mx-auto rounded-2xl overflow-hidden border-2 border-[#9B6B6B]/15 relative"
             style={{
               background:
-                "linear-gradient(145deg, #18181B 0%, #09090B 50%, #18181B 100%)",
+                "linear-gradient(145deg, #161618 0%, #0C0C0E 50%, #161618 100%)",
             }}
           >
             {/* Red overlay */}
-            <div className="absolute inset-0 bg-red-500/5" />
+            <div className="absolute inset-0 bg-[#9B6B6B]/5" />
 
             {/* Card content */}
             <div className="absolute top-6 left-6">
-              <div className="text-[8px] uppercase tracking-[0.3em] text-red-400/40">
+              <div className="text-[8px] uppercase tracking-[0.3em] text-[#9B6B6B]/40">
                 Billionaire Cart
               </div>
-              <div className="text-[7px] uppercase tracking-[0.2em] text-red-400/20 mt-0.5">
+              <div className="text-[7px] uppercase tracking-[0.2em] text-[#9B6B6B]/20 mt-0.5">
                 ✕ CANCELLED
               </div>
             </div>
 
             <div className="absolute top-1/2 left-6 -translate-y-1/2">
-              <div className="text-xl font-serif text-red-400/60">
+              <div className="text-xl font-serif text-[#9B6B6B]/60">
                 {formatCurrency(remaining)}
               </div>
             </div>
 
             <div className="absolute bottom-6 left-6">
-              <div className="text-[9px] uppercase tracking-[0.2em] text-red-400/30 line-through">
+              <div className="text-[9px] uppercase tracking-[0.2em] text-[#9B6B6B]/30 line-through">
                 {selectedBillionaire.name}
               </div>
             </div>
@@ -162,24 +162,24 @@ export function BankruptOverlay() {
             className="grid grid-cols-3 gap-3 text-center"
           >
             <div>
-              <div className="text-[9px] text-white/20 uppercase">
+              <div className="text-[9px] text-ash/30 uppercase">
                 Fortune
               </div>
-              <div className="text-xs font-serif text-white/40">
+              <div className="text-xs font-serif text-ash/60">
                 {formatCurrency(netWorth, true)}
               </div>
             </div>
             <div>
-              <div className="text-[9px] text-white/20 uppercase">Items</div>
-              <div className="text-xs font-serif text-white/40">
+              <div className="text-[9px] text-ash/30 uppercase">Items</div>
+              <div className="text-xs font-serif text-ash/60">
                 {purchases.length}
               </div>
             </div>
             <div>
-              <div className="text-[9px] text-white/20 uppercase">
+              <div className="text-[9px] text-ash/30 uppercase">
                 Trophies
               </div>
-              <div className="text-xs font-serif text-white/40">
+              <div className="text-xs font-serif text-ash/60">
                 {unlockedCount}/{achievements.length}
               </div>
             </div>
@@ -191,10 +191,10 @@ export function BankruptOverlay() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1.5 }}
-              className="text-[10px] text-white/20"
+              className="text-[10px] text-ash/30"
             >
               Most expensive acquisition:{" "}
-              <span className="text-accent/50">
+              <span className="text-stone/50">
                 {topPurchase.product.title} (
                 {formatCurrency(topPurchase.product.price, true)})
               </span>
@@ -213,7 +213,7 @@ export function BankruptOverlay() {
                 setDismissed(true);
                 setShow(false);
               }}
-              className="px-4 py-2 rounded-lg bg-surface-bright/50 text-white/30 text-xs hover:text-white/50 transition-colors"
+              className="px-4 py-2 rounded-lg bg-surface-bright/50 text-ash/50 text-xs hover:text-ash/80 transition-colors"
             >
               Keep Going (Debt Mode)
             </button>
@@ -223,7 +223,7 @@ export function BankruptOverlay() {
                 setShow(false);
                 reset();
               }}
-              className="px-4 py-2 rounded-lg bg-accent/15 text-accent text-xs hover:bg-accent/25 transition-colors"
+              className="px-4 py-2 rounded-lg bg-stone/15 text-stone text-xs hover:bg-stone/25 transition-colors"
             >
               New Identity
             </button>

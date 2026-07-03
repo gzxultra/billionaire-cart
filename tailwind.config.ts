@@ -10,62 +10,65 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        midnight: "#09090B",
+        base: "#0C0C0E",
         surface: {
-          DEFAULT: "#18181B",
-          bright: "#27272A",
-          dim: "#0F0F12",
+          DEFAULT: "#161618",
+          bright: "#1E1E21",
+          dim: "#111113",
         },
-        line: "#3F3F46",
-        accent: {
-          DEFAULT: "#818CF8",
-          light: "#A5B4FC",
-          dim: "rgba(129,140,248,0.15)",
+        line: "#2A2A2E",
+        stone: {
+          DEFAULT: "#9B8B7A",
+          light: "#B8A898",
+          dim: "rgba(155,139,122,0.12)",
+          muted: "rgba(155,139,122,0.4)",
         },
-        gold: {
-          DEFAULT: "#FCD34D",
-          light: "#FDE68A",
-          dim: "rgba(252,211,77,0.15)",
+        champagne: {
+          DEFAULT: "#C5A572",
+          light: "#D4BB91",
+          dim: "rgba(197,165,114,0.12)",
         },
-        mint: {
-          DEFAULT: "#34D399",
-          dim: "rgba(52,211,153,0.15)",
+        sage: {
+          DEFAULT: "#7D9B8A",
+          dim: "rgba(125,155,138,0.12)",
         },
+        sand: "#E8E4DF",
+        ash: "#6B6560",
       },
       fontFamily: {
         sans: ["var(--font-inter)", "Inter", "system-ui", "sans-serif"],
         serif: ["var(--font-playfair)", "Playfair Display", "Georgia", "serif"],
       },
       backgroundImage: {
-        "accent-gradient":
-          "linear-gradient(135deg, #6366F1 0%, #818CF8 50%, #A5B4FC 100%)",
-        "gold-gradient":
-          "linear-gradient(135deg, #D97706 0%, #FCD34D 50%, #FDE68A 100%)",
+        "stone-gradient":
+          "linear-gradient(135deg, #7A6E62 0%, #9B8B7A 50%, #B8A898 100%)",
+        "champagne-gradient":
+          "linear-gradient(135deg, #9B7E4F 0%, #C5A572 50%, #D4BB91 100%)",
         "card-gradient":
-          "linear-gradient(145deg, #18181B 0%, #09090B 50%, #18181B 100%)",
+          "linear-gradient(145deg, #161618 0%, #0C0C0E 50%, #161618 100%)",
         "card-shine":
-          "linear-gradient(135deg, transparent 0%, rgba(129,140,248,0.03) 50%, transparent 100%)",
+          "linear-gradient(135deg, transparent 0%, rgba(155,139,122,0.03) 50%, transparent 100%)",
       },
       boxShadow: {
-        "accent-sm": "0 0 10px rgba(129,140,248,0.12)",
-        accent: "0 0 20px rgba(129,140,248,0.15)",
-        "accent-lg": "0 0 40px rgba(129,140,248,0.2)",
-        "gold-sm": "0 0 10px rgba(252,211,77,0.12)",
-        gold: "0 0 20px rgba(252,211,77,0.15)",
+        "stone-sm": "0 0 10px rgba(155,139,122,0.08)",
+        stone: "0 0 20px rgba(155,139,122,0.1)",
+        "stone-lg": "0 0 40px rgba(155,139,122,0.12)",
+        "champagne-sm": "0 0 10px rgba(197,165,114,0.08)",
+        champagne: "0 0 20px rgba(197,165,114,0.1)",
         glass: "0 8px 32px rgba(0,0,0,0.5)",
-        card: "0 1px 3px rgba(0,0,0,0.4), 0 4px 12px rgba(0,0,0,0.2)",
+        card: "0 1px 3px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.15)",
       },
       animation: {
-        "accent-pulse": "accent-pulse 3s ease-in-out infinite",
+        "stone-pulse": "stone-pulse 3s ease-in-out infinite",
         shimmer: "shimmer 2s ease-in-out infinite",
         "balance-tick": "balance-tick 0.3s ease-out",
         "fade-in": "fade-in 0.4s ease-out",
         "slide-up": "slide-up 0.5s ease-out",
       },
       keyframes: {
-        "accent-pulse": {
-          "0%, 100%": { boxShadow: "0 0 20px rgba(129,140,248,0.1)" },
-          "50%": { boxShadow: "0 0 40px rgba(129,140,248,0.2)" },
+        "stone-pulse": {
+          "0%, 100%": { boxShadow: "0 0 20px rgba(155,139,122,0.06)" },
+          "50%": { boxShadow: "0 0 40px rgba(155,139,122,0.12)" },
         },
         shimmer: {
           "0%": { backgroundPosition: "-200% 0" },

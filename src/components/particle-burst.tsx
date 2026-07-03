@@ -15,7 +15,7 @@ interface Particle {
   angle: number;
 }
 
-const COLORS = ["#818CF8", "#A5B4FC", "#FCD34D", "#C4B5FD"];
+const COLORS = ["#9B8B7A", "#B8A898", "#C5A572", "#D4BB91"];
 
 export function ParticleBurst() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -149,7 +149,7 @@ export function ParticleBurst() {
         <div
           className="w-48 h-48 rounded-full opacity-0"
           style={{
-            background: "radial-gradient(circle, rgba(129,140,248,0.4) 0%, rgba(165,180,252,0.15) 40%, transparent 70%)",
+            background: "radial-gradient(circle, rgba(155,139,122,0.3) 0%, rgba(197,165,114,0.1) 40%, transparent 70%)",
           }}
         />
       </div>

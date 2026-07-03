@@ -36,8 +36,8 @@ export function IdentitySelector() {
                 flex items-center gap-3.5 p-3.5 rounded-xl text-left transition-all duration-200
                 ${
                   isSelected
-                    ? "bg-accent/10 border border-accent/30 shadow-accent-sm ring-1 ring-accent/10"
-                    : "bg-surface-dim/50 border border-line/10 hover:border-accent/15 hover:bg-surface/40"
+                    ? "bg-stone/10 border border-stone/30 shadow-stone-sm ring-1 ring-stone/10"
+                    : "bg-surface-dim/50 border border-line/10 hover:border-stone/15 hover:bg-surface/40"
                 }
               `}
             >
@@ -47,8 +47,8 @@ export function IdentitySelector() {
                   w-11 h-11 rounded-xl flex items-center justify-center text-sm font-bold shrink-0
                   ${
                     isSelected
-                      ? "bg-accent-gradient text-white shadow-accent-sm"
-                      : "bg-surface-bright text-white/50"
+                      ? "bg-stone-gradient text-sand shadow-stone-sm"
+                      : "bg-surface-bright text-ash/80"
                   }
                 `}
               >
@@ -57,16 +57,16 @@ export function IdentitySelector() {
 
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1.5">
-                  <span className="text-[13px] font-semibold text-white/90 truncate">
+                  <span className="text-[13px] font-semibold text-sand/90 truncate">
                     {b.name}
                   </span>
                   <span className="text-xs">{b.emoji}</span>
                 </div>
                 <div className="flex items-center justify-between gap-2 mt-0.5">
-                  <span className="text-[11px] text-white/35 truncate">
+                  <span className="text-[11px] text-sand/35 truncate">
                     {b.company}
                   </span>
-                  <span className="text-[12px] font-serif text-gold/80 shrink-0 font-medium">
+                  <span className="text-[12px] font-serif text-champagne/80 shrink-0 font-medium">
                     {formatNetWorth(b.netWorthB)}
                   </span>
                 </div>

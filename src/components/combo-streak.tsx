@@ -8,12 +8,12 @@ import { playComboTick } from "@/lib/sounds";
 const COMBO_WINDOW_MS = 3000; // 3 seconds between purchases to keep combo
 
 const COMBO_TIERS = [
-  { min: 2, label: "x2", color: "text-emerald-400", bg: "bg-emerald-500/10", border: "border-emerald-500/20" },
-  { min: 5, label: "x5", color: "text-yellow-400", bg: "bg-yellow-500/10", border: "border-yellow-500/20" },
-  { min: 10, label: "x10", color: "text-orange-400", bg: "bg-orange-500/10", border: "border-orange-500/20" },
-  { min: 25, label: "x25", color: "text-red-400", bg: "bg-red-500/10", border: "border-red-500/20" },
-  { min: 50, label: "x50", color: "text-fuchsia-400", bg: "bg-fuchsia-500/10", border: "border-fuchsia-500/20" },
-  { min: 100, label: "x100", color: "text-violet-300", bg: "bg-violet-500/15", border: "border-violet-500/30" },
+  { min: 2, label: "x2", color: "text-sage", bg: "bg-sage/10", border: "border-sage/20" },
+  { min: 5, label: "x5", color: "text-champagne", bg: "bg-champagne/10", border: "border-champagne/20" },
+  { min: 10, label: "x10", color: "text-stone-light", bg: "bg-stone/10", border: "border-stone/20" },
+  { min: 25, label: "x25", color: "text-champagne-light", bg: "bg-champagne/15", border: "border-champagne/25" },
+  { min: 50, label: "x50", color: "text-stone", bg: "bg-stone/15", border: "border-stone/30" },
+  { min: 100, label: "x100", color: "text-champagne", bg: "bg-champagne/20", border: "border-champagne/35" },
 ];
 
 function getComboTier(combo: number) {
@@ -176,14 +176,14 @@ export function ComboStreak() {
               </AnimatePresence>
 
               {/* Timer bar */}
-              <div className="w-full h-1 bg-white/5 rounded-full mt-2 overflow-hidden">
+              <div className="w-full h-1 bg-sand/5 rounded-full mt-2 overflow-hidden">
                 <motion.div
                   className="h-full rounded-full"
                   style={{
                     width: `${timerWidth}%`,
                     backgroundColor:
                       timerWidth > 60
-                        ? "rgba(52, 211, 153, 0.6)"
+                        ? "rgba(125, 155, 138, 0.6)"
                         : timerWidth > 30
                         ? "rgba(251, 191, 36, 0.6)"
                         : "rgba(239, 68, 68, 0.7)",
@@ -213,20 +213,20 @@ export function ComboStreak() {
           </h2>
           <div className="flex items-center gap-4">
             <div>
-              <div className="text-[10px] uppercase tracking-[0.2em] text-white/25 mb-0.5">
+              <div className="text-[10px] uppercase tracking-[0.2em] text-ash/40 mb-0.5">
                 Best Combo
               </div>
-              <div className="text-xl font-serif text-accent tabular-nums">
+              <div className="text-xl font-serif text-stone tabular-nums">
                 {maxCombo}x
               </div>
             </div>
             <div>
-              <div className="text-[10px] uppercase tracking-[0.2em] text-white/25 mb-0.5">
+              <div className="text-[10px] uppercase tracking-[0.2em] text-ash/40 mb-0.5">
                 Current
               </div>
               <div
                 className={`text-xl font-serif tabular-nums ${
-                  combo >= 2 ? tier?.color || "text-accent" : "text-white/20"
+                  combo >= 2 ? tier?.color || "text-stone" : "text-ash/30"
                 }`}
               >
                 {combo >= 2 ? `${combo}x` : "—"}
@@ -234,10 +234,10 @@ export function ComboStreak() {
             </div>
             {maxCombo >= 5 && (
               <div>
-                <div className="text-[10px] uppercase tracking-[0.2em] text-white/25 mb-0.5">
+                <div className="text-[10px] uppercase tracking-[0.2em] text-ash/40 mb-0.5">
                   Rank
                 </div>
-                <div className="text-sm text-white/50">
+                <div className="text-sm text-ash/80">
                   {maxCombo >= 100
                     ? "👑 GOD"
                     : maxCombo >= 50

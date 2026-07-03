@@ -62,7 +62,7 @@ export function ShareReceipt() {
     try {
       const html2canvas = (await import("html2canvas")).default;
       const canvas = await html2canvas(receiptRef.current, {
-        backgroundColor: "#09090B",
+        backgroundColor: "#0C0C0E",
         scale: 2,
         width: 540,
         height: 960,
@@ -83,7 +83,7 @@ export function ShareReceipt() {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="text-[10px] uppercase tracking-[0.2em] text-accent/40 hover:text-accent/70 transition-colors"
+        className="text-[10px] uppercase tracking-[0.2em] text-stone/40 hover:text-stone/70 transition-colors"
       >
         Share Receipt
       </button>
@@ -109,53 +109,53 @@ export function ShareReceipt() {
                 ref={receiptRef}
                 className="
                   w-[540px] h-[960px] mx-auto p-8
-                  bg-midnight text-white
-                  rounded-2xl border border-accent/20
+                  bg-base text-sand
+                  rounded-2xl border border-stone/20
                   overflow-hidden
                   scale-[0.6] origin-top sm:scale-75
                 "
               >
                 {/* Header */}
-                <div className="border-b border-accent/20 pb-4 mb-6">
-                  <div className="text-gold text-lg font-serif tracking-wider">
+                <div className="border-b border-stone/20 pb-4 mb-6">
+                  <div className="text-champagne text-lg font-serif tracking-wider">
                     BILLIONAIRE CART
                   </div>
-                  <div className="text-[10px] text-white/20 uppercase tracking-[0.3em] mt-1">
+                  <div className="text-[10px] text-ash/30 uppercase tracking-[0.3em] mt-1">
                     Transaction Receipt
                   </div>
                 </div>
 
                 {/* Identity */}
                 <div className="mb-6">
-                  <div className="text-white/80 text-base font-medium">
+                  <div className="text-sand/80 text-base font-medium">
                     {billionaire.emoji} {billionaire.name}
                   </div>
-                  <div className="text-white/30 text-xs">{billionaire.company}</div>
+                  <div className="text-ash/50 text-xs">{billionaire.company}</div>
                 </div>
 
                 {/* Financials */}
                 <div className="grid grid-cols-2 gap-4 mb-6">
                   <div>
-                    <div className="text-[9px] text-white/20 uppercase">Net Worth</div>
-                    <div className="text-gold font-serif text-sm">
+                    <div className="text-[9px] text-ash/30 uppercase">Net Worth</div>
+                    <div className="text-champagne font-serif text-sm">
                       {formatCurrency(netWorth, true)}
                     </div>
                   </div>
                   <div>
-                    <div className="text-[9px] text-white/20 uppercase">Deployed</div>
-                    <div className="text-white/70 font-serif text-sm">
+                    <div className="text-[9px] text-ash/30 uppercase">Deployed</div>
+                    <div className="text-sand/70 font-serif text-sm">
                       {formatCurrency(totalSpent, true)}
                     </div>
                   </div>
                   <div>
-                    <div className="text-[9px] text-white/20 uppercase">Remaining</div>
-                    <div className="text-white/50 font-serif text-sm">
+                    <div className="text-[9px] text-ash/30 uppercase">Remaining</div>
+                    <div className="text-ash/80 font-serif text-sm">
                       {formatCurrency(netWorth - totalSpent, true)}
                     </div>
                   </div>
                   <div>
-                    <div className="text-[9px] text-white/20 uppercase">Burn / Mo</div>
-                    <div className="text-red-400/70 font-serif text-sm">
+                    <div className="text-[9px] text-ash/30 uppercase">Burn / Mo</div>
+                    <div className="text-[#9B6B6B]/70 font-serif text-sm">
                       -{formatCurrency(monthlyBurn, true)}
                     </div>
                   </div>
@@ -163,7 +163,7 @@ export function ShareReceipt() {
 
                 {/* Top purchases */}
                 <div className="border-t border-line/30 pt-4 mb-6">
-                  <div className="text-[9px] text-white/20 uppercase mb-3">
+                  <div className="text-[9px] text-ash/30 uppercase mb-3">
                     Top Acquisitions
                   </div>
                   {[...purchases]
@@ -174,10 +174,10 @@ export function ShareReceipt() {
                         key={p.id}
                         className="flex justify-between items-center py-1.5 border-b border-line/10"
                       >
-                        <span className="text-xs text-white/50 truncate max-w-[300px]">
+                        <span className="text-xs text-ash/80 truncate max-w-[300px]">
                           {i + 1}. {p.product.title}
                         </span>
-                        <span className="text-xs font-serif text-gold/70 shrink-0 ml-2">
+                        <span className="text-xs font-serif text-champagne/70 shrink-0 ml-2">
                           {formatCurrency(p.product.price, true)}
                         </span>
                       </div>
@@ -204,19 +204,19 @@ export function ShareReceipt() {
               <div className="flex gap-2 justify-center">
                 <button
                   onClick={downloadImage}
-                  className="px-4 py-2 rounded-lg bg-accent/20 text-accent text-xs hover:bg-accent/30 transition-colors"
+                  className="px-4 py-2 rounded-lg bg-stone/20 text-stone text-xs hover:bg-stone/30 transition-colors"
                 >
                   📥 Download PNG
                 </button>
                 <button
                   onClick={copyText}
-                  className="px-4 py-2 rounded-lg bg-surface-bright text-white/50 text-xs hover:text-white/70 transition-colors"
+                  className="px-4 py-2 rounded-lg bg-surface-bright text-ash/80 text-xs hover:text-sand/70 transition-colors"
                 >
                   {copying ? "✓ Copied!" : "📋 Copy Text"}
                 </button>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="px-4 py-2 rounded-lg bg-surface-bright text-white/30 text-xs hover:text-white/50 transition-colors"
+                  className="px-4 py-2 rounded-lg bg-surface-bright text-ash/50 text-xs hover:text-ash/80 transition-colors"
                 >
                   Close
                 </button>

@@ -102,19 +102,19 @@ export function EarningsTicker() {
       </div>
 
       <div>
-        <div className="text-[10px] uppercase tracking-[0.2em] text-white/25 mb-1">
+        <div className="text-[10px] uppercase tracking-[0.2em] text-ash/40 mb-1">
           {t("earnings.rate", locale)}
         </div>
-        <div className="text-lg font-serif text-gold tabular-nums">
-          {formatCurrency(eps)}<span className="text-[10px] text-white/25 ml-1">{t("speed.perSec", locale)}</span>
+        <div className="text-lg font-serif text-champagne tabular-nums">
+          {formatCurrency(eps)}<span className="text-[10px] text-ash/40 ml-1">{t("speed.perSec", locale)}</span>
         </div>
       </div>
 
       <div>
-        <div className="text-[10px] uppercase tracking-[0.2em] text-white/25 mb-1">
+        <div className="text-[10px] uppercase tracking-[0.2em] text-ash/40 mb-1">
           {t("earnings.since", locale)}
         </div>
-        <div className="text-2xl font-serif text-gold tabular-nums">
+        <div className="text-2xl font-serif text-champagne tabular-nums">
           {formatCurrency(earnedSinceStart, earnedSinceStart >= 1_000_000)}
         </div>
       </div>
@@ -122,19 +122,19 @@ export function EarningsTicker() {
       {earnBackRemaining !== null && (
         <div className={`rounded-xl px-4 py-3 transition-colors duration-300 ${
           earnedBack
-            ? "bg-emerald-500/10 border border-emerald-500/20"
-            : "bg-accent/5 border border-accent/10"
+            ? "bg-sage/10 border border-sage/20"
+            : "bg-stone/5 border border-stone/10"
         }`}>
           {earnedBack ? (
-            <div className="text-emerald-400 text-sm font-medium animate-pulse">
+            <div className="text-sage text-sm font-medium animate-pulse">
               ✓ {t("earnings.earnedBack", locale)}
             </div>
           ) : (
             <>
-              <div className="text-[10px] uppercase tracking-[0.2em] text-white/25 mb-1">
+              <div className="text-[10px] uppercase tracking-[0.2em] text-ash/40 mb-1">
                 ⏱ {t("earnings.earnBack", locale)}
               </div>
-              <div className="text-lg font-serif text-gold tabular-nums">
+              <div className="text-lg font-serif text-champagne tabular-nums">
                 {formatEarnBackTime(earnBackRemaining, locale)}
               </div>
             </>

@@ -63,7 +63,7 @@ export default function Home() {
   }, [reset]);
 
   return (
-    <main className="min-h-screen bg-midnight relative">
+    <main className="min-h-screen bg-base relative">
       {/* Dynamic atmosphere background */}
       <Atmosphere />
 
@@ -71,17 +71,17 @@ export default function Home() {
       <ComboStreak />
 
       {/* Header */}
-      <header className="relative z-10 sticky top-0 bg-midnight/90 backdrop-blur-xl">
+      <header className="relative z-10 sticky top-0 bg-base/85 backdrop-blur-xl">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-accent-gradient flex items-center justify-center text-sm font-bold text-white shadow-accent-sm">
+            <div className="w-7 h-7 rounded-md bg-surface-bright flex items-center justify-center text-xs border border-line/20">
               💳
             </div>
             <div>
-              <h1 className="text-sm font-semibold text-white tracking-wide">
+              <h1 className="text-sm font-medium text-sand/90 tracking-wide">
                 {t("app.title", locale)}
               </h1>
-              <p className="text-[10px] text-white/30 mt-0.5 hidden sm:block">
+              <p className="text-[10px] text-ash/40 mt-0.5 hidden sm:block">
                 {t("app.subtitle", locale)}
               </p>
             </div>
@@ -90,7 +90,7 @@ export default function Home() {
             {/* Language toggle */}
             <button
               onClick={toggleLocale}
-              className="px-2.5 py-1.5 rounded-lg text-[11px] font-semibold text-accent/70 hover:text-accent bg-accent/5 hover:bg-accent/10 border border-accent/10 hover:border-accent/20 transition-all"
+              className="px-2 py-1 rounded-md text-[11px] font-medium text-stone/60 hover:text-stone bg-surface-bright/50 border border-line/15 hover:border-stone/15 transition-all"
               title={locale === "en" ? "切换到中文" : "Switch to English"}
             >
               {locale === "en" ? "中" : "EN"}
@@ -98,7 +98,7 @@ export default function Home() {
             <ShareReceipt />
             <button
               onClick={toggleSound}
-              className="text-white/30 hover:text-accent/70 transition-colors text-sm"
+              className="text-ash/40 hover:text-stone/50 transition-colors text-sm"
               title={soundEnabled ? "Mute" : "Unmute"}
             >
               {soundEnabled ? "🔊" : "🔇"}
@@ -106,7 +106,7 @@ export default function Home() {
             {selectedBillionaire && (
               <button
                 onClick={handleReset}
-                className="text-[10px] text-white/20 hover:text-red-400/60 transition-colors uppercase tracking-wider font-medium"
+                className="text-[10px] text-ash/30 hover:text-[#9B6B6B]/60 transition-colors uppercase tracking-wider font-medium"
               >
                 {t("app.reset", locale)}
               </button>
@@ -114,7 +114,7 @@ export default function Home() {
           </div>
         </div>
         {/* Gradient underline */}
-        <div className="h-px bg-gradient-to-r from-transparent via-accent/20 to-transparent" />
+        <div className="h-px bg-gradient-to-r from-transparent via-stone/10 to-transparent" />
       </header>
 
       <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 sm:py-10 space-y-5 sm:space-y-8 relative z-10">
@@ -132,7 +132,7 @@ export default function Home() {
             </section>
 
             {/* Balance — accent left border */}
-            <section className="card-panel-gold p-5 sm:p-8">
+            <section className="card-panel-champagne p-5 sm:p-8">
               <BalanceDisplay />
             </section>
 
@@ -182,7 +182,7 @@ export default function Home() {
             </section>
 
             {/* The Vault */}
-            <section className="card-panel-gold p-5 sm:p-8">
+            <section className="card-panel-champagne p-5 sm:p-8">
               <Vault />
             </section>
 
@@ -196,9 +196,9 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="mt-20 relative z-10">
-        <div className="h-px bg-gradient-to-r from-transparent via-line/20 to-transparent" />
+        <div className="h-px bg-gradient-to-r from-transparent via-line/15 to-transparent" />
         <div className="max-w-3xl mx-auto px-4 py-8 text-center">
-          <p className="text-[10px] text-white/15 tracking-wide">
+          <p className="text-[10px] text-ash/25 tracking-wide">
             {t("app.footer", locale)}
           </p>
         </div>

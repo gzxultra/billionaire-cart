@@ -63,21 +63,20 @@ export function CheckoutAnimation({
         transition={{ duration: 0.5, ease: "easeOut" }}
         className="
           relative w-80 sm:w-96 aspect-[1.586/1] rounded-2xl overflow-hidden
-          bg-gradient-to-br from-surface-dim via-midnight to-surface
-          shadow-2xl
+          bg-gradient-to-br from-surface-dim via-base to-surface
         "
-        style={{ perspective: 1000 }}
+        style={{ perspective: 1000, boxShadow: "0 8px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(155,139,122,0.06)" }}
       >
-        {/* Accent edge gradient */}
-        <div className="absolute inset-0 rounded-2xl border border-accent/20 pointer-events-none" />
-        <div className="absolute -inset-px rounded-2xl bg-gradient-to-br from-accent/10 via-transparent to-gold/5 pointer-events-none" />
+        {/* Subtle warm border */}
+        <div className="absolute inset-0 rounded-2xl border border-stone/8 pointer-events-none" />
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-stone/12 to-transparent pointer-events-none" />
 
         {/* Chip */}
         <div className="absolute top-8 left-8">
-          <div className="w-10 h-7 rounded bg-gradient-to-br from-accent-light/60 to-accent/40 border border-accent/30">
+          <div className="w-10 h-7 rounded bg-gradient-to-br from-stone-light/60 to-stone/40 border border-stone/30">
             <div className="w-full h-full grid grid-cols-3 grid-rows-2 gap-px p-px opacity-50">
               {[...Array(6)].map((_, i) => (
-                <div key={i} className="bg-accent/30 rounded-[1px]" />
+                <div key={i} className="bg-stone/30 rounded-[1px]" />
               ))}
             </div>
           </div>
@@ -85,21 +84,21 @@ export function CheckoutAnimation({
 
         {/* Card label */}
         <div className="absolute top-8 right-8">
-          <div className="text-[10px] uppercase tracking-[0.3em] text-accent/50 font-sans">
+          <div className="text-[10px] uppercase tracking-[0.3em] text-stone/50 font-sans">
             Billionaire Cart
           </div>
         </div>
 
         {/* Amount */}
         <div className="absolute top-1/2 left-8 -translate-y-1/2">
-          <div className="text-[10px] uppercase tracking-[0.15em] text-white/20 mb-1">
+          <div className="text-[10px] uppercase tracking-[0.15em] text-ash/30 mb-1">
             Amount
           </div>
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
-            className="text-2xl font-serif text-gold"
+            className="text-2xl font-serif text-champagne"
           >
             {formatCurrency(product.price)}
           </motion.div>
@@ -107,7 +106,7 @@ export function CheckoutAnimation({
 
         {/* Cardholder */}
         <div className="absolute bottom-8 left-8">
-          <div className="text-[10px] uppercase tracking-[0.3em] text-white/25">
+          <div className="text-[10px] uppercase tracking-[0.3em] text-ash/40">
             {billionaire.name}
           </div>
         </div>
@@ -123,7 +122,7 @@ export function CheckoutAnimation({
             transition={{ duration: 0.3 }}
             className={`
               text-xs uppercase tracking-[0.2em] font-medium
-              ${phase === "done" ? "text-emerald-400" : "text-accent"}
+              ${phase === "done" ? "text-sage" : "text-stone"}
             `}
           >
             {phase === "done" ? "✓ Authorized" : "Authorizing..."}
@@ -136,7 +135,7 @@ export function CheckoutAnimation({
             initial={{ opacity: 0.6 }}
             animate={{ opacity: 0 }}
             transition={{ duration: 0.4 }}
-            className="absolute inset-0 bg-accent/20"
+            className="absolute inset-0 bg-stone/20"
           />
         )}
       </motion.div>

@@ -32,11 +32,11 @@ export function EasterEggOverlay({ egg, onDismiss }: EasterEggOverlayProps) {
   const effectStyles: Record<string, string> = {
     shake: "animate-[shake_0.5s_ease-in-out_3]",
     rainbow:
-      "bg-gradient-to-r from-red-500/20 via-yellow-500/20 via-green-500/20 via-blue-500/20 to-purple-500/20",
-    gold_rain: "bg-gradient-to-b from-amber-500/15 to-transparent",
-    explosion: "bg-red-500/10",
-    matrix: "bg-emerald-500/10",
-    fire: "bg-gradient-to-t from-red-500/20 via-orange-500/10 to-transparent",
+      "bg-gradient-to-r from-stone/10 via-champagne/10 to-stone/10",
+    gold_rain: "bg-gradient-to-b from-champagne/12 to-transparent",
+    explosion: "bg-stone/10",
+    matrix: "bg-sage/10",
+    fire: "bg-gradient-to-t from-stone/15 via-champagne/8 to-transparent",
   };
 
   return (
@@ -58,16 +58,16 @@ export function EasterEggOverlay({ egg, onDismiss }: EasterEggOverlayProps) {
             transition={{ type: "spring", stiffness: 300, damping: 15 }}
             className="pointer-events-auto"
           >
-            <div className="relative px-8 py-6 rounded-2xl bg-surface/95 border-2 border-accent/50 backdrop-blur-xl shadow-accent-lg text-center">
+            <div className="relative px-8 py-6 rounded-2xl bg-surface/95 border-2 border-stone/50 backdrop-blur-xl shadow-stone-lg text-center">
               {/* Glow ring */}
-              <div className="absolute inset-0 rounded-2xl border border-accent/30 animate-pulse" />
+              <div className="absolute inset-0 rounded-2xl border border-stone/30 animate-pulse" />
 
               <div className="text-5xl mb-3">{egg.emoji}</div>
-              <div className="text-[10px] uppercase tracking-[0.4em] text-accent/60 mb-1">
+              <div className="text-[10px] uppercase tracking-[0.4em] text-stone/60 mb-1">
                 Easter Egg Discovered
               </div>
-              <div className="text-lg font-serif text-accent">{egg.name}</div>
-              <div className="text-xs text-white/40 mt-1.5 max-w-[200px]">
+              <div className="text-lg font-serif text-stone">{egg.name}</div>
+              <div className="text-xs text-ash/60 mt-1.5 max-w-[200px]">
                 {egg.description}
               </div>
             </div>

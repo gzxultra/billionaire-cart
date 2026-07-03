@@ -17,10 +17,10 @@ export function Vault() {
     return (
       <div className="text-center py-12">
         <div className="text-4xl mb-3 opacity-30">🔒</div>
-        <div className="text-xs text-white/20 uppercase tracking-[0.2em]">
+        <div className="text-xs text-ash/30 uppercase tracking-[0.2em]">
           {t("vault.empty", locale)}
         </div>
-        <div className="text-xs text-white/10 mt-1">
+        <div className="text-xs text-ash/15 mt-1">
           {t("vault.emptyHint", locale)}
         </div>
       </div>
@@ -34,12 +34,12 @@ export function Vault() {
           {t("vault.title", locale)}
         </h2>
         <div className="flex items-center gap-4 text-[10px] uppercase tracking-[0.15em]">
-          <span className="text-white/30">
-            {t("vault.deployed", locale)}: <span className="text-gold">{formatCurrency(totalSpent, true)}</span>
+          <span className="text-ash/50">
+            {t("vault.deployed", locale)}: <span className="text-champagne">{formatCurrency(totalSpent, true)}</span>
           </span>
           {monthlyBurn > 0 && (
-            <span className="text-white/30">
-              {t("vault.burn", locale)}: <span className="text-red-400/70">-{formatCurrency(monthlyBurn, true)}/mo</span>
+            <span className="text-ash/50">
+              {t("vault.burn", locale)}: <span className="text-[#9B6B6B]/70">-{formatCurrency(monthlyBurn, true)}/mo</span>
             </span>
           )}
         </div>
@@ -73,7 +73,7 @@ export function Vault() {
                     }}
                   />
                 ) : (
-                  <div className="w-full h-full bg-accent-gradient opacity-20 flex items-center justify-center text-sm">
+                  <div className="w-full h-full bg-stone-gradient opacity-20 flex items-center justify-center text-sm">
                     📦
                   </div>
                 )}
@@ -81,18 +81,18 @@ export function Vault() {
 
               {/* Info */}
               <div className="flex-1 min-w-0">
-                <div className="text-sm text-white/80 truncate">
+                <div className="text-sm text-sand/80 truncate">
                   {purchase.product.title}
                 </div>
                 <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-                  <span className="text-xs font-serif text-gold">
+                  <span className="text-xs font-serif text-champagne">
                     {formatCurrency(purchase.product.price)}
                   </span>
-                  <span className="text-[9px] px-1.5 py-0.5 rounded bg-surface-bright/30 text-white/25">
+                  <span className="text-[9px] px-1.5 py-0.5 rounded bg-surface-bright/30 text-ash/40">
                     {ASSET_LABELS[purchase.product.assetClass] || purchase.product.assetClass}
                   </span>
                   {purchase.product.monthlyOverhead > 0 && (
-                    <span className="text-[9px] text-red-400/50">
+                    <span className="text-[9px] text-[#9B6B6B]/50">
                       -{formatCurrency(purchase.product.monthlyOverhead)}/mo
                     </span>
                   )}
@@ -100,14 +100,14 @@ export function Vault() {
               </div>
 
               {/* Timestamp */}
-              <span className="text-[9px] text-white/15 shrink-0 hidden sm:block">
+              <span className="text-[9px] text-ash/25 shrink-0 hidden sm:block">
                 {timeAgo(purchase.timestamp)}
               </span>
 
               {/* Remove button */}
               <button
                 onClick={() => removePurchase(purchase.id)}
-                className="opacity-0 group-hover:opacity-100 text-white/20 hover:text-red-400/60 transition-all text-xs"
+                className="opacity-0 group-hover:opacity-100 text-ash/30 hover:text-[#9B6B6B]/60 transition-all text-xs"
               >
                 ✕
               </button>

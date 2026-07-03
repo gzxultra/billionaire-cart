@@ -51,29 +51,34 @@ export function Atmosphere() {
     window.addEventListener("resize", handleResize);
 
     function spawnParticle(pct: number) {
-      // Color shifts with spending — indigo → violet → amber → red
+      // Color shifts with spending — warm stone → muted amber → dusty rose → muted red
       let hue: number;
+      let sat: number;
       if (pct < 20) {
-        hue = 230 + Math.random() * 20; // Indigo/blue
+        hue = 30 + Math.random() * 10; // Warm stone
+        sat = 15 + Math.random() * 10;
       } else if (pct < 50) {
-        hue = 250 + Math.random() * 20; // Violet
+        hue = 35 + Math.random() * 10; // Muted amber/taupe
+        sat = 20 + Math.random() * 10;
       } else if (pct < 80) {
-        hue = 35 + Math.random() * 15; // Amber/warm
+        hue = 15 + Math.random() * 15; // Dusty rose
+        sat = 25 + Math.random() * 10;
       } else {
-        hue = Math.random() * 15; // Red/danger
+        hue = 5 + Math.random() * 10; // Muted red
+        sat = 30 + Math.random() * 10;
       }
 
-      const speed = 0.2 + (pct / 100) * 0.8;
+      const speed = 0.15 + (pct / 100) * 0.5;
       return {
         x: Math.random() * w,
         y: Math.random() * h,
         vx: (Math.random() - 0.5) * speed,
-        vy: -0.3 - Math.random() * speed,
-        size: 1 + Math.random() * (1.5 + (pct / 100) * 2),
-        opacity: 0.05 + Math.random() * (0.1 + (pct / 100) * 0.15),
+        vy: -0.2 - Math.random() * speed,
+        size: 0.8 + Math.random() * (1 + (pct / 100) * 1.5),
+        opacity: 0.03 + Math.random() * (0.06 + (pct / 100) * 0.08),
         hue,
         life: 0,
-        maxLife: 4 + Math.random() * 6,
+        maxLife: 5 + Math.random() * 8,
       };
     }
 
@@ -90,13 +95,13 @@ export function Atmosphere() {
 
       // Ambient background glow
       if (lastPct > 30) {
-        const glowIntensity = Math.min(0.06, ((lastPct - 30) / 70) * 0.06);
-        const glowHue = lastPct > 70 ? 0 : 25;
+        const glowIntensity = Math.min(0.03, ((lastPct - 30) / 70) * 0.03);
+        const glowHue = lastPct > 70 ? 5 : 30;
         const gradient = ctx.createRadialGradient(
           w / 2, h * 0.4, 0,
           w / 2, h * 0.4, Math.max(w, h) * 0.7
         );
-        gradient.addColorStop(0, `hsla(${glowHue}, 80%, 50%, ${glowIntensity})`);
+        gradient.addColorStop(0, `hsla(${glowHue}, 25%, 45%, ${glowIntensity})`);
         gradient.addColorStop(1, "transparent");
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, w, h);
@@ -130,7 +135,7 @@ export function Atmosphere() {
         const alpha = p.opacity * fadeFactor;
 
         ctx.globalAlpha = alpha;
-        ctx.fillStyle = `hsl(${p.hue}, 70%, 60%)`;
+        ctx.fillStyle = `hsl(${p.hue}, 20%, 55%)`;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         ctx.fill();
@@ -180,7 +185,7 @@ export function Atmosphere() {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 pointer-events-none z-0"
-      style={{ opacity: 0.8 }}
+      style={{ opacity: 0.5 }}
     />
   );
 }

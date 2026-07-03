@@ -142,11 +142,11 @@ export function OmniBox() {
           className="
             w-full px-5 py-4 rounded-xl
             bg-surface/80 border border-line/30
-            text-white/90 placeholder:text-white/20
-            focus:outline-none focus:border-accent/50 focus:shadow-accent
+            text-sand/90 placeholder:text-ash/30
+            focus:outline-none focus:border-stone/50 focus:shadow-stone
             transition-all duration-300 text-sm
             disabled:opacity-50
-            animate-accent-pulse
+            animate-stone-pulse
           "
         />
         <button
@@ -155,7 +155,7 @@ export function OmniBox() {
           className="
             absolute right-2 top-1/2 -translate-y-1/2
             px-4 py-2 rounded-lg text-xs font-medium
-            bg-accent/20 text-accent hover:bg-accent/30
+            bg-stone/20 text-stone hover:bg-stone/30
             disabled:opacity-30 transition-all
           "
         >
@@ -166,7 +166,7 @@ export function OmniBox() {
       {/* Manual entry toggle */}
       <button
         onClick={() => setShowManual(!showManual)}
-        className="text-[11px] text-white/25 hover:text-accent/60 transition-colors"
+        className="text-[11px] text-ash/40 hover:text-stone/60 transition-colors"
       >
         {showManual ? "← Back to URL" : "Or enter manually →"}
       </button>
@@ -185,7 +185,7 @@ export function OmniBox() {
               value={manualTitle}
               onChange={(e) => setManualTitle(e.target.value)}
               placeholder="Product name..."
-              className="w-full px-4 py-3 rounded-lg bg-surface/60 border border-line/20 text-white/80 placeholder:text-white/15 text-sm focus:outline-none focus:border-accent/40"
+              className="w-full px-4 py-3 rounded-lg bg-surface/60 border border-line/20 text-sand/80 placeholder:text-ash/25 text-sm focus:outline-none focus:border-stone/40"
             />
             <div className="flex gap-3">
               <input
@@ -193,12 +193,12 @@ export function OmniBox() {
                 value={manualPrice}
                 onChange={(e) => setManualPrice(e.target.value)}
                 placeholder="Price (USD)..."
-                className="flex-1 px-4 py-3 rounded-lg bg-surface/60 border border-line/20 text-white/80 placeholder:text-white/15 text-sm focus:outline-none focus:border-accent/40"
+                className="flex-1 px-4 py-3 rounded-lg bg-surface/60 border border-line/20 text-sand/80 placeholder:text-ash/25 text-sm focus:outline-none focus:border-stone/40"
               />
               <select
                 value={manualClass}
                 onChange={(e) => setManualClass(e.target.value as AssetClass)}
-                className="px-3 py-3 rounded-lg bg-surface/60 border border-line/20 text-white/60 text-sm focus:outline-none focus:border-accent/40"
+                className="px-3 py-3 rounded-lg bg-surface/60 border border-line/20 text-ash text-sm focus:outline-none focus:border-stone/40"
               >
                 {ASSET_OPTIONS.map((opt) => (
                   <option key={opt.value} value={opt.value}>
@@ -209,7 +209,7 @@ export function OmniBox() {
             </div>
             <button
               onClick={handleManualSubmit}
-              className="w-full py-3 rounded-lg bg-accent/15 text-accent text-sm font-medium hover:bg-accent/25 transition-colors"
+              className="w-full py-3 rounded-lg bg-stone/15 text-stone text-sm font-medium hover:bg-stone/25 transition-colors"
             >
               Add Item
             </button>
@@ -224,7 +224,7 @@ export function OmniBox() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="text-xs text-red-400/70 px-1"
+            className="text-xs text-[#9B6B6B]/70 px-1"
           >
             {error}
           </motion.div>
@@ -270,7 +270,7 @@ export function OmniBox() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="fixed bottom-8 left-1/2 -translate-x-1/2 px-6 py-3 rounded-xl bg-accent/20 border border-accent/40 text-accent text-sm backdrop-blur-md z-50"
+            className="fixed bottom-8 left-1/2 -translate-x-1/2 px-6 py-3 rounded-xl bg-stone/20 border border-stone/40 text-stone text-sm backdrop-blur-md z-50"
           >
             {toast}
           </motion.div>

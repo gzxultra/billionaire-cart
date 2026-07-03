@@ -14,7 +14,7 @@ export function Achievements() {
         <h2 className="section-label">
           Achievements
         </h2>
-        <span className="text-[10px] text-white/20">
+        <span className="text-[10px] text-ash/30">
           {unlocked.length}/{achievements.length}
         </span>
       </div>
@@ -27,13 +27,13 @@ export function Achievements() {
             animate={{ scale: 1, opacity: 1 }}
             className="
               flex flex-col items-center gap-1 p-3 rounded-lg
-              bg-accent/10 border border-accent/20
-              shadow-accent-sm
+              bg-stone/10 border border-stone/20
+              shadow-stone-sm
             "
             title={`${a.name}: ${a.description}`}
           >
             <span className="text-2xl">{a.icon}</span>
-            <span className="text-[9px] text-accent text-center leading-tight">
+            <span className="text-[9px] text-stone text-center leading-tight">
               {a.name}
             </span>
             <span
@@ -41,10 +41,10 @@ export function Achievements() {
                 text-[8px] uppercase tracking-wider
                 ${
                   a.rarity === "legendary"
-                    ? "text-amber-400"
+                    ? "text-champagne"
                     : a.rarity === "rare"
                     ? "text-slate-300"
-                    : "text-accent/60"
+                    : "text-stone/60"
                 }
               `}
             >
@@ -64,7 +64,7 @@ export function Achievements() {
             title={a.description}
           >
             <span className="text-2xl grayscale">🔒</span>
-            <span className="text-[9px] text-white/20 text-center">???</span>
+            <span className="text-[9px] text-ash/30 text-center">???</span>
           </div>
         ))}
       </div>

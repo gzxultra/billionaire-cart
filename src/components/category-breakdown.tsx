@@ -15,20 +15,20 @@ interface CategoryData {
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
-  supercar: "#ef4444",
-  yacht: "#3b82f6",
-  aircraft: "#8b5cf6",
-  real_estate: "#f59e0b",
-  rv_trailer: "#10b981",
-  commercial_tech: "#06b6d4",
-  luxury_fashion: "#ec4899",
-  jewelry: "#d946ef",
-  coffee_equipment: "#a16207",
-  custom_keyboard: "#6366f1",
-  industrial_equipment: "#64748b",
-  art: "#f43f5e",
-  electronics: "#14b8a6",
-  other: "#71717a",
+  supercar: "#9B6B6B",
+  yacht: "#6B7F9B",
+  aircraft: "#8B7B9B",
+  real_estate: "#9B8B6B",
+  rv_trailer: "#7D9B8A",
+  commercial_tech: "#6B8B9B",
+  luxury_fashion: "#9B7B8B",
+  jewelry: "#8B6B9B",
+  coffee_equipment: "#8B7A5B",
+  custom_keyboard: "#7A7B9B",
+  industrial_equipment: "#7B7B7B",
+  art: "#9B6B7B",
+  electronics: "#6B9B8B",
+  other: "#6B6560",
 };
 
 export function CategoryBreakdown() {
@@ -129,10 +129,10 @@ export function CategoryBreakdown() {
           </svg>
           {/* Center label */}
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <div className="text-[10px] text-white/25 uppercase tracking-wider">
+            <div className="text-[10px] text-ash/40 uppercase tracking-wider">
               Items
             </div>
-            <div className="text-xl font-serif text-white/70 tabular-nums">
+            <div className="text-xl font-serif text-sand/70 tabular-nums">
               {purchases.length}
             </div>
           </div>
@@ -153,17 +153,17 @@ export function CategoryBreakdown() {
                 style={{ backgroundColor: cat.color, opacity: 0.7 }}
               />
               <div className="flex-1 min-w-0 flex items-baseline justify-between gap-1">
-                <span className="text-[11px] text-white/50 truncate">
+                <span className="text-[11px] text-ash/80 truncate">
                   {cat.label}
                 </span>
-                <span className="text-[10px] text-white/25 shrink-0 tabular-nums">
+                <span className="text-[10px] text-ash/40 shrink-0 tabular-nums">
                   {cat.percent.toFixed(1)}%
                 </span>
               </div>
             </motion.div>
           ))}
           {categories.length > 6 && (
-            <div className="text-[9px] text-white/15">
+            <div className="text-[9px] text-ash/25">
               +{categories.length - 6} more categories
             </div>
           )}
@@ -172,9 +172,9 @@ export function CategoryBreakdown() {
 
       {/* Top spending stat */}
       {topCategory && (
-        <div className="mt-4 pt-3 border-t border-line/10 text-[10px] text-white/25">
+        <div className="mt-4 pt-3 border-t border-line/10 text-[10px] text-ash/40">
           Biggest category:{" "}
-          <span className="text-accent/60">
+          <span className="text-stone/60">
             {ASSET_LABELS[topCategory.assetClass] || topCategory.assetClass}
           </span>{" "}
           — {formatCurrency(topCategory.amount, true)} ({topCategory.count}{" "}

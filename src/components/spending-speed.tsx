@@ -54,22 +54,22 @@ export function SpendingSpeed() {
   let verdictColor = "";
   if (spendRate === 0) {
     verdict = t("speed.idle", locale);
-    verdictColor = "text-white/20";
+    verdictColor = "text-ash/30";
   } else if (ratio < 0.5) {
     verdict = t("speed.barelyDent", locale);
-    verdictColor = "text-emerald-400/60";
+    verdictColor = "text-sage/60";
   } else if (ratio < 1) {
     verdict = t("speed.spendingFast", locale);
-    verdictColor = "text-yellow-400/60";
+    verdictColor = "text-champagne/60";
   } else if (ratio < 5) {
     verdict = t("speed.outpacing", locale);
-    verdictColor = "text-orange-400/70";
+    verdictColor = "text-stone/70";
   } else if (ratio < 50) {
     verdict = t("speed.onFire", locale);
-    verdictColor = "text-red-400/80";
+    verdictColor = "text-[#9B6B6B]/80";
   } else {
     verdict = t("speed.carnage", locale);
-    verdictColor = "text-red-500";
+    verdictColor = "text-[#9B6B6B]";
   }
 
   const remaining = netWorth - totalSpent;
@@ -100,9 +100,9 @@ export function SpendingSpeed() {
       {/* Speed gauge */}
       <div className="flex items-end gap-4">
         <div>
-          <div className="text-2xl font-serif text-accent tabular-nums">
+          <div className="text-2xl font-serif text-stone tabular-nums">
             {formatCurrency(spendRate)}
-            <span className="text-[10px] text-white/25 ml-1">{t("speed.perSec", locale)}</span>
+            <span className="text-[10px] text-ash/40 ml-1">{t("speed.perSec", locale)}</span>
           </div>
           <div className={`text-xs mt-1 ${verdictColor}`}>{verdict}</div>
         </div>
@@ -121,7 +121,7 @@ export function SpendingSpeed() {
                   height: 4 + (i / 20) * 28,
                   backgroundColor: filled
                     ? i < 8
-                      ? "rgba(52, 211, 153, 0.4)"
+                      ? "rgba(125, 155, 138, 0.4)"
                       : i < 14
                       ? "rgba(251, 191, 36, 0.4)"
                       : "rgba(239, 68, 68, 0.5)"
@@ -136,17 +136,17 @@ export function SpendingSpeed() {
 
       {/* Context row */}
       <div className="flex items-center justify-between text-[10px]">
-        <span className="text-white/20">
+        <span className="text-ash/30">
           {t("speed.last60", locale)}:{" "}
-          <span className="text-white/40">
+          <span className="text-ash/60">
             {formatCurrency(totalThisMinute, true)}
           </span>
         </span>
         {eps > 0 && (
-          <span className="text-white/20">
+          <span className="text-ash/30">
             {t("speed.vsEarnings", locale)}:{" "}
             <span
-              className={ratio > 1 ? "text-red-400/60" : "text-emerald-400/60"}
+              className={ratio > 1 ? "text-stone/80" : "text-sage/60"}
             >
               {ratio.toFixed(1)}× {ratio > 1 ? t("speed.faster", locale) : t("speed.slower", locale)}
             </span>
@@ -156,9 +156,9 @@ export function SpendingSpeed() {
 
       {/* Time to bankruptcy */}
       {timeToBankrupt && timeToBankrupt > 0 && remaining > 0 && (
-        <div className="text-[10px] text-red-400/40 pt-1 border-t border-line/10">
+        <div className="text-[10px] text-[#9B6B6B]/40 pt-1 border-t border-line/10">
           ⚠ {t("speed.bankruptIn", locale)}{" "}
-          <span className="text-red-400/60">{formatTime(timeToBankrupt)}</span>
+          <span className="text-stone/80">{formatTime(timeToBankrupt)}</span>
         </div>
       )}
     </div>
