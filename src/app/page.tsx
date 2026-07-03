@@ -9,6 +9,10 @@ import { OmniBox } from "@/components/omni-box";
 import { Vault } from "@/components/vault";
 import { Achievements } from "@/components/achievements";
 import { ShareReceipt } from "@/components/share-receipt";
+import { Catalog } from "@/components/catalog";
+import { WealthContext } from "@/components/wealth-context";
+import { SpendingSpeed } from "@/components/spending-speed";
+import { BankruptOverlay } from "@/components/bankrupt-overlay";
 
 export default function Home() {
   const selectedBillionaire = useCartStore((s) => s.selectedBillionaire);
@@ -69,9 +73,24 @@ export default function Home() {
               <BalanceDisplay />
             </section>
 
+            {/* Wealth Context (milestones + comparisons) */}
+            <section className="glass-panel p-6">
+              <WealthContext />
+            </section>
+
+            {/* Spending Speed */}
+            <section className="glass-panel p-6">
+              <SpendingSpeed />
+            </section>
+
             {/* Earnings Velocity */}
             <section className="glass-panel p-6">
               <EarningsTicker />
+            </section>
+
+            {/* Quick Buy Catalog */}
+            <section className="glass-panel p-6">
+              <Catalog />
             </section>
 
             {/* Omni-Box */}
@@ -100,6 +119,9 @@ export default function Home() {
           </p>
         </div>
       </footer>
+
+      {/* Bankrupt overlay */}
+      <BankruptOverlay />
     </main>
   );
 }

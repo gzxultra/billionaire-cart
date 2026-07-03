@@ -136,6 +136,66 @@ const achievementDefs: Omit<Achievement, "unlocked">[] = [
     rarity: "common",
     checkFn: (p) => p.length >= 20,
   },
+  // ─── New achievements for catalog/context features ─────────────
+  {
+    id: "coffee-for-everyone",
+    name: "Coffee for Everyone",
+    description: "Buy 1,000+ coffees/lattes",
+    icon: "☕",
+    rarity: "common",
+    checkFn: (p) =>
+      p.filter((x) => x.product.title.toLowerCase().includes("latte") || x.product.title.toLowerCase().includes("coffee")).length >= 1000,
+  },
+  {
+    id: "ten-billion",
+    name: "Ten Billion Club",
+    description: "Spend over $10,000,000,000",
+    icon: "💰",
+    rarity: "legendary",
+    checkFn: (p) => totalSpent(p) >= 10_000_000_000,
+  },
+  {
+    id: "hundred-items",
+    name: "Hundred Club",
+    description: "Own 100 items",
+    icon: "📦",
+    rarity: "rare",
+    checkFn: (p) => p.length >= 100,
+  },
+  {
+    id: "country-buyer",
+    name: "Country Buyer",
+    description: "Spend more than GDP of Tuvalu ($60M)",
+    icon: "🌍",
+    rarity: "rare",
+    checkFn: (p) => totalSpent(p) >= 60_000_000,
+  },
+  {
+    id: "social-media-mogul",
+    name: "Social Media Mogul",
+    description: "Buy Twitter / X",
+    icon: "🐦",
+    rarity: "legendary",
+    checkFn: (p) =>
+      p.some((x) => x.product.title.toLowerCase().includes("twitter")),
+  },
+  {
+    id: "space-cadet",
+    name: "Space Cadet",
+    description: "Buy the International Space Station",
+    icon: "🛸",
+    rarity: "legendary",
+    checkFn: (p) =>
+      p.some((x) => x.product.title.toLowerCase().includes("space station")),
+  },
+  {
+    id: "total-wipeout",
+    name: "Total Wipeout",
+    description: "Spend more than any single billionaire's full net worth",
+    icon: "💀",
+    rarity: "legendary",
+    checkFn: (p) => totalSpent(p) >= 230_000_000_000, // Elon's net worth
+  },
 ];
 
 export const achievements: Achievement[] = achievementDefs.map((a) => ({
