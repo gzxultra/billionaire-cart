@@ -5,8 +5,11 @@ import { billionaires } from "@/data/billionaires";
 import { useCartStore } from "@/lib/store";
 import { formatNetWorth } from "@/lib/format";
 import { initAudio } from "@/lib/sounds";
+import { useLocale } from "@/lib/use-locale";
+import { t } from "@/lib/i18n";
 
 export function IdentitySelector() {
+  const locale = useLocale((s) => s.locale);
   const selectedBillionaire = useCartStore((s) => s.selectedBillionaire);
   const selectBillionaire = useCartStore((s) => s.selectBillionaire);
 
@@ -18,7 +21,7 @@ export function IdentitySelector() {
   return (
     <div className="w-full">
       <h2 className="text-xs uppercase tracking-[0.3em] text-copper/60 mb-4 font-sans">
-        Select Identity
+        {t("identity.title", locale)}
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
         {billionaires.map((b) => {

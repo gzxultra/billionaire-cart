@@ -2,6 +2,8 @@
 
 import { useState, useCallback } from "react";
 import { useCartStore } from "@/lib/store";
+import { useLocale } from "@/lib/use-locale";
+import { t } from "@/lib/i18n";
 import { IdentitySelector } from "@/components/identity-selector";
 import { BalanceDisplay } from "@/components/balance-display";
 import { EarningsTicker } from "@/components/earnings-ticker";
@@ -33,6 +35,8 @@ export default function Home() {
   const soundEnabled = useCartStore((s) => s.soundEnabled);
   const toggleSound = useCartStore((s) => s.toggleSound);
   const reset = useCartStore((s) => s.reset);
+  const locale = useLocale((s) => s.locale);
+  const toggleLocale = useLocale((s) => s.toggleLocale);
 
   // Absurd toast state
   const [lastPurchasePrice, setLastPurchasePrice] = useState(0);
@@ -67,17 +71,25 @@ export default function Home() {
       <ComboStreak />
 
       {/* Header */}
-      <header className="border-b border-charcoal-600/10 relative z-10">
-        <div className="max-w-3xl mx-auto px-4 py-6 flex items-center justify-between">
+      <header className="border-b border-charcoal-600/10 relative z-10 sticky top-0 bg-vanta/80 backdrop-blur-lg">
+        <div className="max-w-3xl mx-auto px-4 py-4 sm:py-6 flex items-center justify-between">
           <div>
             <h1 className="text-sm font-medium text-white/80 tracking-wide">
-              Billionaire Cart
+              {t("app.title", locale)}
             </h1>
-            <p className="text-[10px] text-white/15 uppercase tracking-[0.3em] mt-0.5">
-              Universal Checkout Simulation
+            <p className="text-[10px] text-white/15 uppercase tracking-[0.3em] mt-0.5 hidden sm:block">
+              {t("app.subtitle", locale)}
             </p>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
+            {/* Language toggle */}
+            <button
+              onClick={toggleLocale}
+              className="px-2 py-1 rounded-md text-[11px] font-medium text-copper/60 hover:text-copper bg-charcoal-800/60 border border-charcoal-600/20 hover:border-copper/30 transition-all"
+              title={locale === "en" ? "切换到中文" : "Switch to English"}
+            >
+              {locale === "en" ? "中" : "EN"}
+            </button>
             <ShareReceipt />
             <button
               onClick={toggleSound}
@@ -91,16 +103,16 @@ export default function Home() {
                 onClick={handleReset}
                 className="text-[10px] text-white/15 hover:text-red-400/50 transition-colors uppercase tracking-wider"
               >
-                Reset
+                {t("app.reset", locale)}
               </button>
             )}
           </div>
         </div>
       </header>
 
-      <div className="max-w-3xl mx-auto px-4 py-8 space-y-8 relative z-10">
+      <div className="max-w-3xl mx-auto px-3 sm:px-4 py-4 sm:py-8 space-y-4 sm:space-y-8 relative z-10">
         {/* Identity selector — always visible */}
-        <section className="glass-panel p-6">
+        <section className="glass-panel p-4 sm:p-6">
           <IdentitySelector />
         </section>
 
@@ -108,67 +120,67 @@ export default function Home() {
         {selectedBillionaire && (
           <>
             {/* Black Card */}
-            <section className="glass-panel p-6">
+            <section className="glass-panel p-4 sm:p-6">
               <BlackCard />
             </section>
 
             {/* Balance */}
-            <section className="glass-panel p-6">
+            <section className="glass-panel p-4 sm:p-6">
               <BalanceDisplay />
             </section>
 
             {/* Wealth Context (milestones + comparisons) */}
-            <section className="glass-panel p-6">
+            <section className="glass-panel p-4 sm:p-6">
               <WealthContext />
             </section>
 
             {/* Billionaire Reactions */}
-            <section className="glass-panel p-6">
+            <section className="glass-panel p-4 sm:p-6">
               <BillionaireReactions />
             </section>
 
             {/* Spending Speed */}
-            <section className="glass-panel p-6">
+            <section className="glass-panel p-4 sm:p-6">
               <SpendingSpeed />
             </section>
 
             {/* Earnings Velocity */}
-            <section className="glass-panel p-6">
+            <section className="glass-panel p-4 sm:p-6">
               <EarningsTicker />
             </section>
 
             {/* Quick Buy Catalog */}
-            <section className="glass-panel p-6">
+            <section className="glass-panel p-4 sm:p-6">
               <Catalog onPurchase={handlePurchase} />
             </section>
 
             {/* Speedrun Mode */}
-            <section className="glass-panel p-6">
+            <section className="glass-panel p-4 sm:p-6">
               <SpeedrunTimer />
             </section>
 
             {/* Category Breakdown */}
-            <section className="glass-panel p-6">
+            <section className="glass-panel p-4 sm:p-6">
               <CategoryBreakdown />
             </section>
 
             {/* Real-World Impact */}
-            <section className="glass-panel p-6">
+            <section className="glass-panel p-4 sm:p-6">
               <GuiltMeter />
             </section>
 
             {/* Omni-Box */}
-            <section className="glass-panel p-6">
+            <section className="glass-panel p-4 sm:p-6">
               <OmniBox />
             </section>
 
             {/* The Vault */}
-            <section className="glass-panel p-6">
+            <section className="glass-panel p-4 sm:p-6">
               <Vault />
             </section>
 
             {/* Achievements */}
-            <section className="glass-panel p-6">
+            <section className="glass-panel p-4 sm:p-6">
               <Achievements />
             </section>
           </>
@@ -179,7 +191,7 @@ export default function Home() {
       <footer className="border-t border-charcoal-600/5 mt-16 relative z-10">
         <div className="max-w-3xl mx-auto px-4 py-6 text-center">
           <p className="text-[9px] text-white/10 uppercase tracking-[0.2em]">
-            Simulation only — no real purchases are made
+            {t("app.footer", locale)}
           </p>
         </div>
       </footer>

@@ -3,8 +3,11 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useCartStore, selectTotalSpent, selectMonthlyBurn } from "@/lib/store";
 import { formatCurrency, timeAgo, ASSET_LABELS } from "@/lib/format";
+import { useLocale } from "@/lib/use-locale";
+import { t } from "@/lib/i18n";
 
 export function Vault() {
+  const locale = useLocale((s) => s.locale);
   const purchases = useCartStore((s) => s.purchases);
   const removePurchase = useCartStore((s) => s.removePurchase);
   const totalSpent = useCartStore(selectTotalSpent);
@@ -15,10 +18,10 @@ export function Vault() {
       <div className="text-center py-12">
         <div className="text-4xl mb-3 opacity-30">🔒</div>
         <div className="text-xs text-white/20 uppercase tracking-[0.2em]">
-          The Vault is Empty
+          {t("vault.empty", locale)}
         </div>
         <div className="text-xs text-white/10 mt-1">
-          Paste a URL above to make your first acquisition
+          {t("vault.emptyHint", locale)}
         </div>
       </div>
     );
@@ -26,17 +29,17 @@ export function Vault() {
 
   return (
     <div className="w-full">
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
         <h2 className="text-xs uppercase tracking-[0.3em] text-copper/60 font-sans">
-          The Vault
+          {t("vault.title", locale)}
         </h2>
         <div className="flex items-center gap-4 text-[10px] uppercase tracking-[0.15em]">
           <span className="text-white/30">
-            Deployed: <span className="text-copper">{formatCurrency(totalSpent, true)}</span>
+            {t("vault.deployed", locale)}: <span className="text-copper">{formatCurrency(totalSpent, true)}</span>
           </span>
           {monthlyBurn > 0 && (
             <span className="text-white/30">
-              Burn: <span className="text-red-400/70">-{formatCurrency(monthlyBurn, true)}/mo</span>
+              {t("vault.burn", locale)}: <span className="text-red-400/70">-{formatCurrency(monthlyBurn, true)}/mo</span>
             </span>
           )}
         </div>
@@ -81,7 +84,7 @@ export function Vault() {
                 <div className="text-sm text-white/80 truncate">
                   {purchase.product.title}
                 </div>
-                <div className="flex items-center gap-2 mt-0.5">
+                <div className="flex items-center gap-2 mt-0.5 flex-wrap">
                   <span className="text-xs font-serif text-copper">
                     {formatCurrency(purchase.product.price)}
                   </span>
@@ -97,7 +100,7 @@ export function Vault() {
               </div>
 
               {/* Timestamp */}
-              <span className="text-[9px] text-white/15 shrink-0">
+              <span className="text-[9px] text-white/15 shrink-0 hidden sm:block">
                 {timeAgo(purchase.timestamp)}
               </span>
 

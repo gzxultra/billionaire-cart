@@ -3,8 +3,16 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useCartStore } from "@/lib/store";
 import { formatCurrency } from "@/lib/format";
+import { useLocale } from "@/lib/use-locale";
+import { t } from "@/lib/i18n";
 
-function formatEarnBackTime(seconds: number): string {
+function formatEarnBackTime(seconds: number, locale: string): string {
+  if (locale === "zh") {
+    if (seconds < 60) return `${Math.ceil(seconds)} 秒`;
+    if (seconds < 3600) return `${Math.ceil(seconds / 60)} 分钟`;
+    if (seconds < 86400) return `${(seconds / 3600).toFixed(1)} 小时`;
+    return `${(seconds / 86400).toFixed(1)} 天`;
+  }
   if (seconds < 60) return `${Math.ceil(seconds)} seconds`;
   if (seconds < 3600) return `${Math.ceil(seconds / 60)} minutes`;
   if (seconds < 86400) return `${(seconds / 3600).toFixed(1)} hours`;
@@ -12,6 +20,7 @@ function formatEarnBackTime(seconds: number): string {
 }
 
 export function EarningsTicker() {
+  const locale = useLocale((s) => s.locale);
   const selectedBillionaire = useCartStore((s) => s.selectedBillionaire);
   const purchases = useCartStore((s) => s.purchases);
 
@@ -25,7 +34,6 @@ export function EarningsTicker() {
   const earnBackTotalRef = useRef<number>(0);
   const rafRef = useRef<number>(0);
 
-  // Reset start time when billionaire changes
   useEffect(() => {
     startTimeRef.current = Date.now();
     setEarnedSinceStart(0);
@@ -35,7 +43,6 @@ export function EarningsTicker() {
     earnBackStartRef.current = null;
   }, [selectedBillionaire?.id]);
 
-  // Detect new purchases
   useEffect(() => {
     if (purchases.length > lastPurchaseRef.current && purchases.length > 0) {
       const lastPurchase = purchases[purchases.length - 1];
@@ -52,7 +59,6 @@ export function EarningsTicker() {
     lastPurchaseRef.current = purchases.length;
   }, [purchases, selectedBillionaire]);
 
-  // Animation loop
   const animate = useCallback(() => {
     if (!selectedBillionaire) return;
 
@@ -60,14 +66,12 @@ export function EarningsTicker() {
     const elapsedSec = (Date.now() - startTimeRef.current) / 1000;
     setEarnedSinceStart(elapsedSec * eps);
 
-    // Update earn-back countdown
     if (earnBackStartRef.current !== null) {
       const earnBackElapsed = (Date.now() - earnBackStartRef.current) / 1000;
       const remaining = earnBackTotalRef.current - earnBackElapsed;
       if (remaining <= 0) {
         setEarnBackRemaining(0);
         setEarnedBack(true);
-        // Clear after 3 seconds of showing "Earned back!"
         setTimeout(() => {
           earnBackStartRef.current = null;
           setEarnBackRemaining(null);
@@ -94,30 +98,27 @@ export function EarningsTicker() {
   return (
     <div className="w-full space-y-4">
       <div className="text-xs uppercase tracking-[0.3em] text-copper/60 font-sans">
-        Earnings Velocity
+        {t("earnings.title", locale)}
       </div>
 
-      {/* Per-second rate */}
       <div>
         <div className="text-[10px] uppercase tracking-[0.2em] text-white/25 mb-1">
-          Earning Rate
+          {t("earnings.rate", locale)}
         </div>
         <div className="text-lg font-serif text-copper tabular-nums">
-          {formatCurrency(eps)}<span className="text-[10px] text-white/25 ml-1">/sec</span>
+          {formatCurrency(eps)}<span className="text-[10px] text-white/25 ml-1">{t("speed.perSec", locale)}</span>
         </div>
       </div>
 
-      {/* Earned since start */}
       <div>
         <div className="text-[10px] uppercase tracking-[0.2em] text-white/25 mb-1">
-          Earned Since You Started
+          {t("earnings.since", locale)}
         </div>
         <div className="text-2xl font-serif text-copper tabular-nums">
           {formatCurrency(earnedSinceStart, earnedSinceStart >= 1_000_000)}
         </div>
       </div>
 
-      {/* Earn-back countdown */}
       {earnBackRemaining !== null && (
         <div className={`rounded-xl px-4 py-3 transition-colors duration-300 ${
           earnedBack
@@ -126,15 +127,15 @@ export function EarningsTicker() {
         }`}>
           {earnedBack ? (
             <div className="text-emerald-400 text-sm font-medium animate-pulse">
-              ✓ Earned back!
+              ✓ {t("earnings.earnedBack", locale)}
             </div>
           ) : (
             <>
               <div className="text-[10px] uppercase tracking-[0.2em] text-white/25 mb-1">
-                ⏱ Earn-back Time
+                ⏱ {t("earnings.earnBack", locale)}
               </div>
               <div className="text-lg font-serif text-copper tabular-nums">
-                {formatEarnBackTime(earnBackRemaining)}
+                {formatEarnBackTime(earnBackRemaining, locale)}
               </div>
             </>
           )}

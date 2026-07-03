@@ -3,75 +3,101 @@
 import { motion } from "framer-motion";
 import { useCartStore, selectTotalSpent, selectNetWorth } from "@/lib/store";
 import { formatCurrency } from "@/lib/format";
+import { useLocale } from "@/lib/use-locale";
+import { t } from "@/lib/i18n";
 
 interface Milestone {
   label: string;
+  labelZh: string;
   amount: number;
   emoji: string;
 }
 
 const MILESTONES: Milestone[] = [
-  { label: "Average Student Debt", amount: 37000, emoji: "🎓" },
-  { label: "Tesla Model 3", amount: 38990, emoji: "⚡" },
-  { label: "Median US Home", amount: 420000, emoji: "🏠" },
-  { label: "One Comma Club", amount: 1000000, emoji: "💰" },
-  { label: "Lambo", amount: 248295, emoji: "🏎️" },
-  { label: "Private Jet", amount: 78000000, emoji: "✈️" },
-  { label: "GDP of Tuvalu", amount: 60000000, emoji: "🏝️" },
-  { label: "NFL Team", amount: 5000000000, emoji: "🏈" },
-  { label: "GDP of Iceland", amount: 28000000000, emoji: "🇮🇸" },
-  { label: "Twitter / X", amount: 44000000000, emoji: "🐦" },
-  { label: "GDP of Croatia", amount: 71000000000, emoji: "🇭🇷" },
-  { label: "Moon Mission", amount: 100000000000, emoji: "🌕" },
+  { label: "Average Student Debt", labelZh: "美国学生贷款平均", amount: 37000, emoji: "🎓" },
+  { label: "Tesla Model 3", labelZh: "特斯拉 Model 3", amount: 38990, emoji: "⚡" },
+  { label: "Median US Home", labelZh: "美国房价中位数", amount: 420000, emoji: "🏠" },
+  { label: "One Comma Club", labelZh: "百万俱乐部", amount: 1000000, emoji: "💰" },
+  { label: "Lambo", labelZh: "兰博基尼", amount: 248295, emoji: "🏎️" },
+  { label: "Private Jet", labelZh: "私人飞机", amount: 78000000, emoji: "✈️" },
+  { label: "GDP of Tuvalu", labelZh: "图瓦卢GDP", amount: 60000000, emoji: "🏝️" },
+  { label: "NFL Team", labelZh: "NFL球队", amount: 5000000000, emoji: "🏈" },
+  { label: "GDP of Iceland", labelZh: "冰岛GDP", amount: 28000000000, emoji: "🇮🇸" },
+  { label: "Twitter / X", labelZh: "推特 / X", amount: 44000000000, emoji: "🐦" },
+  { label: "GDP of Croatia", labelZh: "克罗地亚GDP", amount: 71000000000, emoji: "🇭🇷" },
+  { label: "Moon Mission", labelZh: "登月任务", amount: 100000000000, emoji: "🌕" },
 ];
 
 const COMPARISONS = [
   {
     unit: "average US yearly salary",
+    unitZh: "年美国人均工资",
     unitPlural: "years of average US salary",
+    unitPluralZh: "年美国人均工资",
     amount: 75000,
     emoji: "👤",
   },
   {
     unit: "cup of coffee",
+    unitZh: "杯咖啡",
     unitPlural: "cups of coffee",
+    unitPluralZh: "杯咖啡",
     amount: 6.5,
     emoji: "☕",
   },
   {
     unit: "iPhone",
+    unitZh: "部 iPhone",
     unitPlural: "iPhones",
+    unitPluralZh: "部 iPhone",
     amount: 1199,
     emoji: "📱",
   },
   {
     unit: "Toyota Corolla",
+    unitZh: "辆丰田卡罗拉",
     unitPlural: "Toyota Corollas",
+    unitPluralZh: "辆丰田卡罗拉",
     amount: 22000,
     emoji: "🚗",
   },
   {
     unit: "average American's lifetime earnings",
+    unitZh: "个美国人一生收入",
     unitPlural: "lifetimes of average earnings",
+    unitPluralZh: "个美国人一生收入",
     amount: 2700000,
     emoji: "⏳",
   },
 ];
 
-function getRelevantComparisons(totalSpent: number) {
+function getRelevantComparisons(totalSpent: number, locale: string) {
   return COMPARISONS.map((c) => {
     const count = totalSpent / c.amount;
     if (count < 1) return null;
     return {
       ...c,
       count: Math.floor(count),
+      displayUnit:
+        locale === "zh"
+          ? c.unitPluralZh
+          : Math.floor(count) === 1
+          ? c.unit
+          : c.unitPlural,
     };
   }).filter(Boolean);
 }
 
-function getEarnBackTime(totalSpent: number, earningsPerSecond: number) {
+function getEarnBackTime(totalSpent: number, earningsPerSecond: number, locale: string) {
   if (earningsPerSecond <= 0) return null;
   const seconds = totalSpent / earningsPerSecond;
+  if (locale === "zh") {
+    if (seconds < 60) return `${Math.ceil(seconds)} 秒`;
+    if (seconds < 3600) return `${Math.ceil(seconds / 60)} 分钟`;
+    if (seconds < 86400) return `${(seconds / 3600).toFixed(1)} 小时`;
+    if (seconds < 86400 * 365) return `${(seconds / 86400).toFixed(1)} 天`;
+    return `${(seconds / (86400 * 365)).toFixed(1)} 年`;
+  }
   if (seconds < 60) return `${Math.ceil(seconds)} seconds`;
   if (seconds < 3600) return `${Math.ceil(seconds / 60)} minutes`;
   if (seconds < 86400) return `${(seconds / 3600).toFixed(1)} hours`;
@@ -80,6 +106,7 @@ function getEarnBackTime(totalSpent: number, earningsPerSecond: number) {
 }
 
 export function WealthContext() {
+  const locale = useLocale((s) => s.locale);
   const selectedBillionaire = useCartStore((s) => s.selectedBillionaire);
   const totalSpent = useCartStore(selectTotalSpent);
   const netWorth = useCartStore(selectNetWorth);
@@ -94,19 +121,17 @@ export function WealthContext() {
     (m) => m.amount <= netWorth && m.amount <= totalSpent * 2
   )
     .sort((a, b) => a.amount - b.amount)
-    .slice(-5); // show up to 5 most relevant
+    .slice(-5);
 
-  // Pick 2-3 interesting comparisons
-  const comparisons = getRelevantComparisons(totalSpent);
+  const comparisons = getRelevantComparisons(totalSpent, locale);
   const topComparisons = comparisons.slice(0, 3);
 
-  // Earn-back time for the total spent
   const earnBackTime = getEarnBackTime(
     totalSpent,
-    selectedBillionaire.earningsPerSecond
+    selectedBillionaire.earningsPerSecond,
+    locale
   );
 
-  // Passed milestones
   const passedMilestones = MILESTONES.filter((m) => totalSpent >= m.amount);
   const nextMilestone = MILESTONES.filter((m) => totalSpent < m.amount).sort(
     (a, b) => a.amount - b.amount
@@ -115,7 +140,7 @@ export function WealthContext() {
   return (
     <div className="w-full space-y-4">
       <h2 className="text-xs uppercase tracking-[0.3em] text-copper/60 font-sans">
-        Spending Context
+        {t("wealth.title", locale)}
       </h2>
 
       {/* Progress bar with milestones */}
@@ -137,7 +162,6 @@ export function WealthContext() {
           />
         </div>
 
-        {/* Milestone markers on the bar */}
         {visibleMilestones.map((m) => {
           const pos = netWorth > 0 ? (m.amount / netWorth) * 100 : 0;
           if (pos > 100) return null;
@@ -148,7 +172,7 @@ export function WealthContext() {
               style={{ left: `${pos}%` }}
             >
               <div className="text-[8px] text-white/20 whitespace-nowrap">
-                {m.emoji} {m.label}
+                {m.emoji} {locale === "zh" ? m.labelZh : m.label}
               </div>
             </div>
           );
@@ -163,7 +187,7 @@ export function WealthContext() {
               key={m.label}
               className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-copper/10 border border-copper/15 text-[9px] text-copper/70"
             >
-              {m.emoji} {m.label}
+              {m.emoji} {locale === "zh" ? m.labelZh : m.label}
             </span>
           ))}
         </div>
@@ -172,14 +196,14 @@ export function WealthContext() {
       {/* Next milestone */}
       {nextMilestone && (
         <div className="text-[10px] text-white/25">
-          Next milestone:{" "}
+          {t("wealth.nextMilestone", locale)}:{" "}
           <span className="text-copper/50">
-            {nextMilestone.emoji} {nextMilestone.label} (
+            {nextMilestone.emoji} {locale === "zh" ? nextMilestone.labelZh : nextMilestone.label} (
             {formatCurrency(nextMilestone.amount, true)})
           </span>
           {" — "}
           <span className="text-white/40">
-            {formatCurrency(nextMilestone.amount - totalSpent, true)} to go
+            {formatCurrency(nextMilestone.amount - totalSpent, true)} {t("wealth.toGo", locale)}
           </span>
         </div>
       )}
@@ -188,7 +212,7 @@ export function WealthContext() {
       {topComparisons.length > 0 && (
         <div className="space-y-1.5 pt-2 border-t border-charcoal-600/10">
           <div className="text-[10px] uppercase tracking-[0.2em] text-white/20 mb-1">
-            That&apos;s equivalent to…
+            {t("wealth.equivalentTo", locale)}
           </div>
           {topComparisons.map((c) =>
             c ? (
@@ -203,7 +227,7 @@ export function WealthContext() {
                   <span className="text-copper font-serif">
                     {c.count.toLocaleString()}
                   </span>{" "}
-                  {c.count === 1 ? c.unit : c.unitPlural}
+                  {c.displayUnit}
                 </span>
               </motion.div>
             ) : null
@@ -214,7 +238,7 @@ export function WealthContext() {
       {/* Earn-back context */}
       {earnBackTime && (
         <div className="text-[10px] text-white/25 pt-2 border-t border-charcoal-600/10">
-          ⏱ {selectedBillionaire.name} earns all this back in{" "}
+          ⏱ {selectedBillionaire.name} {t("wealth.earnBack", locale)}{" "}
           <span className="text-copper/60">{earnBackTime}</span>
         </div>
       )}
