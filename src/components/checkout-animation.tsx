@@ -1,0 +1,140 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { ParsedProduct, Billionaire } from "@/lib/types";
+import { formatCurrency } from "@/lib/format";
+import { playAuthorize } from "@/lib/sounds";
+import { useCartStore } from "@/lib/store";
+
+interface CheckoutAnimationProps {
+  product: ParsedProduct;
+  billionaire: Billionaire;
+  onComplete: () => void;
+}
+
+export function CheckoutAnimation({
+  product,
+  billionaire,
+  onComplete,
+}: CheckoutAnimationProps) {
+  const [phase, setPhase] = useState<"card" | "authorize" | "done">("card");
+  const soundEnabled = useCartStore((s) => s.soundEnabled);
+
+  useEffect(() => {
+    // Phase 1: Show card (0.6s)
+    const t1 = setTimeout(() => {
+      setPhase("authorize");
+      if (soundEnabled) playAuthorize();
+    }, 600);
+
+    // Phase 2: Show authorized (1.5s after)
+    const t2 = setTimeout(() => setPhase("done"), 2100);
+
+    // Phase 3: Dismiss (1s after)
+    const t3 = setTimeout(onComplete, 3100);
+
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+    };
+  }, [onComplete, soundEnabled]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm"
+    >
+      {/* The Black Card */}
+      <motion.div
+        initial={{ scale: 0.8, rotateY: -90, opacity: 0 }}
+        animate={{
+          scale: 1,
+          rotateY: 0,
+          opacity: 1,
+        }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="
+          relative w-80 sm:w-96 aspect-[1.586/1] rounded-2xl overflow-hidden
+          bg-card-gradient border border-copper/20
+          shadow-2xl
+        "
+        style={{ perspective: 1000 }}
+      >
+        {/* Copper edge gradient */}
+        <div className="absolute inset-0 rounded-2xl border-2 border-copper/30 pointer-events-none" />
+
+        {/* Chip */}
+        <div className="absolute top-8 left-8">
+          <div className="w-10 h-7 rounded bg-gradient-to-br from-copper-light/60 to-copper-dark/40 border border-copper/30">
+            <div className="w-full h-full grid grid-cols-3 grid-rows-2 gap-px p-px opacity-50">
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="bg-copper/30 rounded-[1px]" />
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Card label */}
+        <div className="absolute top-8 right-8">
+          <div className="text-[10px] uppercase tracking-[0.3em] text-copper/50 font-sans">
+            Billionaire Cart
+          </div>
+        </div>
+
+        {/* Amount */}
+        <div className="absolute top-1/2 left-8 -translate-y-1/2">
+          <div className="text-[10px] uppercase tracking-[0.15em] text-white/20 mb-1">
+            Amount
+          </div>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="text-2xl font-serif text-copper"
+          >
+            {formatCurrency(product.price)}
+          </motion.div>
+        </div>
+
+        {/* Cardholder */}
+        <div className="absolute bottom-8 left-8">
+          <div className="text-[10px] uppercase tracking-[0.3em] text-white/25">
+            {billionaire.name}
+          </div>
+        </div>
+
+        {/* Authorization status */}
+        <div className="absolute bottom-8 right-8">
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{
+              opacity: phase === "authorize" || phase === "done" ? 1 : 0,
+              x: phase === "authorize" || phase === "done" ? 0 : 20,
+            }}
+            transition={{ duration: 0.3 }}
+            className={`
+              text-xs uppercase tracking-[0.2em] font-medium
+              ${phase === "done" ? "text-emerald-400" : "text-copper"}
+            `}
+          >
+            {phase === "done" ? "✓ Authorized" : "Authorizing..."}
+          </motion.div>
+        </div>
+
+        {/* Flash effect */}
+        {phase === "authorize" && (
+          <motion.div
+            initial={{ opacity: 0.6 }}
+            animate={{ opacity: 0 }}
+            transition={{ duration: 0.4 }}
+            className="absolute inset-0 bg-copper/20"
+          />
+        )}
+      </motion.div>
+    </motion.div>
+  );
+}

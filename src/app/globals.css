@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-vanta text-white antialiased;
+    font-feature-settings: "ss01", "ss02", "cv01";
+  }
+
+  /* Custom scrollbar — subtle */
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(184, 115, 51, 0.15);
+    border-radius: 2px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(184, 115, 51, 0.3);
+  }
+
+  /* Selection */
+  ::selection {
+    background: rgba(184, 115, 51, 0.3);
+    color: white;
+  }
+}
+
+@layer components {
+  .glass-panel {
+    @apply bg-charcoal-800/40 backdrop-blur-xl border border-charcoal-600/15 rounded-2xl;
+  }
+
+  .glass-panel-hover {
+    @apply glass-panel hover:border-copper/15 hover:bg-charcoal-800/60 transition-all duration-300;
+  }
+
+  .copper-text {
+    @apply text-copper;
+  }
+
+  .copper-border {
+    @apply border-copper/30;
+  }
+
+  .section-label {
+    @apply text-xs uppercase tracking-[0.3em] text-copper/60 font-sans;
+  }
+
+  .mono-number {
+    @apply font-serif tabular-nums;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
