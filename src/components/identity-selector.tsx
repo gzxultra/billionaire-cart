@@ -14,7 +14,7 @@ export function IdentitySelector() {
   const locale = useLocale((s) => s.locale);
   const selectedBillionaire = useCartStore((s) => s.selectedBillionaire);
   const selectBillionaire = useCartStore((s) => s.selectBillionaire);
-  const mergedBillionaires = useLiveData((s) => s.getMerged());
+  const mergedBillionaires = useLiveData((s) => s.mergedBillionaires);
   const liveLoaded = useLiveData((s) => s.loaded);
   const getEnriched = useLiveData((s) => s.getEnriched);
   const currency = useCurrency((s) => s.currency);

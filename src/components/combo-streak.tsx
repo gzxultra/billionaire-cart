@@ -97,9 +97,11 @@ export function ComboStreak() {
     setTimerWidth(100);
   }, [purchases, selectedBillionaire, soundEnabled]);
 
-  // Decay timer — animates the timer bar down
+  // Decay timer — animates the timer bar down.
+  // Uses comboRef (not combo state) inside the interval to avoid a dep-cycle
+  // where setCombo(0) would re-trigger this effect.
   useEffect(() => {
-    if (combo < 2) return;
+    if (comboRef.current < 2) return;
 
     if (timerRef.current) clearInterval(timerRef.current);
 
@@ -121,6 +123,7 @@ export function ComboStreak() {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [combo]);
 
   // Reset on billionaire change

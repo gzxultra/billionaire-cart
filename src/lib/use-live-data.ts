@@ -8,6 +8,8 @@ interface LiveDataState {
   liveBillionaires: Map<string, LiveBillionaireData>;
   loaded: boolean;
   lastUpdated: number | null;
+  /** Pre-computed merged list — stable reference between store updates. */
+  mergedBillionaires: Billionaire[];
   setLiveData: (data: LiveBillionaireData[]) => void;
   getMerged: () => Billionaire[];
   getEnriched: (id: string) => EnrichedBillionaire | null;
@@ -51,43 +53,45 @@ const ID_TO_URI: Record<string, string> = {
 };
 
 function calcEarningsPerSec(currentM: number, archivedM: number): number {
-  // Calculate from yearly change in net worth
   if (archivedM <= 0 || currentM <= archivedM) {
-    // Fallback: 3% annual return on net worth
     return (currentM * 1_000_000 * 0.03) / (365.25 * 24 * 3600);
   }
   const yearlyGain = (currentM - archivedM) * 1_000_000;
   return yearlyGain / (365.25 * 24 * 3600);
 }
 
+/** Compute merged billionaires from live data map. Pure, no side-effects. */
+function computeMerged(liveMap: Map<string, LiveBillionaireData>): Billionaire[] {
+  return staticBillionaires.map((b) => {
+    const uri = ID_TO_URI[b.id];
+    const live = uri ? liveMap.get(uri) : null;
+    if (!live) return b;
+    return {
+      ...b,
+      netWorthB: live.netWorthM / 1000,
+      earningsPerSecond: calcEarningsPerSec(live.netWorthM, live.archivedWorthM),
+    };
+  });
+}
+
 export const useLiveData = create<LiveDataState>()((set, get) => ({
   liveBillionaires: new Map(),
   loaded: false,
   lastUpdated: null,
+  mergedBillionaires: staticBillionaires,
 
   setLiveData: (data: LiveBillionaireData[]) => {
     const map = new Map<string, LiveBillionaireData>();
     for (const d of data) {
       map.set(d.uri, d);
     }
-    set({ liveBillionaires: map, loaded: true, lastUpdated: Date.now() });
+    const merged = computeMerged(map);
+    set({ liveBillionaires: map, loaded: true, lastUpdated: Date.now(), mergedBillionaires: merged });
   },
 
   getMerged: () => {
-    const { liveBillionaires, loaded } = get();
-    if (!loaded) return staticBillionaires;
-
-    return staticBillionaires.map((b) => {
-      const uri = ID_TO_URI[b.id];
-      const live = uri ? liveBillionaires.get(uri) : null;
-      if (!live) return b;
-
-      return {
-        ...b,
-        netWorthB: live.netWorthM / 1000,
-        earningsPerSecond: calcEarningsPerSec(live.netWorthM, live.archivedWorthM),
-      };
-    });
+    const { mergedBillionaires } = get();
+    return mergedBillionaires;
   },
 
   getEnriched: (id: string) => {
@@ -124,7 +128,6 @@ export const useLiveData = create<LiveDataState>()((set, get) => ({
   },
 }));
 
-// Fetch live data on mount
 export function initLiveData() {
   fetch("/api/billionaires")
     .then((r) => r.json())
