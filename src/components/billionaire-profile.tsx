@@ -139,13 +139,18 @@ function SecFilingsPanel({
               </span>
               <span className="text-[11px] text-ash/70 font-mono">{f.date}</span>
             </div>
-            <div className="text-right shrink-0">
-              <div className="text-[11px] text-sand font-mono">
-                {f.shares.toLocaleString()} {f.ticker}
+            <div className="text-right shrink-0 min-w-[100px]">
+              <div className="text-[11px] text-sand font-mono whitespace-nowrap">
+                {f.shares >= 1_000_000
+                  ? `${(f.shares / 1_000_000).toFixed(1)}M`
+                  : f.shares.toLocaleString()}{" "}
+                {f.ticker}
               </div>
-              <div className="text-[9px] text-ash/60 font-mono">
-                @ ${f.pricePerShare.toLocaleString()} = $
-                {f.totalValue >= 1_000_000
+              <div className="text-[9px] text-ash/60 font-mono whitespace-nowrap">
+                @ ${f.pricePerShare.toLocaleString(undefined, { maximumFractionDigits: 2 })} = $
+                {f.totalValue >= 1_000_000_000
+                  ? `${(f.totalValue / 1_000_000_000).toFixed(1)}B`
+                  : f.totalValue >= 1_000_000
                   ? `${(f.totalValue / 1_000_000).toFixed(1)}M`
                   : f.totalValue.toLocaleString()}
               </div>
@@ -262,9 +267,9 @@ function SignaturePurchasesPanel({
                 {locale === "zh" ? p.descriptionZh : p.description}
               </div>
             </div>
-            <div className="text-right shrink-0">
+            <div className="text-right shrink-0 min-w-[52px]">
               {p.price > 0 ? (
-                <div className="text-[11px] font-mono text-champagne">
+                <div className="text-[11px] font-mono text-champagne whitespace-nowrap">
                   {p.price >= 1_000_000_000
                     ? `$${(p.price / 1_000_000_000).toFixed(1)}B`
                     : p.price >= 1_000_000
@@ -276,7 +281,7 @@ function SignaturePurchasesPanel({
                   {locale === "zh" ? "无价" : "Priceless"}
                 </div>
               )}
-              <div className="text-[9px] text-ash/70 font-mono">{p.year}</div>
+              <div className="text-[9px] text-ash/70 font-mono whitespace-nowrap">{p.year}</div>
               {onBuy && (
                 <div className="text-[8px] text-stone/50 uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity font-medium mt-0.5">
                   {locale === "zh" ? "点击购买" : "Click to buy"}

@@ -126,10 +126,14 @@ function parseForm4Xml(xml: string, targetName: string, ticker: string, filedDat
     const acqDisp = extractNestedValue(block, "transactionAcquiredDisposedCode") || "";
     const sharesAfter = parseFloat(extractNestedValue(block, "sharesOwnedFollowingTransaction") || "0");
 
+    // Classify by transaction code (not disposition — acqDisp "A" on an option exercise is NOT a buy)
     let type: SecFiling["type"] = "other";
-    if (code === "P" || acqDisp === "A") type = "buy";
-    else if (code === "S" || code === "F" || acqDisp === "D") type = "sell";
-    else if (code === "M") type = "option";
+    if (code === "P") type = "buy";                    // Open market purchase
+    else if (code === "S" || code === "F") type = "sell"; // Open market sale / sell-to-cover
+    else if (code === "M" || code === "A" || code === "G" || code === "J") type = "option"; // Exercise, grant, gift
+
+    // Filter out $0 price transactions (option grants/conversions, not real trades)
+    if (price <= 0) continue;
 
     if (shares > 0) {
       filings.push({
