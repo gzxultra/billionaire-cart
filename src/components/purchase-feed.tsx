@@ -83,10 +83,10 @@ export function PurchaseFeed({ onRepurchase }: PurchaseFeedProps) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="text-base">🛍️</span>
-          <h2 className="text-xs uppercase tracking-[0.2em] text-stone/70 font-medium">
+          <h2 className="text-xs uppercase tracking-[0.2em] text-stone/85 font-medium">
             {t("feed.title", locale)}
           </h2>
-          <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-stone/20 text-stone/70 font-mono">
+          <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-stone/20 text-stone/85 font-mono">
             {savedProducts.length}
           </span>
         </div>
@@ -96,7 +96,7 @@ export function PurchaseFeed({ onRepurchase }: PurchaseFeedProps) {
           className={`text-[10px] px-2 py-0.5 rounded transition-colors ${
             confirmClear
               ? "bg-[#9B6B6B]/15 text-[#9B6B6B]/70 border border-[#9B6B6B]/20"
-              : "text-ash/42 hover:text-ash/50"
+              : "text-ash/65 hover:text-ash/70"
           }`}
         >
           {confirmClear
@@ -110,7 +110,7 @@ export function PurchaseFeed({ onRepurchase }: PurchaseFeedProps) {
         <div className="space-y-2">
           {/* Search input */}
           <div className="relative">
-            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-ash/35">
+            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-ash/72">
               <svg
                 width="13"
                 height="13"
@@ -129,7 +129,7 @@ export function PurchaseFeed({ onRepurchase }: PurchaseFeedProps) {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder={t("feed.search", locale)}
-              className="w-full pl-8 pr-3 py-2 rounded-lg bg-surface/55 border border-line/12 text-sand/70 placeholder:text-ash/30 text-xs focus:outline-none focus:border-stone/30 transition-colors"
+              className="w-full pl-8 pr-3 py-2 rounded-lg bg-surface/55 border border-line/30 text-sand/85 placeholder:text-ash/70 text-xs focus:outline-none focus:border-stone/30 transition-colors"
             />
           </div>
 
@@ -142,8 +142,8 @@ export function PurchaseFeed({ onRepurchase }: PurchaseFeedProps) {
                   onClick={() => setFilterClass(cls)}
                   className={`shrink-0 px-2.5 py-1 rounded-full text-[10px] font-medium transition-all border ${
                     filterClass === cls
-                      ? "bg-stone/20 text-stone border-stone/20"
-                      : "text-ash/35 hover:text-ash/50 border-transparent hover:border-line/22"
+                      ? "bg-stone/20 text-stone border-stone/35"
+                      : "text-ash/72 hover:text-ash/70 border-transparent hover:border-line/40"
                   }`}
                 >
                   {cls === "all"
@@ -159,14 +159,14 @@ export function PurchaseFeed({ onRepurchase }: PurchaseFeedProps) {
       {/* No results */}
       {filtered.length === 0 && (search || filterClass !== "all") && (
         <div className="text-center py-4">
-          <span className="text-xs text-ash/42">{t("feed.noResults", locale)}</span>
+          <span className="text-xs text-ash/65">{t("feed.noResults", locale)}</span>
         </div>
       )}
 
       {/* Purchased items — horizontal scrollable strip */}
       {purchased.length > 0 && (
         <div className="space-y-2">
-          <span className="text-[10px] uppercase tracking-wider text-champagne/50 font-medium px-1">
+          <span className="text-[10px] uppercase tracking-wider text-champagne/70 font-medium px-1">
             {t("feed.purchased", locale)}
           </span>
           <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-1 -mx-1 px-1">
@@ -188,7 +188,7 @@ export function PurchaseFeed({ onRepurchase }: PurchaseFeedProps) {
       {/* Browsed / parsed items */}
       {browsed.length > 0 && (
         <div className="space-y-2">
-          <span className="text-[10px] uppercase tracking-wider text-ash/50 font-medium px-1">
+          <span className="text-[10px] uppercase tracking-wider text-ash/70 font-medium px-1">
             {t("feed.browsed", locale)}
           </span>
           <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-1 -mx-1 px-1">
@@ -232,15 +232,15 @@ function FeedCard({ item, onRepurchase, onRemove, locale, dimmed }: FeedCardProp
       exit={{ opacity: 0, scale: 0.9 }}
       className={`
         shrink-0 w-44 rounded-xl overflow-hidden
-        bg-surface/50 border border-line/12
-        hover:border-stone/20 hover:bg-surface/70
+        bg-surface/70 border border-line/30
+        hover:border-stone/35 hover:bg-surface/70
         transition-all duration-200 group cursor-pointer
         ${dimmed ? "opacity-70 hover:opacity-100" : ""}
       `}
       onClick={onRepurchase}
     >
       {/* Mini image */}
-      <div className="relative w-full aspect-[3/2] bg-surface-bright/20 overflow-hidden">
+      <div className="relative w-full aspect-[3/2] bg-surface-bright/80 overflow-hidden">
         {product.imageUrl ? (
           <img
             src={proxyImage(product.imageUrl) || ""}
@@ -269,7 +269,7 @@ function FeedCard({ item, onRepurchase, onRemove, locale, dimmed }: FeedCardProp
             e.stopPropagation();
             onRemove();
           }}
-          className="absolute top-1.5 left-1.5 w-5 h-5 rounded-full bg-base/60 backdrop-blur-sm text-ash/50 hover:text-[#9B6B6B]/70 text-[10px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+          className="absolute top-1.5 left-1.5 w-5 h-5 rounded-full bg-base/60 backdrop-blur-sm text-ash/70 hover:text-[#9B6B6B]/70 text-[10px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
         >
           ✕
         </button>
@@ -299,13 +299,13 @@ function FeedCard({ item, onRepurchase, onRemove, locale, dimmed }: FeedCardProp
           <span className="text-xs font-serif text-champagne">
             {formatCurrency(product.price)}
           </span>
-          <span className="text-[9px] text-ash/42">{timeAgo(item.parsedAt, locale)}</span>
+          <span className="text-[9px] text-ash/65">{timeAgo(item.parsedAt, locale)}</span>
         </div>
         <div className="flex items-center justify-between pt-0.5">
-          <span className="text-[9px] text-ash/35 font-mono truncate">
+          <span className="text-[9px] text-ash/72 font-mono truncate">
             {assetLabel(product.assetClass, locale).split(" ").slice(0, 2).join(" ")}
           </span>
-          <span className="text-[9px] px-1.5 py-0.5 rounded bg-stone/20 text-stone/70 opacity-0 group-hover:opacity-100 transition-opacity font-medium">
+          <span className="text-[9px] px-1.5 py-0.5 rounded bg-stone/20 text-stone/85 opacity-0 group-hover:opacity-100 transition-opacity font-medium">
             {t("omni.rebuy", locale)}
           </span>
         </div>

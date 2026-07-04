@@ -111,10 +111,10 @@ export function CategoryBreakdown() {
             ))}
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <div className="text-[10px] text-ash/50 uppercase tracking-wider font-mono">
+            <div className="text-[10px] text-ash/70 uppercase tracking-wider font-mono">
               {t("category.items", locale)}
             </div>
-            <div className="text-xl font-serif text-sand/70 tabular-nums">
+            <div className="text-xl font-serif text-sand/85 tabular-nums">
               {purchases.length}
             </div>
           </div>
@@ -138,14 +138,14 @@ export function CategoryBreakdown() {
                 <span className="text-[11px] text-ash/80 truncate">
                   {cat.label}
                 </span>
-                <span className="text-[10px] text-ash/50 shrink-0 tabular-nums font-mono">
+                <span className="text-[10px] text-ash/70 shrink-0 tabular-nums font-mono">
                   {cat.percent.toFixed(1)}%
                 </span>
               </div>
             </motion.div>
           ))}
           {categories.length > 6 && (
-            <div className="text-[9px] text-ash/35 font-mono">
+            <div className="text-[9px] text-ash/72 font-mono">
               {t("category.moreCategories", locale, { n: categories.length - 6 })}
             </div>
           )}
@@ -153,9 +153,9 @@ export function CategoryBreakdown() {
       </div>
 
       {topCategory && (
-        <div className="mt-4 pt-3 border-t border-line/18 text-[10px] text-ash/50">
+        <div className="mt-4 pt-3 border-t border-line/50 text-[10px] text-ash/70">
           {t("category.biggest", locale)}:{" "}
-          <span className="text-stone/70">
+          <span className="text-stone/85">
             {assetLabel(topCategory.assetClass, locale)}
           </span>{" "}
           — {formatCurrency(topCategory.amount, true)} ({topCategory.count}{" "}

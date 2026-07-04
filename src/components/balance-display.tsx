@@ -47,31 +47,31 @@ export function BalanceDisplay() {
       </div>
       <AnimatedNumber value={displayBalance} className="text-3xl sm:text-5xl lg:text-6xl font-serif text-sand/95 tracking-tight" />
       {currency !== "USD" && convertedBalance && (
-        <div className="text-sm text-ash/50 font-mono mt-1">
+        <div className="text-sm text-ash/70 font-mono mt-1">
           ≈ {convertedBalance}
         </div>
       )}
 
       <div className="grid grid-cols-3 gap-4 mt-6">
         <div>
-          <div className="text-[10px] uppercase tracking-[0.2em] text-ash/50 mb-1">{t("balance.spent", locale)}</div>
+          <div className="text-[10px] uppercase tracking-[0.2em] text-ash/70 mb-1">{t("balance.spent", locale)}</div>
           <div className="text-sm font-serif text-champagne">
             {formatCurrency(totalSpent, true)}
           </div>
           {currency !== "USD" && (
-            <div className="text-[9px] text-ash/42 font-mono">
+            <div className="text-[9px] text-ash/65 font-mono">
               {formatConverted(totalSpent, true)}
             </div>
           )}
         </div>
         <div>
-          <div className="text-[10px] uppercase tracking-[0.2em] text-ash/50 mb-1">{t("balance.burn", locale)}</div>
+          <div className="text-[10px] uppercase tracking-[0.2em] text-ash/70 mb-1">{t("balance.burn", locale)}</div>
           <div className="text-sm font-serif text-[#9B6B6B]/80">
             {monthlyBurn > 0 ? `-${formatCurrency(monthlyBurn, true)}` : "$0"}
           </div>
         </div>
         <div>
-          <div className="text-[10px] uppercase tracking-[0.2em] text-ash/50 mb-1">{t("balance.items", locale)}</div>
+          <div className="text-[10px] uppercase tracking-[0.2em] text-ash/70 mb-1">{t("balance.items", locale)}</div>
           <div className="text-sm font-serif text-ash">
             {purchaseCount}
           </div>

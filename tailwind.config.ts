@@ -24,16 +24,16 @@ const config: Config = {
           muted: "rgba(140,122,101,0.35)",
         },
         champagne: {
-          DEFAULT: "#A68530",
-          light: "#C4A04A",
-          dim: "rgba(166,133,48,0.10)",
+          DEFAULT: "#8B6F18",
+          light: "#A68530",
+          dim: "rgba(139,111,24,0.12)",
         },
         sage: {
           DEFAULT: "#5A8A68",
           dim: "rgba(90,138,104,0.10)",
         },
         sand: "#2A2520",
-        ash: "#8C847B",
+        ash: "#635C54",
         ink: "#1A1714",
       },
       fontFamily: {
@@ -45,7 +45,7 @@ const config: Config = {
         "stone-gradient":
           "linear-gradient(135deg, #8C7A65 0%, #A89279 50%, #C4AD92 100%)",
         "champagne-gradient":
-          "linear-gradient(135deg, #8A7030 0%, #A68530 50%, #C4A04A 100%)",
+          "linear-gradient(135deg, #7A6015 0%, #8B6F18 50%, #A68530 100%)",
         "card-gradient":
           "linear-gradient(145deg, #FFFFFF 0%, #FAF7F3 50%, #FFFFFF 100%)",
         "card-shine":
@@ -57,8 +57,8 @@ const config: Config = {
         "stone-lg": "0 0 40px rgba(140,122,101,0.1)",
         "champagne-sm": "0 0 10px rgba(166,133,48,0.08)",
         champagne: "0 0 20px rgba(166,133,48,0.08)",
-        glass: "0 8px 32px rgba(0,0,0,0.06)",
-        card: "0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)",
+        glass: "0 8px 32px rgba(0,0,0,0.08)",
+        card: "0 1px 4px rgba(0,0,0,0.06), 0 6px 20px rgba(0,0,0,0.04)",
       },
       animation: {
         "stone-pulse": "stone-pulse 3s ease-in-out infinite",

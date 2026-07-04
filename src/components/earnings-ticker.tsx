@@ -102,16 +102,16 @@ export function EarningsTicker() {
       </div>
 
       <div>
-        <div className="text-[10px] uppercase tracking-[0.2em] text-ash/50 mb-1">
+        <div className="text-[10px] uppercase tracking-[0.2em] text-ash/70 mb-1">
           {t("earnings.rate", locale)}
         </div>
         <div className="text-lg font-serif text-champagne tabular-nums">
-          {formatCurrency(eps)}<span className="text-[10px] text-ash/50 ml-1">{t("speed.perSec", locale)}</span>
+          {formatCurrency(eps)}<span className="text-[10px] text-ash/70 ml-1">{t("speed.perSec", locale)}</span>
         </div>
       </div>
 
       <div>
-        <div className="text-[10px] uppercase tracking-[0.2em] text-ash/50 mb-1">
+        <div className="text-[10px] uppercase tracking-[0.2em] text-ash/70 mb-1">
           {t("earnings.since", locale)}
         </div>
         <div className="text-2xl font-serif text-champagne tabular-nums">
@@ -123,7 +123,7 @@ export function EarningsTicker() {
         <div className={`rounded-xl px-4 py-3 transition-colors duration-300 ${
           earnedBack
             ? "bg-sage/10 border border-sage/20"
-            : "bg-stone/5 border border-stone/20"
+            : "bg-stone/8 border border-stone/35"
         }`}>
           {earnedBack ? (
             <div className="text-sage text-sm font-medium animate-pulse">
@@ -131,7 +131,7 @@ export function EarningsTicker() {
             </div>
           ) : (
             <>
-              <div className="text-[10px] uppercase tracking-[0.2em] text-ash/50 mb-1">
+              <div className="text-[10px] uppercase tracking-[0.2em] text-ash/70 mb-1">
                 ⏱ {t("earnings.earnBack", locale)}
               </div>
               <div className="text-lg font-serif text-champagne tabular-nums">

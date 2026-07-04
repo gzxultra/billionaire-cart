@@ -54,16 +54,16 @@ export function SpendingSpeed() {
   let verdictColor = "";
   if (spendRate === 0) {
     verdict = t("speed.idle", locale);
-    verdictColor = "text-ash/42";
+    verdictColor = "text-ash/65";
   } else if (ratio < 0.5) {
     verdict = t("speed.barelyDent", locale);
-    verdictColor = "text-sage/60";
+    verdictColor = "text-sage/80";
   } else if (ratio < 1) {
     verdict = t("speed.spendingFast", locale);
-    verdictColor = "text-champagne/60";
+    verdictColor = "text-champagne/80";
   } else if (ratio < 5) {
     verdict = t("speed.outpacing", locale);
-    verdictColor = "text-stone/70";
+    verdictColor = "text-stone/85";
   } else if (ratio < 50) {
     verdict = t("speed.onFire", locale);
     verdictColor = "text-[#9B6B6B]/80";
@@ -102,7 +102,7 @@ export function SpendingSpeed() {
         <div>
           <div className="text-2xl font-serif text-stone tabular-nums">
             {formatCurrency(spendRate)}
-            <span className="text-[10px] text-ash/50 ml-1">{t("speed.perSec", locale)}</span>
+            <span className="text-[10px] text-ash/70 ml-1">{t("speed.perSec", locale)}</span>
           </div>
           <div className={`text-xs mt-1 ${verdictColor}`}>{verdict}</div>
         </div>
@@ -136,17 +136,17 @@ export function SpendingSpeed() {
 
       {/* Context row */}
       <div className="flex items-center justify-between text-[10px]">
-        <span className="text-ash/42">
+        <span className="text-ash/65">
           {t("speed.last60", locale)}:{" "}
           <span className="text-ash/60">
             {formatCurrency(totalThisMinute, true)}
           </span>
         </span>
         {eps > 0 && (
-          <span className="text-ash/42">
+          <span className="text-ash/65">
             {t("speed.vsEarnings", locale)}:{" "}
             <span
-              className={ratio > 1 ? "text-stone/80" : "text-sage/60"}
+              className={ratio > 1 ? "text-stone/80" : "text-sage/80"}
             >
               {ratio.toFixed(1)}× {ratio > 1 ? t("speed.faster", locale) : t("speed.slower", locale)}
             </span>
@@ -156,7 +156,7 @@ export function SpendingSpeed() {
 
       {/* Time to bankruptcy */}
       {timeToBankrupt && timeToBankrupt > 0 && remaining > 0 && (
-        <div className="text-[10px] text-[#9B6B6B]/40 pt-1 border-t border-line/18">
+        <div className="text-[10px] text-[#9B6B6B]/40 pt-1 border-t border-line/50">
           ⚠ {t("speed.bankruptIn", locale)}{" "}
           <span className="text-stone/80">{formatTime(timeToBankrupt)}</span>
         </div>

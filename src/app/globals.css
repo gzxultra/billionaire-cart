@@ -27,39 +27,39 @@
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: rgba(168, 146, 121, 0.18);
+    background: rgba(140, 122, 101, 0.20);
     border-radius: 2px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(168, 146, 121, 0.3);
+    background: rgba(140, 122, 101, 0.35);
   }
 
   /* Selection */
   ::selection {
-    background: rgba(168, 146, 121, 0.3);
+    background: rgba(140, 122, 101, 0.35);
     color: #2A2520;
   }
 }
 
 @layer components {
   .card-panel {
-    @apply bg-surface/70 border border-line/20 rounded-xl shadow-card backdrop-blur-sm;
+    @apply bg-surface border border-line/50 rounded-xl shadow-card;
   }
 
   .card-panel-hover {
-    @apply card-panel hover:border-stone/15 hover:bg-surface/90 transition-all duration-300;
+    @apply card-panel hover:border-stone/30 hover:shadow-stone-sm transition-all duration-300;
   }
 
   .card-panel-accent {
-    @apply bg-surface/70 border-l-2 border-l-stone/40 border border-line/20 rounded-xl shadow-card backdrop-blur-sm;
+    @apply bg-surface border-l-2 border-l-stone/50 border border-line/50 rounded-xl shadow-card;
   }
 
   .card-panel-champagne {
-    @apply bg-surface/70 border-l-2 border-l-champagne/40 border border-line/20 rounded-xl shadow-card backdrop-blur-sm;
+    @apply bg-surface border-l-2 border-l-champagne/50 border border-line/50 rounded-xl shadow-card;
   }
 
   .section-label {
-    @apply text-[11px] uppercase tracking-[0.2em] text-stone/60 font-medium font-sans;
+    @apply text-[11px] uppercase tracking-[0.2em] text-stone/80 font-medium font-sans;
   }
 
   .mono-number {

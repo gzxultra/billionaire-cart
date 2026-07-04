@@ -17,10 +17,10 @@ export function Vault() {
     return (
       <div className="text-center py-12">
         <div className="text-4xl mb-3 opacity-30">🔒</div>
-        <div className="text-xs text-ash/42 uppercase tracking-[0.2em]">
+        <div className="text-xs text-ash/65 uppercase tracking-[0.2em]">
           {t("vault.empty", locale)}
         </div>
-        <div className="text-xs text-ash/15 mt-1">
+        <div className="text-xs text-ash/72 mt-1">
           {t("vault.emptyHint", locale)}
         </div>
       </div>
@@ -34,11 +34,11 @@ export function Vault() {
           {t("vault.title", locale)}
         </h2>
         <div className="flex items-center gap-4 text-[10px] uppercase tracking-[0.15em]">
-          <span className="text-ash/50">
+          <span className="text-ash/70">
             {t("vault.deployed", locale)}: <span className="text-champagne">{formatCurrency(totalSpent, true)}</span>
           </span>
           {monthlyBurn > 0 && (
-            <span className="text-ash/50">
+            <span className="text-ash/70">
               {t("vault.burn", locale)}: <span className="text-[#9B6B6B]/70">-{formatCurrency(monthlyBurn, true)}/mo</span>
             </span>
           )}
@@ -56,8 +56,8 @@ export function Vault() {
               exit={{ opacity: 0, x: 20 }}
               className="
                 group flex items-center gap-3 p-3 rounded-lg
-                bg-surface/30 border border-line/18
-                hover:bg-surface/50 hover:border-line/25
+                bg-surface/70 border border-line/50
+                hover:bg-surface/70 hover:border-line/45
                 transition-colors
               "
             >
@@ -88,7 +88,7 @@ export function Vault() {
                   <span className="text-xs font-serif text-champagne">
                     {formatCurrency(purchase.product.price)}
                   </span>
-                  <span className="text-[9px] px-1.5 py-0.5 rounded bg-surface-bright/45 text-ash/50">
+                  <span className="text-[9px] px-1.5 py-0.5 rounded bg-surface-bright/65 text-ash/70">
                     {assetLabel(purchase.product.assetClass, locale)}
                   </span>
                   {purchase.product.monthlyOverhead > 0 && (
@@ -100,14 +100,14 @@ export function Vault() {
               </div>
 
               {/* Timestamp */}
-              <span className="text-[9px] text-ash/35 shrink-0 hidden sm:block">
+              <span className="text-[9px] text-ash/72 shrink-0 hidden sm:block">
                 {timeAgo(purchase.timestamp, locale)}
               </span>
 
               {/* Remove button */}
               <button
                 onClick={() => removePurchase(purchase.id)}
-                className="opacity-0 group-hover:opacity-100 text-ash/42 hover:text-[#9B6B6B]/60 transition-all text-xs"
+                className="opacity-0 group-hover:opacity-100 text-ash/65 hover:text-[#9B6B6B]/60 transition-all text-xs"
               >
                 ✕
               </button>

@@ -9,9 +9,9 @@ const COMBO_WINDOW_MS = 3000; // 3 seconds between purchases to keep combo
 
 const COMBO_TIERS = [
   { min: 2, label: "x2", color: "text-sage", bg: "bg-sage/10", border: "border-sage/20" },
-  { min: 5, label: "x5", color: "text-champagne", bg: "bg-champagne/10", border: "border-champagne/20" },
-  { min: 10, label: "x10", color: "text-stone-light", bg: "bg-stone/20", border: "border-stone/20" },
-  { min: 25, label: "x25", color: "text-champagne-light", bg: "bg-champagne/15", border: "border-champagne/25" },
+  { min: 5, label: "x5", color: "text-champagne", bg: "bg-champagne/10", border: "border-champagne/40" },
+  { min: 10, label: "x10", color: "text-stone-light", bg: "bg-stone/20", border: "border-stone/35" },
+  { min: 25, label: "x25", color: "text-champagne-light", bg: "bg-champagne/15", border: "border-champagne/40" },
   { min: 50, label: "x50", color: "text-stone", bg: "bg-stone/20", border: "border-stone/30" },
   { min: 100, label: "x100", color: "text-champagne", bg: "bg-champagne/20", border: "border-champagne/35" },
 ];
@@ -216,7 +216,7 @@ export function ComboStreak() {
           </h2>
           <div className="flex items-center gap-4">
             <div>
-              <div className="text-[10px] uppercase tracking-[0.2em] text-ash/50 mb-0.5">
+              <div className="text-[10px] uppercase tracking-[0.2em] text-ash/70 mb-0.5">
                 Best Combo
               </div>
               <div className="text-xl font-serif text-stone tabular-nums">
@@ -224,12 +224,12 @@ export function ComboStreak() {
               </div>
             </div>
             <div>
-              <div className="text-[10px] uppercase tracking-[0.2em] text-ash/50 mb-0.5">
+              <div className="text-[10px] uppercase tracking-[0.2em] text-ash/70 mb-0.5">
                 Current
               </div>
               <div
                 className={`text-xl font-serif tabular-nums ${
-                  combo >= 2 ? tier?.color || "text-stone" : "text-ash/42"
+                  combo >= 2 ? tier?.color || "text-stone" : "text-ash/65"
                 }`}
               >
                 {combo >= 2 ? `${combo}x` : "—"}
@@ -237,7 +237,7 @@ export function ComboStreak() {
             </div>
             {maxCombo >= 5 && (
               <div>
-                <div className="text-[10px] uppercase tracking-[0.2em] text-ash/50 mb-0.5">
+                <div className="text-[10px] uppercase tracking-[0.2em] text-ash/70 mb-0.5">
                   Rank
                 </div>
                 <div className="text-sm text-ash/80">

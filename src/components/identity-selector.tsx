@@ -46,7 +46,7 @@ export function IdentitySelector() {
         <div className="flex items-center gap-2">
           {/* Live indicator */}
           {liveLoaded && (
-            <span className="flex items-center gap-1 text-[9px] text-sage/70 uppercase tracking-wider">
+            <span className="flex items-center gap-1 text-[9px] text-sage/85 uppercase tracking-wider">
               <span className="w-1.5 h-1.5 rounded-full bg-sage animate-pulse" />
               {t("identity.live", locale)}
             </span>
@@ -56,7 +56,7 @@ export function IdentitySelector() {
             <select
               value={currency}
               onChange={(e) => setCurrency(e.target.value)}
-              className="px-1.5 py-0.5 rounded text-[10px] bg-surface/70 border border-line/25 text-ash focus:outline-none focus:border-stone/40 cursor-pointer"
+              className="px-1.5 py-0.5 rounded text-[10px] bg-white border border-line/60 text-sand focus:outline-none focus:border-stone/40 cursor-pointer"
               aria-label={t("identity.currency", locale)}
             >
               {CURRENCY_OPTIONS.map((opt) => (
@@ -91,8 +91,8 @@ export function IdentitySelector() {
                 flex items-center gap-3.5 p-3.5 rounded-xl text-left transition-all duration-200
                 ${
                   isSelected
-                    ? "bg-stone/12 border border-stone/35 shadow-stone-sm ring-1 ring-stone/12"
-                    : "bg-surface-dim/60 border border-line/15 hover:border-stone/20 hover:bg-surface/50"
+                    ? "bg-stone/15 border-2 border-stone/50 shadow-stone ring-2 ring-stone/10"
+                    : "bg-surface-dim/80 border border-line/50 hover:border-stone/35 hover:bg-surface/70"
                 }
               `}
             >
@@ -107,7 +107,7 @@ export function IdentitySelector() {
                         : "bg-stone-gradient text-white shadow-stone-sm"
                       : hasPhoto
                       ? ""
-                      : "bg-surface-bright text-ash/80"
+                      : "bg-stone/12 text-stone/80 border border-stone/20"
                   }
                 `}
               >
@@ -127,7 +127,7 @@ export function IdentitySelector() {
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1.5">
                   {enriched?.isLive && enriched.rank > 0 && (
-                    <span className="text-[9px] text-ash/50 font-mono">
+                    <span className="text-[9px] text-ash/70 font-mono">
                       #{enriched.rank}
                     </span>
                   )}
@@ -137,7 +137,7 @@ export function IdentitySelector() {
                   <span className="text-xs">{b.emoji}</span>
                 </div>
                 <div className="flex items-center justify-between gap-2 mt-0.5">
-                  <span className="text-[11px] text-sand/45 truncate">
+                  <span className="text-[11px] text-ash truncate">
                     {b.company}
                   </span>
                   <div className="flex flex-col items-end shrink-0">
@@ -164,7 +164,7 @@ function CurrencyAmount({ usd }: { usd: number }) {
   const converted = formatConverted(usd, true);
   if (!converted) return null;
   return (
-    <span className="text-[9px] text-ash/40 font-mono">
+    <span className="text-[9px] text-ash/60 font-mono">
       ≈ {converted}
     </span>
   );

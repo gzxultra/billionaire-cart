@@ -175,7 +175,7 @@ export default function Home() {
       <ComboStreak />
 
       {/* Header */}
-      <header className="relative z-10 sticky top-0 bg-base/80 backdrop-blur-xl border-b border-line/10">
+      <header className="relative z-10 sticky top-0 bg-base/80 backdrop-blur-xl border-b border-line/45">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-7 h-7 rounded-md bg-surface-bright flex items-center justify-center text-xs border border-line/30">
@@ -194,7 +194,7 @@ export default function Home() {
             {/* Language toggle */}
             <button
               onClick={toggleLocale}
-              className="px-2 py-1 rounded-md text-[11px] font-medium text-stone/70 hover:text-stone bg-surface-bright/60 border border-line/20 hover:border-stone/20 transition-all"
+              className="px-2 py-1 rounded-md text-[11px] font-medium text-stone/85 hover:text-stone bg-surface-bright/80 border border-line/40 hover:border-stone/35 transition-all"
               title={locale === "en" ? "切换到中文" : "Switch to English"}
             >
               {locale === "en" ? "中" : "EN"}
@@ -202,7 +202,7 @@ export default function Home() {
             <ShareReceipt />
             <button
               onClick={toggleSound}
-              className="text-ash/50 hover:text-stone/60 transition-colors text-sm"
+              className="text-ash/70 hover:text-stone/75 transition-colors text-sm"
               title={soundEnabled ? "Mute" : "Unmute"}
             >
               {soundEnabled ? "🔊" : "🔇"}
@@ -210,7 +210,7 @@ export default function Home() {
             {selectedBillionaire && (
               <button
                 onClick={handleReset}
-                className="text-[10px] text-ash/40 hover:text-[#9B6B6B]/70 transition-colors uppercase tracking-wider font-medium"
+                className="text-[10px] text-ash/60 hover:text-[#9B6B6B]/70 transition-colors uppercase tracking-wider font-medium"
               >
                 {t("app.reset", locale)}
               </button>
@@ -224,13 +224,13 @@ export default function Home() {
             className={`overflow-hidden transition-all duration-300 ease-out ${stickyVisible ? "max-h-14 opacity-100" : "max-h-0 opacity-0"}`}
           >
             <div className="max-w-3xl mx-auto px-4 sm:px-6 pb-2.5">
-              <div className="flex items-center bg-surface/70 backdrop-blur-md border border-line/25 rounded-xl overflow-hidden shadow-stone-sm">
-                <div className="pl-3 pr-1 text-ash/35 flex items-center gap-1">
+              <div className="flex items-center bg-surface/70 backdrop-blur-md border border-line/45 rounded-xl overflow-hidden shadow-stone-sm">
+                <div className="pl-3 pr-1 text-ash/72 flex items-center gap-1">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                     <circle cx="11" cy="11" r="8" />
                     <path d="m21 21-4.35-4.35" />
                   </svg>
-                  <kbd className="hidden sm:inline-flex text-[8px] px-1 py-px rounded bg-surface-bright/40 text-ash/42 font-mono border border-line/12 leading-none">⌘K</kbd>
+                  <kbd className="hidden sm:inline-flex text-[8px] px-1 py-px rounded bg-surface-bright/80 text-ash/65 font-mono border border-line/30 leading-none">⌘K</kbd>
                 </div>
                 <input
                   ref={stickyInputRef}
@@ -241,7 +241,7 @@ export default function Home() {
                   onPaste={handleStickyPaste}
                   placeholder={t("omni.placeholder", locale)}
                   disabled={stickyLoading}
-                  className="flex-1 px-2 py-2 bg-transparent text-sand/90 placeholder:text-ash/35 focus:outline-none text-xs disabled:opacity-50"
+                  className="flex-1 px-2 py-2 bg-transparent text-sand/90 placeholder:text-ash/72 focus:outline-none text-xs disabled:opacity-50"
                 />
                 <button
                   onClick={handleStickyParse}
@@ -289,7 +289,7 @@ export default function Home() {
               <div className="relative">
                 <div className="flex items-center gap-2 mb-4">
                   <span className="text-base">🔗</span>
-                  <h2 className="text-xs uppercase tracking-[0.2em] text-stone/60 font-medium">
+                  <h2 className="text-xs uppercase tracking-[0.2em] text-stone/75 font-medium">
                     {t("omni.sectionTitle", locale)}
                   </h2>
                 </div>
@@ -359,7 +359,7 @@ export default function Home() {
       <footer className="mt-20 relative z-10">
         <div className="h-px bg-gradient-to-r from-transparent via-line/15 to-transparent" />
         <div className="max-w-3xl mx-auto px-4 py-8 text-center">
-          <p className="text-[10px] text-ash/35 tracking-wide">
+          <p className="text-[10px] text-ash/72 tracking-wide">
             {t("app.footer", locale)}
           </p>
         </div>

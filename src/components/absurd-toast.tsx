@@ -229,7 +229,7 @@ export function AbsurdToast({
           <div className="px-5 py-3 rounded-2xl bg-surface/95 border border-stone/30 backdrop-blur-xl shadow-stone-lg">
             <div className="flex items-center gap-3">
               <span className="text-2xl shrink-0">{toast.emoji}</span>
-              <p className="text-xs text-sand/70 leading-relaxed">
+              <p className="text-xs text-sand/85 leading-relaxed">
                 {toast.text}
               </p>
             </div>

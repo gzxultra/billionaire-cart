@@ -160,7 +160,7 @@ export function SpeedrunTimer() {
           ⚡ Speedrun Mode
         </h2>
         {bestTime !== null && !active && (
-          <span className="text-[10px] text-stone/40">
+          <span className="text-[10px] text-stone/75">
             Best: {formatTimer(bestTime)}
           </span>
         )}
@@ -168,12 +168,12 @@ export function SpeedrunTimer() {
 
       {!active && !finished && (
         <div className="text-center py-3">
-          <p className="text-xs text-ash/50 mb-3">
+          <p className="text-xs text-ash/70 mb-3">
             Bankrupt {selectedBillionaire.name} as fast as you can!
           </p>
           <button
             onClick={startTimer}
-            className="px-6 py-2.5 rounded-xl bg-stone/20 text-stone text-sm font-medium hover:bg-stone/30 transition-all border border-stone/20 hover:border-stone/40"
+            className="px-6 py-2.5 rounded-xl bg-stone/20 text-stone text-sm font-medium hover:bg-stone/30 transition-all border border-stone/35 hover:border-stone/40"
           >
             🏁 Start Speedrun
           </button>
@@ -187,14 +187,14 @@ export function SpeedrunTimer() {
             <div className="text-3xl font-serif text-stone tabular-nums tracking-wide">
               {formatTimer(elapsed)}
             </div>
-            <div className="text-[10px] text-ash/42 mt-1">
+            <div className="text-[10px] text-ash/65 mt-1">
               {purchases.length - startPurchasesRef.current} items ·{" "}
               {formatCurrency(totalSpent, true)} spent
             </div>
           </div>
 
           {/* Progress bar */}
-          <div className="relative w-full h-3 bg-surface-bright/60 rounded-full overflow-hidden">
+          <div className="relative w-full h-3 bg-surface-bright/80 rounded-full overflow-hidden">
             <motion.div
               className="h-full rounded-full"
               style={{
@@ -217,7 +217,7 @@ export function SpeedrunTimer() {
 
           {/* Remaining */}
           <div className="flex justify-between text-[10px]">
-            <span className="text-ash/42">
+            <span className="text-ash/65">
               Remaining:{" "}
               <span className={remaining < netWorth * 0.1 ? "text-[#9B6B6B]/60" : "text-ash/60"}>
                 {formatCurrency(remaining, true)}
@@ -229,7 +229,7 @@ export function SpeedrunTimer() {
                 finishedRef.current = true;
                 cancelAnimationFrame(rafRef.current);
               }}
-              className="text-ash/42 hover:text-[#9B6B6B]/60 transition-colors"
+              className="text-ash/65 hover:text-[#9B6B6B]/60 transition-colors"
             >
               ✕ Abort
             </button>
@@ -248,13 +248,13 @@ export function SpeedrunTimer() {
             <div className="text-4xl mb-2">
               {isNewRecord ? "🏆" : "🏁"}
             </div>
-            <div className="text-[10px] uppercase tracking-[0.4em] text-stone/70">
+            <div className="text-[10px] uppercase tracking-[0.4em] text-stone/85">
               {isNewRecord ? "New Record!" : "Speedrun Complete"}
             </div>
             <div className="text-3xl font-serif text-stone tabular-nums">
               {formatTimer(finalTime)}
             </div>
-            <div className="text-xs text-ash/50">
+            <div className="text-xs text-ash/70">
               {purchases.length} items ·{" "}
               {formatCurrency(totalSpent, true)} spent
             </div>

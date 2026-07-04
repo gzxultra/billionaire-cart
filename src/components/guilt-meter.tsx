@@ -135,7 +135,7 @@ export function GuiltMeter() {
         {t("guilt.title", locale)}
       </h2>
 
-      <p className="text-[10px] text-ash/42 italic font-mono">
+      <p className="text-[10px] text-ash/65 italic font-mono">
         {t("guilt.couldHave", locale, { amount: formatCurrency(totalSpent, true) })}
       </p>
 
@@ -147,14 +147,14 @@ export function GuiltMeter() {
             initial={{ opacity: 0, x: -15 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: i * 0.08 }}
-            className="flex items-start gap-3 p-2.5 rounded-lg bg-surface/30 border border-line/8"
+            className="flex items-start gap-3 p-2.5 rounded-lg bg-surface/70 border border-line/8"
           >
             <span className="text-xl shrink-0">{item.emoji}</span>
             <div className="min-w-0">
               <div className="text-xs text-ash">
                 {item.count.toLocaleString()} {t(item.labelKey, locale)}
               </div>
-              <div className="text-[10px] text-ash/50 mt-0.5 font-mono">
+              <div className="text-[10px] text-ash/70 mt-0.5 font-mono">
                 {t(item.descKey, locale, item.descVars)}
               </div>
             </div>
@@ -164,18 +164,18 @@ export function GuiltMeter() {
 
       {/* GDP comparison */}
       {(countryBeaten || countryNext) && (
-        <div className="pt-3 border-t border-line/18 space-y-1.5">
+        <div className="pt-3 border-t border-line/50 space-y-1.5">
           {countryBeaten && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-[11px] text-ash/60">
               {countryBeaten.flag} {t("guilt.gdpBeaten", locale)}{" "}
-              <span className="text-stone/70 font-medium">{countryBeaten.name}</span>
+              <span className="text-stone/85 font-medium">{countryBeaten.name}</span>
               {t("guilt.gdpBeatSuffix", locale)}
             </motion.div>
           )}
           {countryNext && (
-            <div className="text-[10px] text-ash/42 font-mono">
+            <div className="text-[10px] text-ash/65 font-mono">
               {countryNext.flag} {t("guilt.gdpNext", locale)}:{" "}
-              <span className="text-ash/50">{countryNext.name}</span> —{" "}
+              <span className="text-ash/70">{countryNext.name}</span> —{" "}
               {formatCurrency(countryNext.gdp - totalSpent, true)} to go
             </div>
           )}
@@ -183,12 +183,12 @@ export function GuiltMeter() {
       )}
 
       {/* Guilt-o-meter */}
-      <div className="pt-3 border-t border-line/18">
+      <div className="pt-3 border-t border-line/50">
         <div className="flex items-center justify-between mb-1.5">
-          <span className="text-[10px] text-ash/42 uppercase tracking-wider font-mono">
+          <span className="text-[10px] text-ash/65 uppercase tracking-wider font-mono">
             {t("guilt.guiltLevel", locale)}
           </span>
-          <span className="text-[10px] text-ash/50">
+          <span className="text-[10px] text-ash/70">
             {guiltLevel >= 9
               ? t("guilt.beyondRedemption", locale)
               : guiltLevel >= 7

@@ -65,7 +65,7 @@ function StockTicker({ stock, ticker }: { stock: StockData | null; ticker?: stri
   const isUp = stock ? stock.change >= 0 : true;
 
   return (
-    <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-surface-dim/60 border border-line/15">
+    <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-surface-dim/80 border border-line/50">
       <span className="text-[10px] font-mono text-ash/60 uppercase tracking-wider">
         {stock?.ticker || ticker}
       </span>
@@ -83,7 +83,7 @@ function StockTicker({ stock, ticker }: { stock: StockData | null; ticker?: stri
           </span>
         </>
       ) : (
-        <span className="text-[11px] text-ash/40">loading…</span>
+        <span className="text-[11px] text-ash/60">loading…</span>
       )}
     </div>
   );
@@ -100,7 +100,7 @@ function SecFilingsPanel({
 }) {
   if (loading) {
     return (
-      <div className="text-[11px] text-ash/40 py-4 text-center animate-pulse">
+      <div className="text-[11px] text-ash/60 py-4 text-center animate-pulse">
         {t("profile.secLoading", locale)}
       </div>
     );
@@ -109,7 +109,7 @@ function SecFilingsPanel({
 
   return (
     <div className="space-y-2">
-      <h3 className="text-[10px] font-mono text-ash/50 uppercase tracking-wider flex items-center gap-1.5">
+      <h3 className="text-[10px] font-mono text-ash/70 uppercase tracking-wider flex items-center gap-1.5">
         <span className="text-xs">📊</span>
         {t("profile.secTitle", locale)}
       </h3>
@@ -120,7 +120,7 @@ function SecFilingsPanel({
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: i * 0.08 }}
-            className="flex items-center justify-between gap-2 px-3 py-2 rounded-lg bg-surface-dim/40 border border-line/10"
+            className="flex items-center justify-between gap-2 px-3 py-2 rounded-lg bg-surface-dim/80 border border-line/45"
           >
             <div className="flex items-center gap-2 min-w-0">
               <span
@@ -129,7 +129,7 @@ function SecFilingsPanel({
                     ? "bg-[#e05555]/15 text-[#e05555]"
                     : f.type === "buy"
                     ? "bg-sage/15 text-sage"
-                    : "bg-stone/10 text-stone/60"
+                    : "bg-stone/15 text-stone/75"
                 }`}
               >
                 {f.type === "sell"
@@ -138,13 +138,13 @@ function SecFilingsPanel({
                   ? locale === "zh" ? "买入" : "BUY"
                   : locale === "zh" ? "行权" : "OPT"}
               </span>
-              <span className="text-[11px] text-ash/50 font-mono">{f.date}</span>
+              <span className="text-[11px] text-ash/70 font-mono">{f.date}</span>
             </div>
             <div className="text-right shrink-0">
               <div className="text-[11px] text-sand font-mono">
                 {f.shares.toLocaleString()} {f.ticker}
               </div>
-              <div className="text-[9px] text-ash/40 font-mono">
+              <div className="text-[9px] text-ash/60 font-mono">
                 @ ${f.pricePerShare.toLocaleString()} = $
                 {f.totalValue >= 1_000_000
                   ? `${(f.totalValue / 1_000_000).toFixed(1)}M`
@@ -180,7 +180,7 @@ function WealthComposition({
 
   return (
     <div className="space-y-3">
-      <h3 className="text-[10px] font-mono text-ash/50 uppercase tracking-wider flex items-center gap-1.5">
+      <h3 className="text-[10px] font-mono text-ash/70 uppercase tracking-wider flex items-center gap-1.5">
         <span className="text-xs">🧬</span>
         {t("profile.wealthTitle", locale)}
       </h3>
@@ -218,7 +218,7 @@ function WealthComposition({
               <span className="text-[11px] text-ash/70 truncate">
                 {locale === "zh" ? s.labelZh : s.label}
               </span>
-              <span className="text-[10px] text-ash/40 font-mono ml-auto shrink-0">
+              <span className="text-[10px] text-ash/60 font-mono ml-auto shrink-0">
                 {(s.pct * 100).toFixed(0)}%
               </span>
             </div>
@@ -240,7 +240,7 @@ function SignaturePurchasesPanel({
 }) {
   return (
     <div className="space-y-3">
-      <h3 className="text-[10px] font-mono text-ash/50 uppercase tracking-wider flex items-center gap-1.5">
+      <h3 className="text-[10px] font-mono text-ash/70 uppercase tracking-wider flex items-center gap-1.5">
         <span className="text-xs">⭐</span>
         {t("profile.signatureTitle", locale)}
       </h3>
@@ -251,7 +251,7 @@ function SignaturePurchasesPanel({
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.1 }}
-            className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-surface-dim/40 border border-line/10 hover:border-stone/25 hover:bg-surface/50 transition-all cursor-pointer group active:scale-[0.98]"
+            className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-surface-dim/80 border border-line/45 hover:border-stone/25 hover:bg-surface/70 transition-all cursor-pointer group active:scale-[0.98]"
             onClick={() => onBuy?.(p)}
           >
             <span className="text-xl shrink-0">{p.emoji}</span>
@@ -259,7 +259,7 @@ function SignaturePurchasesPanel({
               <div className="text-[12px] font-medium text-sand truncate">
                 {locale === "zh" ? p.nameZh : p.name}
               </div>
-              <div className="text-[10px] text-ash/45 truncate">
+              <div className="text-[10px] text-ash/65 truncate">
                 {locale === "zh" ? p.descriptionZh : p.description}
               </div>
             </div>
@@ -273,11 +273,11 @@ function SignaturePurchasesPanel({
                     : `$${p.price.toLocaleString()}`}
                 </div>
               ) : (
-                <div className="text-[10px] text-ash/35 italic">
+                <div className="text-[10px] text-ash/72 italic">
                   {locale === "zh" ? "无价" : "Priceless"}
                 </div>
               )}
-              <div className="text-[9px] text-ash/30 font-mono">{p.year}</div>
+              <div className="text-[9px] text-ash/70 font-mono">{p.year}</div>
               {onBuy && (
                 <div className="text-[8px] text-stone/50 uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity font-medium mt-0.5">
                   {locale === "zh" ? "点击购买" : "Click to buy"}
@@ -336,15 +336,15 @@ function WealthDnaPanel({
 
   return (
     <div className="space-y-3">
-      <h3 className="text-[10px] font-mono text-ash/50 uppercase tracking-wider flex items-center gap-1.5">
+      <h3 className="text-[10px] font-mono text-ash/70 uppercase tracking-wider flex items-center gap-1.5">
         <span className="text-xs">🧬</span>
         {t("profile.dnaTitle", locale)}
       </h3>
 
       {/* Personality badge + quote */}
-      <div className="px-3 py-2.5 rounded-lg bg-stone/[0.06] border border-stone/15">
+      <div className="px-3 py-2.5 rounded-lg bg-stone/[0.06] border border-stone/30">
         <div className="flex items-center gap-2 mb-2">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-stone/70 px-2 py-0.5 rounded bg-stone/10">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-stone/85 px-2 py-0.5 rounded bg-stone/15">
             {locale === "zh" ? pLabel.zh : pLabel.en}
           </span>
         </div>
@@ -361,7 +361,7 @@ function WealthDnaPanel({
           return (
             <div
               key={asset}
-              className="flex items-center justify-between px-2 py-1.5 rounded bg-surface-dim/40 border border-line/10"
+              className="flex items-center justify-between px-2 py-1.5 rounded bg-surface-dim/80 border border-line/45"
             >
               <span className="text-[10px] text-ash/60">
                 {locale === "zh" ? label.zh : label.en}
@@ -380,8 +380,8 @@ function WealthDnaPanel({
 
       {/* Free items */}
       {dna.freeItems && dna.freeItems.length > 0 && (
-        <div className="text-[10px] text-ash/45">
-          <span className="text-sage/70 font-medium">
+        <div className="text-[10px] text-ash/65">
+          <span className="text-sage/85 font-medium">
             {locale === "zh" ? "免费：" : "Free: "}
           </span>
           {dna.freeItems.join(", ")}
@@ -400,11 +400,11 @@ function WikiSummary({ wiki, locale }: { wiki: WikiData | null; locale: Locale }
 
   return (
     <div className="space-y-2">
-      <h3 className="text-[10px] font-mono text-ash/50 uppercase tracking-wider flex items-center gap-1.5">
+      <h3 className="text-[10px] font-mono text-ash/70 uppercase tracking-wider flex items-center gap-1.5">
         <span className="text-xs">📖</span>
         {t("profile.bioTitle", locale)}
       </h3>
-      <p className="text-[11px] text-ash/55 leading-relaxed">{short}</p>
+      <p className="text-[11px] text-ash/72 leading-relaxed">{short}</p>
     </div>
   );
 }
@@ -493,7 +493,7 @@ export function BillionaireProfile() {
       {/* Expandable detailed section */}
       <button
         onClick={() => setExpanded(!expanded)}
-        className="w-full text-center py-2 text-[10px] text-ash/40 hover:text-stone/60 transition-colors uppercase tracking-wider font-mono"
+        className="w-full text-center py-2 text-[10px] text-ash/60 hover:text-stone/75 transition-colors uppercase tracking-wider font-mono"
       >
         {expanded
           ? locale === "zh" ? "收起详情 ▲" : "Less ▲"

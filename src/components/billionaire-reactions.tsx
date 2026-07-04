@@ -113,12 +113,12 @@ const DEFAULT_QUOTES: BillionaireQuote[] = [
 
 const REACTIONS: Reaction[] = [
   { emoji: "😎", moodKey: "reactions.mood.unfazed", color: "text-sage/80" },
-  { emoji: "🙂", moodKey: "reactions.mood.calm", color: "text-sage/60" },
+  { emoji: "🙂", moodKey: "reactions.mood.calm", color: "text-sage/80" },
   { emoji: "😏", moodKey: "reactions.mood.amused", color: "text-sage/40" },
-  { emoji: "🤨", moodKey: "reactions.mood.noticing", color: "text-champagne/50" },
-  { emoji: "😐", moodKey: "reactions.mood.concerned", color: "text-champagne/60" },
-  { emoji: "😰", moodKey: "reactions.mood.worried", color: "text-stone/70" },
-  { emoji: "😱", moodKey: "reactions.mood.panicking", color: "text-stone/70" },
+  { emoji: "🤨", moodKey: "reactions.mood.noticing", color: "text-champagne/70" },
+  { emoji: "😐", moodKey: "reactions.mood.concerned", color: "text-champagne/80" },
+  { emoji: "😰", moodKey: "reactions.mood.worried", color: "text-stone/85" },
+  { emoji: "😱", moodKey: "reactions.mood.panicking", color: "text-stone/85" },
   { emoji: "😭", moodKey: "reactions.mood.desperate", color: "text-[#9B6B6B]/80" },
   { emoji: "💀", moodKey: "reactions.mood.ruined", color: "text-[#9B6B6B]" },
 ];
@@ -242,7 +242,7 @@ export function BillionaireReactions() {
               );
             })}
           </div>
-          <div className="text-[9px] text-ash/35 mt-1 font-mono">
+          <div className="text-[9px] text-ash/72 mt-1 font-mono">
             {t("reactions.stress", locale)}: {Math.min(spentPercent, 100).toFixed(1)}%
           </div>
         </div>
