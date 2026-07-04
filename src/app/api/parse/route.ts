@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { validateUrl } from "@/lib/url-validator";
 import { classifyProduct } from "@/lib/asset-classifier";
 import { ParsedProduct } from "@/lib/types";
+import { getD1 } from "@/lib/d1";
 
 export const runtime = "edge";
 
@@ -607,6 +608,11 @@ export async function POST(request: NextRequest) {
 
     cache.set(url, product);
 
+    // ── Persist to D1 (fire-and-forget, non-blocking) ──
+    saveToD1(product, source).catch(() => {
+      // Silently ignore D1 errors — local dev won't have D1
+    });
+
     return NextResponse.json({ success: true, product, source });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Failed to parse URL";
@@ -614,5 +620,74 @@ export async function POST(request: NextRequest) {
       { success: false, error: message },
       { status: 500 }
     );
+  }
+}
+
+// ─── D1 persistence (non-blocking) ─────────────────────────────────
+async function saveToD1(product: ParsedProduct, parseSource: string): Promise<void> {
+  const db = await getD1();
+  if (!db) return;
+
+  const now = Date.now();
+
+  const existing = await db
+    .prepare("SELECT id, parse_count FROM parsed_products WHERE url = ?")
+    .bind(product.sourceUrl)
+    .first<{ id: number; parse_count: number }>();
+
+  if (existing) {
+    await db
+      .prepare(
+        `UPDATE parsed_products SET
+          title = ?, price = ?, image_url = ?, description = ?,
+          asset_class = ?, monthly_overhead = ?,
+          original_price = ?, original_currency = ?,
+          source_domain = ?, favicon = ?, parse_source = ?,
+          updated_at = ?, parse_count = ?
+        WHERE url = ?`
+      )
+      .bind(
+        product.title,
+        product.price,
+        product.imageUrl ?? null,
+        product.description ?? null,
+        product.assetClass,
+        product.monthlyOverhead,
+        product.originalPrice ?? null,
+        product.originalCurrency ?? null,
+        product.sourceDomain ?? null,
+        product.favicon ?? null,
+        parseSource,
+        now,
+        existing.parse_count + 1,
+        product.sourceUrl
+      )
+      .run();
+  } else {
+    await db
+      .prepare(
+        `INSERT INTO parsed_products
+          (url, title, price, image_url, description, asset_class, monthly_overhead,
+           original_price, original_currency, source_domain, favicon, parse_source,
+           parsed_at, updated_at, parse_count)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)`
+      )
+      .bind(
+        product.sourceUrl,
+        product.title,
+        product.price,
+        product.imageUrl ?? null,
+        product.description ?? null,
+        product.assetClass,
+        product.monthlyOverhead,
+        product.originalPrice ?? null,
+        product.originalCurrency ?? null,
+        product.sourceDomain ?? null,
+        product.favicon ?? null,
+        parseSource,
+        now,
+        now
+      )
+      .run();
   }
 }
