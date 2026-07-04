@@ -4,6 +4,8 @@ import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { useCartStore, selectTotalSpent } from "@/lib/store";
 import { formatCurrency, ASSET_LABELS } from "@/lib/format";
+import { useLocale } from "@/lib/use-locale";
+import { t } from "@/lib/i18n";
 
 interface CategoryData {
   assetClass: string;
@@ -34,14 +36,12 @@ const CATEGORY_COLORS: Record<string, string> = {
 export function CategoryBreakdown() {
   const purchases = useCartStore((s) => s.purchases);
   const totalSpent = useCartStore(selectTotalSpent);
+  const locale = useLocale((s) => s.locale);
 
   const categories = useMemo(() => {
     if (purchases.length === 0) return [];
 
-    const map = new Map<
-      string,
-      { amount: number; count: number }
-    >();
+    const map = new Map<string, { amount: number; count: number }>();
 
     for (const p of purchases) {
       const cls = p.product.assetClass;
@@ -69,7 +69,6 @@ export function CategoryBreakdown() {
 
   if (purchases.length < 2) return null;
 
-  // SVG donut chart
   const radius = 60;
   const circumference = 2 * Math.PI * radius;
   let cumulativePercent = 0;
@@ -84,41 +83,25 @@ export function CategoryBreakdown() {
     };
   });
 
-  // Top purchase by category
   const topCategory = categories[0];
 
   return (
     <div className="w-full">
       <h2 className="section-label mb-4">
-        Portfolio Breakdown
+        {t("category.title", locale)}
       </h2>
 
       <div className="flex items-start gap-6">
         {/* Donut chart */}
         <div className="relative shrink-0">
           <svg width="140" height="140" viewBox="0 0 140 140">
-            {/* Background ring */}
-            <circle
-              cx="70"
-              cy="70"
-              r={radius}
-              fill="none"
-              stroke="rgba(255,255,255,0.03)"
-              strokeWidth="16"
-            />
-            {/* Category segments */}
+            <circle cx="70" cy="70" r={radius} fill="none" stroke="rgba(255,255,255,0.03)" strokeWidth="16" />
             {segments.map((seg, i) => (
               <motion.circle
                 key={seg.assetClass}
-                cx="70"
-                cy="70"
-                r={radius}
-                fill="none"
-                stroke={seg.color}
-                strokeWidth="16"
-                strokeLinecap="round"
-                strokeDasharray={seg.dashArray}
-                strokeDashoffset={seg.dashOffset}
+                cx="70" cy="70" r={radius} fill="none"
+                stroke={seg.color} strokeWidth="16" strokeLinecap="round"
+                strokeDasharray={seg.dashArray} strokeDashoffset={seg.dashOffset}
                 transform="rotate(-90 70 70)"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 0.7 }}
@@ -127,10 +110,9 @@ export function CategoryBreakdown() {
               />
             ))}
           </svg>
-          {/* Center label */}
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <div className="text-[10px] text-ash/40 uppercase tracking-wider">
-              Items
+            <div className="text-[10px] text-ash/40 uppercase tracking-wider font-mono">
+              {t("category.items", locale)}
             </div>
             <div className="text-xl font-serif text-sand/70 tabular-nums">
               {purchases.length}
@@ -156,29 +138,30 @@ export function CategoryBreakdown() {
                 <span className="text-[11px] text-ash/80 truncate">
                   {cat.label}
                 </span>
-                <span className="text-[10px] text-ash/40 shrink-0 tabular-nums">
+                <span className="text-[10px] text-ash/40 shrink-0 tabular-nums font-mono">
                   {cat.percent.toFixed(1)}%
                 </span>
               </div>
             </motion.div>
           ))}
           {categories.length > 6 && (
-            <div className="text-[9px] text-ash/25">
-              +{categories.length - 6} more categories
+            <div className="text-[9px] text-ash/25 font-mono">
+              {t("category.moreCategories", locale, { n: categories.length - 6 })}
             </div>
           )}
         </div>
       </div>
 
-      {/* Top spending stat */}
       {topCategory && (
         <div className="mt-4 pt-3 border-t border-line/10 text-[10px] text-ash/40">
-          Biggest category:{" "}
+          {t("category.biggest", locale)}:{" "}
           <span className="text-stone/60">
             {ASSET_LABELS[topCategory.assetClass] || topCategory.assetClass}
           </span>{" "}
           — {formatCurrency(topCategory.amount, true)} ({topCategory.count}{" "}
-          {topCategory.count === 1 ? "item" : "items"})
+          {topCategory.count === 1
+            ? t("category.item", locale)
+            : t("category.itemPlural", locale)})
         </div>
       )}
     </div>

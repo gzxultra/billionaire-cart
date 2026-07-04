@@ -64,6 +64,9 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-base relative">
+      {/* Film grain overlay — Backlot style */}
+      <div className="film-grain" aria-hidden="true" />
+
       {/* Dynamic atmosphere background */}
       <Atmosphere />
 
@@ -127,17 +130,17 @@ export default function Home() {
         {selectedBillionaire && (
           <>
             {/* Black Card — hero, full bleed feel */}
-            <section className="p-5 sm:p-8">
+            <section className="p-5 sm:p-8 stagger-section">
               <BlackCard />
             </section>
 
             {/* Balance — accent left border */}
-            <section className="card-panel-champagne p-5 sm:p-8">
+            <section className="card-panel-champagne p-5 sm:p-8 stagger-section">
               <BalanceDisplay />
             </section>
 
             {/* Stats row — two cards side by side */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 stagger-section">
               <section className="card-panel p-5">
                 <SpendingSpeed />
               </section>
@@ -147,27 +150,27 @@ export default function Home() {
             </div>
 
             {/* Wealth Context — accent left border */}
-            <section className="card-panel-accent p-5 sm:p-8">
+            <section className="card-panel-accent p-5 sm:p-8 stagger-section">
               <WealthContext />
             </section>
 
             {/* Billionaire Reactions */}
-            <section className="card-panel p-5 sm:p-8">
+            <section className="card-panel p-5 sm:p-8 stagger-section">
               <BillionaireReactions />
             </section>
 
             {/* Quick Buy Catalog — full width */}
-            <section className="card-panel p-5 sm:p-8">
+            <section className="card-panel p-5 sm:p-8 stagger-section">
               <Catalog onPurchase={handlePurchase} />
             </section>
 
             {/* Speedrun Mode */}
-            <section className="card-panel-accent p-5 sm:p-8">
+            <section className="card-panel-accent p-5 sm:p-8 stagger-section">
               <SpeedrunTimer />
             </section>
 
             {/* Analytics row */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 stagger-section">
               <section className="card-panel p-5">
                 <CategoryBreakdown />
               </section>
@@ -177,17 +180,17 @@ export default function Home() {
             </div>
 
             {/* Omni-Box */}
-            <section className="card-panel p-5 sm:p-8">
+            <section className="card-panel p-5 sm:p-8 stagger-section">
               <OmniBox />
             </section>
 
             {/* The Vault */}
-            <section className="card-panel-champagne p-5 sm:p-8">
+            <section className="card-panel-champagne p-5 sm:p-8 stagger-section">
               <Vault />
             </section>
 
             {/* Achievements */}
-            <section className="card-panel p-5 sm:p-8">
+            <section className="card-panel p-5 sm:p-8 stagger-section">
               <Achievements />
             </section>
           </>

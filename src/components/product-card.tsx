@@ -3,6 +3,8 @@
 import { motion } from "framer-motion";
 import { ParsedProduct } from "@/lib/types";
 import { formatCurrency, ASSET_LABELS } from "@/lib/format";
+import { useLocale } from "@/lib/use-locale";
+import { t } from "@/lib/i18n";
 
 interface ProductCardProps {
   product: ParsedProduct;
@@ -10,6 +12,8 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product, onAuthorize }: ProductCardProps) {
+  const locale = useLocale((s) => s.locale);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20, scale: 0.95 }}
@@ -54,13 +58,13 @@ export function ProductCard({ product, onAuthorize }: ProductCardProps) {
             <span className="text-lg font-serif text-champagne">
               {formatCurrency(product.price)}
             </span>
-            <span className="text-[10px] px-2 py-0.5 rounded-full bg-surface-bright/50 text-ash/60">
+            <span className="text-[10px] px-2 py-0.5 rounded-full bg-surface-bright/50 text-ash/60 font-mono">
               {ASSET_LABELS[product.assetClass] || product.assetClass}
             </span>
           </div>
           {product.monthlyOverhead > 0 && (
-            <div className="text-[10px] text-[#9B6B6B]/60 mt-1">
-              + {formatCurrency(product.monthlyOverhead)}/mo hidden costs
+            <div className="text-[10px] text-[#9B6B6B]/60 mt-1 font-mono">
+              + {formatCurrency(product.monthlyOverhead)}{t("bankrupt.monthly", locale)} {t("product.hiddenCosts", locale)}
             </div>
           )}
         </div>
@@ -77,7 +81,7 @@ export function ProductCard({ product, onAuthorize }: ProductCardProps) {
           hover:shadow-stone-lg transition-shadow
         "
       >
-        Authorize Purchase
+        {t("product.authorize", locale)}
       </motion.button>
     </motion.div>
   );

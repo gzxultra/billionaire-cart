@@ -3,6 +3,8 @@
 import { motion } from "framer-motion";
 import { useCartStore, selectTotalSpent, selectMonthlyBurn, selectNetWorth } from "@/lib/store";
 import { formatCurrency } from "@/lib/format";
+import { useLocale } from "@/lib/use-locale";
+import { t } from "@/lib/i18n";
 
 export function BlackCard() {
   const billionaire = useCartStore((s) => s.selectedBillionaire);
@@ -10,6 +12,7 @@ export function BlackCard() {
   const totalSpent = useCartStore(selectTotalSpent);
   const monthlyBurn = useCartStore(selectMonthlyBurn);
   const purchases = useCartStore((s) => s.purchases);
+  const locale = useLocale((s) => s.locale);
 
   if (!billionaire) return null;
 
@@ -44,19 +47,19 @@ export function BlackCard() {
           </div>
         </div>
         <div className="text-right">
-          <div className="text-[8px] uppercase tracking-[0.4em] text-stone/40">
-            Billionaire Cart
+          <div className="text-[8px] uppercase tracking-[0.4em] text-stone/40 font-mono">
+            {t("card.brand", locale)}
           </div>
-          <div className="text-[7px] uppercase tracking-[0.2em] text-ash/25 mt-0.5">
-            Black Card
+          <div className="text-[7px] uppercase tracking-[0.2em] text-ash/25 mt-0.5 font-mono">
+            {t("card.type", locale)}
           </div>
         </div>
       </div>
 
       {/* Balance */}
       <div className="absolute top-1/2 left-6 -translate-y-1/2">
-        <div className="text-[8px] uppercase tracking-[0.2em] text-ash/30 mb-0.5">
-          Remaining
+        <div className="text-[8px] uppercase tracking-[0.2em] text-ash/30 mb-0.5 font-mono">
+          {t("card.remaining", locale)}
         </div>
         <div className="text-xl sm:text-2xl font-serif text-sand/90">
           {formatCurrency(remaining, true)}
@@ -68,8 +71,8 @@ export function BlackCard() {
             style={{ width: `${Math.min(spentPercent, 100)}%` }}
           />
         </div>
-        <div className="text-[7px] text-ash/25 mt-1">
-          {spentPercent.toFixed(4)}% depleted
+        <div className="text-[7px] text-ash/25 mt-1 font-mono">
+          {spentPercent.toFixed(4)}% {t("card.depleted", locale)}
         </div>
       </div>
 
@@ -79,17 +82,17 @@ export function BlackCard() {
           <div className="text-[9px] uppercase tracking-[0.25em] text-ash/50">
             {billionaire.name}
           </div>
-          <div className="text-[7px] text-ash/25 mt-0.5">
+          <div className="text-[7px] text-ash/25 mt-0.5 font-mono">
             {billionaire.company}
           </div>
         </div>
         <div className="text-right">
-          <div className="text-[8px] text-ash/25">
-            {purchases.length} items
+          <div className="text-[8px] text-ash/25 font-mono">
+            {purchases.length} {t("card.items", locale)}
           </div>
           {monthlyBurn > 0 && (
-            <div className="text-[8px] text-[#9B6B6B]/40">
-              -{formatCurrency(monthlyBurn, true)}/mo
+            <div className="text-[8px] text-[#9B6B6B]/40 font-mono">
+              -{formatCurrency(monthlyBurn, true)}{t("bankrupt.monthly", locale)}
             </div>
           )}
         </div>

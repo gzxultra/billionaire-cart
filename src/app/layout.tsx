@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 
+import { JetBrains_Mono } from "next/font/google";
+
 const inter = Inter({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
@@ -13,6 +15,13 @@ const playfair = Playfair_Display({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-playfair",
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["300", "400", "500"],
+  variable: "--font-mono",
   display: "swap",
 });
 
@@ -68,8 +77,29 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh" className={`dark ${inter.variable} ${playfair.variable}`}>
-      <body className="min-h-screen font-sans">{children}</body>
+    <html lang="zh" className={`dark ${inter.variable} ${playfair.variable} ${jetbrainsMono.variable}`}>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebApplication",
+              name: "Billionaire Cart — 亿万富翁购物车",
+              description: "Adopt a billionaire's identity and spend their fortune. Interactive wealth simulation with real-time Forbes data.",
+              url: "https://billionairecart.app",
+              applicationCategory: "EntertainmentApplication",
+              operatingSystem: "Any",
+              offers: {
+                "@type": "Offer",
+                price: "0",
+                priceCurrency: "USD",
+              },
+              inLanguage: ["en", "zh"],
+            }),
+          }}
+        />
+      </head>      <body className="min-h-screen font-sans">{children}</body>
     </html>
   );
 }

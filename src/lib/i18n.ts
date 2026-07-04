@@ -273,6 +273,33 @@ const strings: Record<string, Record<Locale, string>> = {
 
   // ─── Bankrupt text additions ───────────────────────────────────
   "bankrupt.monthly": { en: "/mo", zh: "/月" },
+
+  // ─── Product Card ──────────────────────────────────────────────
+  "product.authorize": { en: "Authorize Purchase", zh: "授权购买" },
+  "product.hiddenCosts": { en: "hidden costs", zh: "隐性费用" },
+
+  // ─── Achievements (additions) ──────────────────────────────────
+  "achievements.locked": { en: "???", zh: "???" },
+  "achievements.rarity.legendary": { en: "legendary", zh: "传说" },
+  "achievements.rarity.rare": { en: "rare", zh: "稀有" },
+  "achievements.rarity.common": { en: "common", zh: "普通" },
+
+  // ─── Reactions (mood labels) ───────────────────────────────────
+  "reactions.mood.unfazed": { en: "Unfazed", zh: "毫不在意" },
+  "reactions.mood.calm": { en: "Calm", zh: "淡定" },
+  "reactions.mood.amused": { en: "Amused", zh: "觉得好笑" },
+  "reactions.mood.noticing": { en: "Noticing", zh: "注意到了" },
+  "reactions.mood.concerned": { en: "Concerned", zh: "有点担心" },
+  "reactions.mood.worried": { en: "Worried", zh: "焦虑" },
+  "reactions.mood.panicking": { en: "Panicking", zh: "慌了" },
+  "reactions.mood.desperate": { en: "Desperate", zh: "绝望" },
+  "reactions.mood.ruined": { en: "Ruined", zh: "破产了" },
+
+  // ─── Share Receipt (additions) ─────────────────────────────────
+  "share.acquisitions": { en: "Acquisitions", zh: "消费记录" },
+  "share.moreItems": { en: "and {n} more", zh: "另有 {n} 件" },
+  "share.burnMo": { en: "Burn / Mo", zh: "月支出" },
+  "share.identity": { en: "Identity", zh: "身份" },
 };
 
 

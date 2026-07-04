@@ -3,15 +3,17 @@
 import { useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCartStore, selectTotalSpent, selectNetWorth } from "@/lib/store";
+import { useLocale } from "@/lib/use-locale";
+import { t, Locale } from "@/lib/i18n";
 
 interface Reaction {
   emoji: string;
-  mood: string;
+  moodKey: string;
   color: string;
 }
 
 interface BillionaireQuote {
-  threshold: number; // percent spent
+  threshold: number;
   quote: string;
 }
 
@@ -98,7 +100,6 @@ const BILLIONAIRE_QUOTES: Record<string, BillionaireQuote[]> = {
   ],
 };
 
-// Fallback quotes for billionaires without custom quotes
 const DEFAULT_QUOTES: BillionaireQuote[] = [
   { threshold: 0, quote: "Wealth is just a number." },
   { threshold: 2, quote: "A light shopping day." },
@@ -111,15 +112,15 @@ const DEFAULT_QUOTES: BillionaireQuote[] = [
 ];
 
 const REACTIONS: Reaction[] = [
-  { emoji: "😎", mood: "Unfazed", color: "text-sage/80" },
-  { emoji: "🙂", mood: "Calm", color: "text-sage/60" },
-  { emoji: "😏", mood: "Amused", color: "text-sage/40" },
-  { emoji: "🤨", mood: "Noticing", color: "text-champagne/50" },
-  { emoji: "😐", mood: "Concerned", color: "text-champagne/60" },
-  { emoji: "😰", mood: "Worried", color: "text-stone/60" },
-  { emoji: "😱", mood: "Panicking", color: "text-stone/70" },
-  { emoji: "😭", mood: "Desperate", color: "text-[#9B6B6B]/80" },
-  { emoji: "💀", mood: "Ruined", color: "text-[#9B6B6B]" },
+  { emoji: "😎", moodKey: "reactions.mood.unfazed", color: "text-sage/80" },
+  { emoji: "🙂", moodKey: "reactions.mood.calm", color: "text-sage/60" },
+  { emoji: "😏", moodKey: "reactions.mood.amused", color: "text-sage/40" },
+  { emoji: "🤨", moodKey: "reactions.mood.noticing", color: "text-champagne/50" },
+  { emoji: "😐", moodKey: "reactions.mood.concerned", color: "text-champagne/60" },
+  { emoji: "😰", moodKey: "reactions.mood.worried", color: "text-stone/60" },
+  { emoji: "😱", moodKey: "reactions.mood.panicking", color: "text-stone/70" },
+  { emoji: "😭", moodKey: "reactions.mood.desperate", color: "text-[#9B6B6B]/80" },
+  { emoji: "💀", moodKey: "reactions.mood.ruined", color: "text-[#9B6B6B]" },
 ];
 
 function getReaction(percent: number): Reaction {
@@ -148,6 +149,7 @@ export function BillionaireReactions() {
   const totalSpent = useCartStore(selectTotalSpent);
   const netWorth = useCartStore(selectNetWorth);
   const purchases = useCartStore((s) => s.purchases);
+  const locale = useLocale((s) => s.locale);
 
   const spentPercent = useMemo(
     () => (netWorth > 0 ? (totalSpent / netWorth) * 100 : 0),
@@ -158,14 +160,12 @@ export function BillionaireReactions() {
 
   const reaction = getReaction(spentPercent);
   const quote = getQuote(selectedBillionaire.id, spentPercent);
-
-  // Stress bar segments
   const stressLevel = Math.min(spentPercent / 100, 1);
 
   return (
     <div className="w-full">
       <h2 className="section-label mb-4">
-        {selectedBillionaire.name}&apos;s Reaction
+        {t("reactions.reaction", locale, { name: selectedBillionaire.name })}
       </h2>
 
       <div className="flex items-start gap-4">
@@ -189,28 +189,11 @@ export function BillionaireReactions() {
             className="absolute -inset-1 w-[calc(100%+8px)] h-[calc(100%+8px)]"
             viewBox="0 0 56 56"
           >
-            <circle
-              cx="28"
-              cy="28"
-              r="25"
-              fill="none"
-              stroke="rgba(255,255,255,0.05)"
-              strokeWidth="2"
-            />
+            <circle cx="28" cy="28" r="25" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="2" />
             <motion.circle
-              cx="28"
-              cy="28"
-              r="25"
-              fill="none"
-              stroke={
-                spentPercent > 70
-                  ? "#ef4444"
-                  : spentPercent > 40
-                  ? "#f59e0b"
-                  : "#34d399"
-              }
-              strokeWidth="2"
-              strokeLinecap="round"
+              cx="28" cy="28" r="25" fill="none"
+              stroke={spentPercent > 70 ? "#ef4444" : spentPercent > 40 ? "#f59e0b" : "#34d399"}
+              strokeWidth="2" strokeLinecap="round"
               strokeDasharray={`${stressLevel * 157} 157`}
               transform="rotate(-90 28 28)"
               initial={{ strokeDasharray: "0 157" }}
@@ -223,8 +206,8 @@ export function BillionaireReactions() {
 
         {/* Quote + mood */}
         <div className="flex-1 min-w-0">
-          <div className={`text-xs font-medium ${reaction.color} mb-1`}>
-            {reaction.mood}
+          <div className={`text-xs font-medium ${reaction.color} mb-1 font-mono uppercase tracking-wider`}>
+            {t(reaction.moodKey, locale)}
           </div>
           <AnimatePresence mode="wait">
             <motion.p
@@ -248,13 +231,10 @@ export function BillionaireReactions() {
                   className="flex-1 h-1.5 rounded-full"
                   animate={{
                     backgroundColor: segmentFilled
-                      ? i < 3
-                        ? "rgba(125, 155, 138, 0.4)"
-                        : i < 5
-                        ? "rgba(251, 191, 36, 0.4)"
-                        : i < 7
-                        ? "rgba(249, 115, 22, 0.5)"
-                        : "rgba(239, 68, 68, 0.6)"
+                      ? i < 3 ? "rgba(125, 155, 138, 0.4)"
+                      : i < 5 ? "rgba(251, 191, 36, 0.4)"
+                      : i < 7 ? "rgba(249, 115, 22, 0.5)"
+                      : "rgba(239, 68, 68, 0.6)"
                       : "rgba(36, 36, 41, 0.3)",
                   }}
                   transition={{ duration: 0.3, delay: i * 0.03 }}
@@ -262,8 +242,8 @@ export function BillionaireReactions() {
               );
             })}
           </div>
-          <div className="text-[9px] text-ash/25 mt-1">
-            Stress Level: {Math.min(spentPercent, 100).toFixed(1)}%
+          <div className="text-[9px] text-ash/25 mt-1 font-mono">
+            {t("reactions.stress", locale)}: {Math.min(spentPercent, 100).toFixed(1)}%
           </div>
         </div>
       </div>
