@@ -6,6 +6,7 @@ import { useCartStore } from "@/lib/store";
 import { classifyProduct } from "@/lib/asset-classifier";
 import { ParsedProduct, ParseResponse, AssetClass, SavedProduct } from "@/lib/types";
 import { generateId, ASSET_LABELS, assetLabel, formatCurrency, timeAgo, proxyImage } from "@/lib/format";
+import { applyWealthDna } from "@/lib/wealth-dna";
 import { ProductCard } from "./product-card";
 import { CheckoutAnimation } from "./checkout-animation";
 import { useLocale } from "@/lib/use-locale";
@@ -195,15 +196,22 @@ export function OmniBox() {
   const handleCheckoutComplete = () => {
     if (!product || !selectedBillionaire) return;
 
+    // Apply Wealth DNA modifiers to the price
+    const dna = applyWealthDna(product, selectedBillionaire);
+
     // Find matching saved product and increment its purchase count
     const match = savedProducts.find(
       (sp) => sp.product.sourceUrl === product.sourceUrl
     );
     if (match) incrementPurchaseCount(match.id);
 
+    const adjustedProduct = dna.adjustedPrice !== product.price
+      ? { ...product, price: dna.adjustedPrice }
+      : product;
+
     const newlyUnlocked = addPurchase({
       id: generateId(),
-      product,
+      product: adjustedProduct,
       billionaireId: selectedBillionaire.id,
       timestamp: Date.now(),
     });

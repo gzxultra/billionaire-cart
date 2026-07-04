@@ -22,6 +22,7 @@ import { Atmosphere } from "@/components/atmosphere";
 import { EasterEggOverlay } from "@/components/easter-egg-overlay";
 import { SpeedrunTimer } from "@/components/speedrun-timer";
 import { BillionaireReactions } from "@/components/billionaire-reactions";
+import { BillionaireProfile } from "@/components/billionaire-profile";
 import { ComboStreak } from "@/components/combo-streak";
 import { CategoryBreakdown } from "@/components/category-breakdown";
 import { GuiltMeter } from "@/components/guilt-meter";
@@ -270,6 +271,11 @@ export default function Home() {
             {/* Black Card — hero, full bleed feel */}
             <section className="p-5 sm:p-8 stagger-section">
               <BlackCard />
+            </section>
+
+            {/* Billionaire Profile — wealth DNA, signature purchases, SEC filings */}
+            <section className="card-panel p-5 sm:p-8 stagger-section">
+              <BillionaireProfile />
             </section>
 
             {/* Balance — accent left border */}

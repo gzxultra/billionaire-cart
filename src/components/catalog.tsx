@@ -9,6 +9,7 @@ import { playAuthorize, playSparkle } from "@/lib/sounds";
 import { ParticleBurst } from "./particle-burst";
 import { useLocale } from "@/lib/use-locale";
 import { t, tierLabel } from "@/lib/i18n";
+import { applyWealthDna, formatModifier } from "@/lib/wealth-dna";
 
 const QUANTITY_OPTIONS = [1, 10, 100, 1000, "MAX"] as const;
 type QuantityOption = (typeof QUANTITY_OPTIONS)[number];
@@ -86,7 +87,14 @@ export function Catalog({ onPurchase }: CatalogProps) {
   const handleBuy = useCallback(
     (item: CatalogItem) => {
       if (!selectedBillionaire) return;
-      const qty = getQty(item.id, item.price);
+
+      // Apply Wealth DNA modifier
+      const dna = applyWealthDna(
+        { title: item.name, price: item.price, assetClass: item.assetClass },
+        selectedBillionaire
+      );
+      const effectivePrice = dna.adjustedPrice;
+      const qty = getQty(item.id, effectivePrice > 0 ? effectivePrice : item.price);
 
       setBuyingId(item.id);
       if (soundEnabled) {
@@ -96,7 +104,7 @@ export function Catalog({ onPurchase }: CatalogProps) {
       setShowBurst(true);
       setTimeout(() => setShowBurst(false), 1500);
 
-      const totalPrice = item.price * qty;
+      const totalPrice = effectivePrice * qty;
 
       // Add purchases
       let newlyUnlockedAll: string[] = [];
@@ -105,7 +113,7 @@ export function Catalog({ onPurchase }: CatalogProps) {
           id: generateId() + `-${i}`,
           product: {
             title: qty > 1 ? `${item.name} (${i + 1}/${qty})` : item.name,
-            price: item.price,
+            price: effectivePrice,
             imageUrl: null,
             description: item.description,
             sourceUrl: `catalog://${item.id}`,
@@ -215,9 +223,14 @@ export function Catalog({ onPurchase }: CatalogProps) {
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
         <AnimatePresence mode="popLayout">
           {displayItems.map((item) => {
-            const qty = getQty(item.id, item.price);
-            const totalPrice = item.price * qty;
-            const canAfford = item.price <= remaining;
+            const itemDna = applyWealthDna(
+              { title: item.name, price: item.price, assetClass: item.assetClass },
+              selectedBillionaire
+            );
+            const effectivePrice = itemDna.adjustedPrice;
+            const qty = getQty(item.id, effectivePrice > 0 ? effectivePrice : item.price);
+            const totalPrice = effectivePrice * qty;
+            const canAfford = effectivePrice <= remaining || itemDna.isFree;
             const isBuying = buyingId === item.id;
             const currentQtySelection = quantities[item.id] || 1;
 
@@ -248,17 +261,34 @@ export function Catalog({ onPurchase }: CatalogProps) {
                   {item.description}
                 </div>
 
-                {/* Price */}
-                <div className="text-sm font-serif text-stone mt-2">
-                  {formatCurrency(item.price)}
+                {/* Price + DNA modifier */}
+                <div className="mt-2">
+                  {itemDna.isFree ? (
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-sm font-serif text-sage font-medium">FREE</span>
+                      <span className="text-[10px] text-ash/40 line-through">{formatCurrency(item.price)}</span>
+                    </div>
+                  ) : itemDna.modifier != null ? (
+                    <div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-sm font-serif text-stone">{formatCurrency(effectivePrice)}</span>
+                        <span className="text-[10px] text-ash/40 line-through">{formatCurrency(item.price)}</span>
+                      </div>
+                      <span className={`text-[9px] font-medium ${itemDna.modifier < 0 ? "text-sage/70" : "text-[#9B6B6B]/70"}`}>
+                        {formatModifier(itemDna.modifier)}
+                      </span>
+                    </div>
+                  ) : (
+                    <span className="text-sm font-serif text-stone">{formatCurrency(item.price)}</span>
+                  )}
                 </div>
 
                 {/* Quantity selector */}
                 <div className="flex gap-1 mt-2 flex-wrap">
                   {QUANTITY_OPTIONS.map((q) => {
                     if (q === "MAX") {
-                      if (!canAfford) return null;
-                      const maxQty = Math.floor(remaining / item.price);
+                      if (!canAfford || itemDna.isFree) return null;
+                      const maxQty = Math.floor(remaining / effectivePrice);
                       if (maxQty <= 1) return null;
                       return (
                         <button
@@ -277,7 +307,7 @@ export function Catalog({ onPurchase }: CatalogProps) {
                         </button>
                       );
                     }
-                    const qTotal = item.price * q;
+                    const qTotal = effectivePrice * q;
                     const qAfford = qTotal <= remaining;
                     if (!qAfford && q > 1) return null;
                     return (

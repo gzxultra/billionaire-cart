@@ -6,6 +6,8 @@ import { ParsedProduct } from "@/lib/types";
 import { formatCurrency, assetLabel, proxyImage } from "@/lib/format";
 import { useLocale } from "@/lib/use-locale";
 import { t } from "@/lib/i18n";
+import { useCartStore } from "@/lib/store";
+import { applyWealthDna, formatModifier } from "@/lib/wealth-dna";
 
 interface ProductCardProps {
   product: ParsedProduct;
@@ -17,6 +19,8 @@ const SWIPE_THRESHOLD = 120;
 
 export function ProductCard({ product, onAuthorize, autoFocusBuy }: ProductCardProps) {
   const locale = useLocale((s) => s.locale);
+  const selectedBillionaire = useCartStore((s) => s.selectedBillionaire);
+  const dna = applyWealthDna(product, selectedBillionaire);
   const [swiped, setSwiped] = useState(false);
   const buyRef = useRef<HTMLButtonElement>(null);
   const x = useMotionValue(0);
@@ -105,10 +109,30 @@ export function ProductCard({ product, onAuthorize, autoFocusBuy }: ProductCardP
           {/* Price tag — prominent floating pill */}
           <div className="absolute bottom-4 right-4">
             <div className="px-4 py-2 rounded-xl bg-base/85 backdrop-blur-xl border border-champagne/20 shadow-champagne-sm">
-              <span className="text-xl font-serif text-champagne tracking-tight">
-                {formatCurrency(product.price)}
-              </span>
-              {product.originalPrice != null && product.originalCurrency && (
+              {dna.isFree ? (
+                <>
+                  <span className="text-xl font-serif text-sage tracking-tight">
+                    FREE
+                  </span>
+                  <span className="block text-[10px] text-ash/50 font-mono text-right mt-0.5 line-through">
+                    {formatCurrency(product.price)}
+                  </span>
+                </>
+              ) : dna.modifier != null ? (
+                <>
+                  <span className="text-xl font-serif text-champagne tracking-tight">
+                    {formatCurrency(dna.adjustedPrice)}
+                  </span>
+                  <span className="block text-[10px] text-ash/50 font-mono text-right mt-0.5 line-through">
+                    {formatCurrency(product.price)}
+                  </span>
+                </>
+              ) : (
+                <span className="text-xl font-serif text-champagne tracking-tight">
+                  {formatCurrency(product.price)}
+                </span>
+              )}
+              {product.originalPrice != null && product.originalCurrency && !dna.isFree && dna.modifier == null && (
                 <span className="block text-[10px] text-ash/50 font-mono text-right mt-0.5">
                   {product.originalCurrency === "CNY" ? "¥" : product.originalCurrency}
                   {product.originalPrice.toLocaleString()}
@@ -116,6 +140,24 @@ export function ProductCard({ product, onAuthorize, autoFocusBuy }: ProductCardP
               )}
             </div>
           </div>
+
+          {/* DNA modifier badge — top right area, below swipe hint */}
+          {(dna.isFree || dna.modifier != null) && selectedBillionaire && (
+            <div className="absolute bottom-4 left-3">
+              <span className={`text-[10px] px-2 py-1 rounded-full backdrop-blur-md font-medium border shadow-sm ${
+                dna.isFree
+                  ? "bg-sage/15 text-sage border-sage/25"
+                  : dna.modifier! < 0
+                  ? "bg-sage/15 text-sage/80 border-sage/20"
+                  : "bg-[#9B6B6B]/15 text-[#9B6B6B] border-[#9B6B6B]/20"
+              }`}>
+                {dna.isFree
+                  ? t("dna.free", locale, { item: dna.matchedFreeItem || "" })
+                  : `${selectedBillionaire.name.split(" ")[0]} ${formatModifier(dna.modifier!)} ${assetLabel(product.assetClass, locale)}`
+                }
+              </span>
+            </div>
+          )}
 
           {/* Category badge — top left */}
           <div className="absolute top-3 left-3 flex items-center gap-2">

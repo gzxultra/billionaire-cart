@@ -9,6 +9,7 @@ import { useCartStore } from "@/lib/store";
 import { ParticleBurst } from "@/components/particle-burst";
 import { useLocale } from "@/lib/use-locale";
 import { t } from "@/lib/i18n";
+import { applyWealthDna, formatModifier } from "@/lib/wealth-dna";
 
 interface CheckoutAnimationProps {
   product: ParsedProduct;
@@ -24,6 +25,7 @@ export function CheckoutAnimation({
   const [phase, setPhase] = useState<"card" | "authorize" | "done">("card");
   const soundEnabled = useCartStore((s) => s.soundEnabled);
   const locale = useLocale((s) => s.locale);
+  const dna = applyWealthDna(product, billionaire);
 
   useEffect(() => {
     // Phase 1: Show card (0.4s)
@@ -101,9 +103,33 @@ export function CheckoutAnimation({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
-            className="text-2xl font-serif text-champagne"
           >
-            {formatCurrency(product.price)}
+            {dna.isFree ? (
+              <>
+                <div className="text-2xl font-serif text-sage">FREE</div>
+                <div className="text-[10px] text-ash/50 line-through mt-0.5">
+                  {formatCurrency(product.price)}
+                </div>
+              </>
+            ) : dna.modifier != null ? (
+              <>
+                <div className="text-2xl font-serif text-champagne">
+                  {formatCurrency(dna.adjustedPrice)}
+                </div>
+                <div className="flex items-center gap-2 mt-0.5">
+                  <span className="text-[10px] text-ash/50 line-through">
+                    {formatCurrency(product.price)}
+                  </span>
+                  <span className={`text-[10px] font-medium ${dna.modifier < 0 ? "text-sage/80" : "text-[#9B6B6B]/80"}`}>
+                    {formatModifier(dna.modifier)}
+                  </span>
+                </div>
+              </>
+            ) : (
+              <div className="text-2xl font-serif text-champagne">
+                {formatCurrency(product.price)}
+              </div>
+            )}
           </motion.div>
         </div>
 

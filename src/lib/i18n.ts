@@ -393,6 +393,23 @@ const strings: Record<string, Record<Locale, string>> = {
   "share.moreItems": { en: "and {n} more", zh: "另有 {n} 件" },
   "share.burnMo": { en: "Burn / Mo", zh: "月支出" },
   "share.identity": { en: "Identity", zh: "身份" },
+
+  // ─── Billionaire Profile ───────────────────────────────────────
+  "profile.title": { en: "{name}'s Profile", zh: "{name}的档案" },
+  "profile.bioTitle": { en: "Biography", zh: "人物简介" },
+  "profile.wealthTitle": { en: "Wealth Composition", zh: "财富构成" },
+  "profile.dnaTitle": { en: "Spending DNA", zh: "消费基因" },
+  "profile.signatureTitle": { en: "Signature Purchases", zh: "标志性购买" },
+  "profile.secTitle": { en: "Recent Insider Trades (SEC)", zh: "近期内部交易 (SEC)" },
+  "profile.secLoading": { en: "Loading SEC filings…", zh: "加载 SEC 文件中…" },
+  "profile.noSec": { en: "No SEC filings (non-US listed)", zh: "无 SEC 数据（非美国上市）" },
+
+  // ─── Wealth DNA Price Modifiers ────────────────────────────────
+  "dna.discount": { en: "{name} Discount", zh: "{name}折扣" },
+  "dna.surcharge": { en: "{name} Surcharge", zh: "{name}加价" },
+  "dna.free": { en: "FREE — {item}", zh: "免费 — {item}" },
+  "dna.originalPrice": { en: "was {price}", zh: "原价 {price}" },
+  "dna.modifier": { en: "{pct} on {category}", zh: "{category} {pct}" },
 };
 
 
