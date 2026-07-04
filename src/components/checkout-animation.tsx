@@ -23,20 +23,20 @@ export function CheckoutAnimation({
   const soundEnabled = useCartStore((s) => s.soundEnabled);
 
   useEffect(() => {
-    // Phase 1: Show card (0.6s)
+    // Phase 1: Show card (0.4s)
     const t1 = setTimeout(() => {
       setPhase("authorize");
       if (soundEnabled) {
         playAuthorize();
         playSparkle();
       }
-    }, 600);
+    }, 400);
 
-    // Phase 2: Show authorized (1.5s after)
-    const t2 = setTimeout(() => setPhase("done"), 2100);
+    // Phase 2: Show authorized (0.9s after start)
+    const t2 = setTimeout(() => setPhase("done"), 1300);
 
-    // Phase 3: Dismiss (1s after)
-    const t3 = setTimeout(onComplete, 3100);
+    // Phase 3: Dismiss (0.7s after done)
+    const t3 = setTimeout(onComplete, 2000);
 
     return () => {
       clearTimeout(t1);

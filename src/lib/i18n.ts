@@ -313,6 +313,13 @@ const strings: Record<string, Record<Locale, string>> = {
   // ─── Product Card ──────────────────────────────────────────────
   "product.authorize": { en: "Authorize Purchase", zh: "授权购买" },
   "product.hiddenCosts": { en: "hidden costs", zh: "隐性费用" },
+  "product.swipeHint": { en: "swipe → to buy", zh: "右滑购买 →" },
+  "product.enterHint": { en: "Press Enter to authorize", zh: "按 Enter 授权购买" },
+
+  // ─── Purchase Feed ─────────────────────────────────────────────
+  "feed.title": { en: "Recent Items", zh: "最近商品" },
+  "feed.purchased": { en: "Purchased", zh: "已购买" },
+  "feed.browsed": { en: "Browsed", zh: "浏览过" },
 
   // ─── Achievements (additions) ──────────────────────────────────
   "achievements.locked": { en: "???", zh: "???" },

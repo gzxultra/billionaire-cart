@@ -4,6 +4,7 @@ import { useState, useCallback } from "react";
 import { useCartStore } from "@/lib/store";
 import { useLocale } from "@/lib/use-locale";
 import { t } from "@/lib/i18n";
+import { SavedProduct } from "@/lib/types";
 import { IdentitySelector } from "@/components/identity-selector";
 import { BalanceDisplay } from "@/components/balance-display";
 import { EarningsTicker } from "@/components/earnings-ticker";
@@ -24,6 +25,7 @@ import { BillionaireReactions } from "@/components/billionaire-reactions";
 import { ComboStreak } from "@/components/combo-streak";
 import { CategoryBreakdown } from "@/components/category-breakdown";
 import { GuiltMeter } from "@/components/guilt-meter";
+import { PurchaseFeed } from "@/components/purchase-feed";
 import {
   checkEasterEggs,
   resetEasterEggs,
@@ -61,6 +63,14 @@ export default function Home() {
     reset();
     resetEasterEggs();
   }, [reset]);
+
+  // Handle repurchase from feed
+  const handleRepurchase = useCallback(
+    (savedProduct: SavedProduct) => {
+      useCartStore.getState().setActiveParsed(savedProduct.product);
+    },
+    []
+  );
 
   return (
     <main className="min-h-screen bg-base relative">
@@ -151,6 +161,11 @@ export default function Home() {
                 </div>
                 <OmniBox />
               </div>
+            </section>
+
+            {/* Purchase Feed — recent parsed & bought items */}
+            <section className="card-panel p-5 sm:p-8 stagger-section">
+              <PurchaseFeed onRepurchase={handleRepurchase} />
             </section>
 
             {/* Stats row — two cards side by side */}

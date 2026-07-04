@@ -16,6 +16,7 @@ interface CartState {
   achievements: Achievement[];
   soundEnabled: boolean;
   savedProducts: SavedProduct[];
+  activeParsedProduct: ParsedProduct | null;
   selectBillionaire: (id: string) => void;
   addPurchase: (purchase: Purchase) => string[]; // returns newly unlocked achievement names
   removePurchase: (id: string) => void;
@@ -24,6 +25,7 @@ interface CartState {
   saveProduct: (product: ParsedProduct) => void;
   removeSavedProduct: (id: string) => void;
   incrementPurchaseCount: (id: string) => void;
+  setActiveParsed: (product: ParsedProduct | null) => void;
 }
 
 function resolveBillionaire(id: string): Billionaire | null {
@@ -45,6 +47,7 @@ export const useCartStore = create<CartState>()(
       achievements: defaultAchievements,
       soundEnabled: true,
       savedProducts: [],
+      activeParsedProduct: null,
 
       selectBillionaire: (id: string) => {
         const b = resolveBillionaire(id);
@@ -111,6 +114,10 @@ export const useCartStore = create<CartState>()(
             sp.id === id ? { ...sp, purchaseCount: sp.purchaseCount + 1 } : sp
           ),
         });
+      },
+
+      setActiveParsed: (product: ParsedProduct | null) => {
+        set({ activeParsedProduct: product });
       },
     }),
     {

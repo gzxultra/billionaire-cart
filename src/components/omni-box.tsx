@@ -38,6 +38,7 @@ export function OmniBox() {
   const [parseSource, setParseSource] = useState<string | null>(null);
   const [showHistory, setShowHistory] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   // Manual entry state
   const [manualTitle, setManualTitle] = useState("");
@@ -50,7 +51,23 @@ export function OmniBox() {
   const savedProducts = useCartStore((s) => s.savedProducts);
   const removeSavedProduct = useCartStore((s) => s.removeSavedProduct);
   const incrementPurchaseCount = useCartStore((s) => s.incrementPurchaseCount);
+  const activeParsedProduct = useCartStore((s) => s.activeParsedProduct);
+  const setActiveParsed = useCartStore((s) => s.setActiveParsed);
   const locale = useLocale((s) => s.locale);
+
+  // Watch for external product selection (e.g. from PurchaseFeed)
+  useEffect(() => {
+    if (activeParsedProduct) {
+      setProduct(activeParsedProduct);
+      setUrl(activeParsedProduct.sourceUrl);
+      setShowHistory(false);
+      setActiveParsed(null);
+      // Auto-scroll to card
+      setTimeout(() => {
+        cardRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 100);
+    }
+  }, [activeParsedProduct, setActiveParsed]);
 
   const parseUrl = useCallback(async (inputUrl?: string) => {
     const target = (inputUrl || url).trim();
@@ -74,6 +91,10 @@ export function OmniBox() {
         setParseSource(data.source || null);
         // Auto-save to history
         saveProduct(data.product);
+        // Auto-scroll to product card
+        setTimeout(() => {
+          cardRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+        }, 100);
       } else {
         setError(data.error || t("omni.parseFail", locale));
         setShowManual(true);
@@ -452,7 +473,9 @@ export function OmniBox() {
       {/* Product card */}
       <AnimatePresence>
         {product && !showCheckout && (
-          <ProductCard product={product} onAuthorize={handleAuthorize} />
+          <div ref={cardRef}>
+            <ProductCard product={product} onAuthorize={handleAuthorize} autoFocusBuy />
+          </div>
         )}
       </AnimatePresence>
 
