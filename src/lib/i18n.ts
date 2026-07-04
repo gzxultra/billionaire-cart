@@ -88,9 +88,13 @@ const strings: Record<string, Record<Locale, string>> = {
   "earnings.earnedBack": { en: "Earned back!", zh: "已赚回！" },
 
   // ─── OmniBox ───────────────────────────────────────────────────
+  "omni.sectionTitle": {
+    en: "Acquire Anything",
+    zh: "万物皆可买",
+  },
   "omni.placeholder": {
-    en: "Paste any URL to purchase…",
-    zh: "粘贴任意商品链接…",
+    en: "Paste any product URL to purchase…",
+    zh: "粘贴任意商品链接即刻购买…",
   },
   "omni.parse": { en: "Parse", zh: "解析" },
   "omni.parsing": { en: "Parsing…", zh: "解析中…" },
@@ -99,6 +103,38 @@ const strings: Record<string, Record<Locale, string>> = {
   "omni.productName": { en: "Product name…", zh: "商品名称…" },
   "omni.price": { en: "Price (USD)…", zh: "价格 (美元)…" },
   "omni.addItem": { en: "Add Item", zh: "添加商品" },
+  "omni.parseFail": {
+    en: "Failed to parse — try manual entry",
+    zh: "解析失败 — 试试手动输入",
+  },
+  "omni.networkError": {
+    en: "Network error — try manual entry",
+    zh: "网络错误 — 试试手动输入",
+  },
+  "omni.validError": {
+    en: "Enter a valid title and price",
+    zh: "请输入有效的名称和价格",
+  },
+  "omni.analyzing": {
+    en: "Analyzing product data…",
+    zh: "正在解析商品数据…",
+  },
+  "omni.recentItems": {
+    en: "Recent ({n})",
+    zh: "最近 ({n})",
+  },
+  "omni.hideHistory": {
+    en: "Hide recent",
+    zh: "收起",
+  },
+  "omni.rebuy": {
+    en: "Buy again",
+    zh: "再买一次",
+  },
+  "omni.achievementUnlocked": {
+    en: "Achievement Unlocked",
+    zh: "成就解锁",
+  },
 
   // ─── Share Receipt ─────────────────────────────────────────────
   "share.title": { en: "Share Receipt", zh: "分享" },

@@ -2,21 +2,28 @@
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { Billionaire, Purchase, Achievement } from "@/lib/types";
+import { Billionaire, Purchase, Achievement, ParsedProduct, SavedProduct } from "@/lib/types";
 import { billionaires } from "@/data/billionaires";
 import { achievements as defaultAchievements, checkAchievements } from "@/data/achievements";
 import { useLiveData } from "@/lib/use-live-data";
+import { generateId } from "@/lib/format";
+
+const MAX_SAVED_PRODUCTS = 50;
 
 interface CartState {
   selectedBillionaire: Billionaire | null;
   purchases: Purchase[];
   achievements: Achievement[];
   soundEnabled: boolean;
+  savedProducts: SavedProduct[];
   selectBillionaire: (id: string) => void;
   addPurchase: (purchase: Purchase) => string[]; // returns newly unlocked achievement names
   removePurchase: (id: string) => void;
   toggleSound: () => void;
   reset: () => void;
+  saveProduct: (product: ParsedProduct) => void;
+  removeSavedProduct: (id: string) => void;
+  incrementPurchaseCount: (id: string) => void;
 }
 
 function resolveBillionaire(id: string): Billionaire | null {
@@ -37,6 +44,7 @@ export const useCartStore = create<CartState>()(
       purchases: [],
       achievements: defaultAchievements,
       soundEnabled: true,
+      savedProducts: [],
 
       selectBillionaire: (id: string) => {
         const b = resolveBillionaire(id);
@@ -65,6 +73,45 @@ export const useCartStore = create<CartState>()(
           purchases: [],
           achievements: defaultAchievements,
         }),
+
+      saveProduct: (product: ParsedProduct) => {
+        const existing = get().savedProducts;
+        // Dedupe by sourceUrl
+        const isDupe = existing.some((sp) => sp.product.sourceUrl === product.sourceUrl);
+        if (isDupe) {
+          // Update existing entry with fresh data
+          set({
+            savedProducts: existing.map((sp) =>
+              sp.product.sourceUrl === product.sourceUrl
+                ? { ...sp, product, parsedAt: Date.now() }
+                : sp
+            ),
+          });
+          return;
+        }
+        const newEntry: SavedProduct = {
+          id: generateId(),
+          product,
+          parsedAt: Date.now(),
+          purchaseCount: 0,
+        };
+        // Prepend and cap at MAX
+        set({
+          savedProducts: [newEntry, ...existing].slice(0, MAX_SAVED_PRODUCTS),
+        });
+      },
+
+      removeSavedProduct: (id: string) => {
+        set({ savedProducts: get().savedProducts.filter((sp) => sp.id !== id) });
+      },
+
+      incrementPurchaseCount: (id: string) => {
+        set({
+          savedProducts: get().savedProducts.map((sp) =>
+            sp.id === id ? { ...sp, purchaseCount: sp.purchaseCount + 1 } : sp
+          ),
+        });
+      },
     }),
     {
       name: "billionaire-cart-storage",
@@ -73,6 +120,7 @@ export const useCartStore = create<CartState>()(
         purchases: state.purchases,
         achievements: state.achievements,
         soundEnabled: state.soundEnabled,
+        savedProducts: state.savedProducts,
       }),
     }
   )

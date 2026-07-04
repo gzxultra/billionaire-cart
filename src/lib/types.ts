@@ -35,6 +35,15 @@ export interface ParsedProduct {
   sourceUrl: string;
   assetClass: AssetClass;
   monthlyOverhead: number;
+  sourceDomain?: string;
+  favicon?: string;
+}
+
+export interface SavedProduct {
+  id: string;
+  product: ParsedProduct;
+  parsedAt: number;
+  purchaseCount: number;
 }
 
 export interface Purchase {

@@ -139,6 +139,20 @@ export default function Home() {
               <BalanceDisplay />
             </section>
 
+            {/* ★ OmniBox — HERO position, the core shopping interaction */}
+            <section className="card-panel-champagne p-5 sm:p-8 stagger-section relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-stone/[0.03] to-transparent pointer-events-none" />
+              <div className="relative">
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="text-base">🔗</span>
+                  <h2 className="text-xs uppercase tracking-[0.2em] text-stone/60 font-medium">
+                    {t("omni.sectionTitle", locale)}
+                  </h2>
+                </div>
+                <OmniBox />
+              </div>
+            </section>
+
             {/* Stats row — two cards side by side */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 stagger-section">
               <section className="card-panel p-5">
@@ -178,11 +192,6 @@ export default function Home() {
                 <GuiltMeter />
               </section>
             </div>
-
-            {/* Omni-Box */}
-            <section className="card-panel p-5 sm:p-8 stagger-section">
-              <OmniBox />
-            </section>
 
             {/* The Vault */}
             <section className="card-panel-champagne p-5 sm:p-8 stagger-section">
