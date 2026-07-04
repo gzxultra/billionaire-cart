@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
+export const runtime = "edge";
+
 const MAX_SIZE = 10 * 1024 * 1024; // 10MB
 
 export async function GET(request: NextRequest) {

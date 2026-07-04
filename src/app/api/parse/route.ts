@@ -3,6 +3,8 @@ import { validateUrl } from "@/lib/url-validator";
 import { classifyProduct } from "@/lib/asset-classifier";
 import { ParsedProduct } from "@/lib/types";
 
+export const runtime = "edge";
+
 // Simple in-memory cache
 const cache = new Map<string, ParsedProduct>();
 

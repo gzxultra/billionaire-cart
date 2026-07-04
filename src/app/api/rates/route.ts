@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 
+export const runtime = "edge";
+
 // Cache exchange rates for 1 hour
 let cache: { rates: Record<string, number>; ts: number } | null = null;
 const CACHE_TTL = 60 * 60 * 1000;

@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 
+export const runtime = "edge";
+
 // Cache Forbes data for 5 minutes
 let cache: { data: ForbesBillionaire[]; ts: number } | null = null;
 const CACHE_TTL = 5 * 60 * 1000;
