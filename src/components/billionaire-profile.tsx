@@ -6,6 +6,7 @@ import { useCartStore } from "@/lib/store";
 import { useLocale } from "@/lib/use-locale";
 import { t, Locale } from "@/lib/i18n";
 import { formatCurrency, generateId } from "@/lib/format";
+import { Skeleton } from "@/components/skeleton";
 import {
   Billionaire,
   SecFiling,
@@ -48,43 +49,45 @@ function useStockData(id: string | undefined) {
 
 function useWikiData(id: string | undefined) {
   const [wiki, setWiki] = useState<WikiData | null>(null);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     if (!id) return;
+    setLoading(true);
     fetch(`/api/wiki?id=${id}`)
       .then((r) => r.json())
       .then((d) => setWiki(d.wiki || null))
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, [id]);
-  return wiki;
+  return { wiki, loading };
 }
 
 // ─── Sub-Components ───────────────────────────────────────────────
 
 function StockTicker({ stock, ticker }: { stock: StockData | null; ticker?: string }) {
   if (!stock && !ticker) return null;
-  const isUp = stock ? stock.change >= 0 : true;
+
+  if (!stock) {
+    return <Skeleton.StockTicker />;
+  }
+
+  const isUp = stock.change >= 0;
 
   return (
     <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-surface-dim/80 border border-line/50">
       <span className="text-[10px] font-mono text-ash/60 uppercase tracking-wider">
-        {stock?.ticker || ticker}
+        {stock.ticker || ticker}
       </span>
-      {stock ? (
-        <>
-          <span className="text-sm font-semibold text-sand font-mono">
-            ${stock.price.toLocaleString()}
-          </span>
-          <span
-            className={`text-[11px] font-mono font-medium ${
-              isUp ? "text-sage" : "text-[#e05555]"
-            }`}
-          >
-            {isUp ? "▲" : "▼"} {Math.abs(stock.changePercent)}%
-          </span>
-        </>
-      ) : (
-        <span className="text-[11px] text-ash/60">loading…</span>
-      )}
+      <span className="text-sm font-semibold text-sand font-mono">
+        ${stock.price.toLocaleString()}
+      </span>
+      <span
+        className={`text-[11px] font-mono font-medium ${
+          isUp ? "text-sage" : "text-[#e05555]"
+        }`}
+      >
+        {isUp ? "▲" : "▼"} {Math.abs(stock.changePercent)}%
+      </span>
     </div>
   );
 }
@@ -99,11 +102,7 @@ function SecFilingsPanel({
   locale: Locale;
 }) {
   if (loading) {
-    return (
-      <div className="text-[11px] text-ash/60 py-4 text-center animate-pulse">
-        {t("profile.secLoading", locale)}
-      </div>
-    );
+    return <Skeleton.SecFilings />;
   }
   if (filings.length === 0) return null;
 
@@ -391,7 +390,8 @@ function WealthDnaPanel({
   );
 }
 
-function WikiSummary({ wiki, locale }: { wiki: WikiData | null; locale: Locale }) {
+function WikiSummary({ wiki, locale, loading }: { wiki: WikiData | null; locale: Locale; loading?: boolean }) {
+  if (loading) return <Skeleton.WikiSummary />;
   if (!wiki?.summary) return null;
 
   // Truncate to ~2 sentences
@@ -422,7 +422,7 @@ export function BillionaireProfile() {
   const id = selectedBillionaire?.id;
   const { filings, loading: secLoading } = useSecFilings(id);
   const stock = useStockData(id);
-  const wiki = useWikiData(id);
+  const { wiki, loading: wikiLoading } = useWikiData(id);
 
   if (!selectedBillionaire) return null;
 
@@ -483,7 +483,7 @@ export function BillionaireProfile() {
       </div>
 
       {/* Wiki bio */}
-      <WikiSummary wiki={wiki} locale={locale} />
+      <WikiSummary wiki={wiki} locale={locale} loading={wikiLoading} />
 
       {/* Wealth Composition - always visible */}
       {b.wealthBreakdown && (

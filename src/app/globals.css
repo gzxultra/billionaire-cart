@@ -85,6 +85,29 @@
   }
 }
 
+/* ─── Skeleton shimmer animation ────────────────────────────────── */
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    #F0EBE4 0%,
+    #F5F1EB 20%,
+    #FAF7F2 40%,
+    #F5F1EB 60%,
+    #F0EBE4 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.8s ease-in-out infinite;
+}
+
 /* Easter egg shake animation */
 @keyframes shake {
   0%, 100% { transform: translateX(0); }

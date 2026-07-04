@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCartStore, selectRemaining } from "@/lib/store";
 import { catalogItems, CatalogItem, TIER_LABELS } from "@/data/catalog";
@@ -15,6 +15,48 @@ const QUANTITY_OPTIONS = [1, 10, 100, 1000, "MAX"] as const;
 type QuantityOption = (typeof QUANTITY_OPTIONS)[number];
 
 type SortMode = "default" | "priceAsc" | "priceDesc" | "name";
+
+// ─── Animated Price Counter ───────────────────────────────────────
+// Smoothly counts up/down when the total price changes
+function AnimatedPrice({
+  value,
+  compact,
+}: {
+  value: number;
+  compact: boolean;
+}) {
+  const [display, setDisplay] = useState(value);
+  const frameRef = useRef<number>(0);
+  const startRef = useRef(value);
+  const targetRef = useRef(value);
+
+  useEffect(() => {
+    if (value === display && value === targetRef.current) return;
+    startRef.current = display;
+    targetRef.current = value;
+    const duration = 280; // ms
+    const t0 = performance.now();
+
+    const tick = (now: number) => {
+      const elapsed = now - t0;
+      const progress = Math.min(elapsed / duration, 1);
+      // ease-out cubic
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const current = startRef.current + (targetRef.current - startRef.current) * eased;
+      setDisplay(Math.round(current));
+      if (progress < 1) {
+        frameRef.current = requestAnimationFrame(tick);
+      } else {
+        setDisplay(targetRef.current);
+      }
+    };
+    frameRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frameRef.current);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
+
+  return <>{formatCurrency(display, compact)}</>;
+}
 
 interface CatalogProps {
   onPurchase?: (totalPrice: number) => void;
@@ -242,16 +284,55 @@ export function Catalog({ onPurchase }: CatalogProps) {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
                 className={`
-                  relative p-3 rounded-xl border transition-all duration-200
+                  relative p-3 rounded-xl border transition-all duration-200 overflow-hidden
                   ${
                     isBuying
-                      ? "bg-stone/20 border-stone/40 scale-95"
+                      ? "bg-stone/20 border-champagne/60 scale-[0.97]"
                       : canAfford
                       ? "bg-surface/70 border-line/40 hover:border-stone/35 hover:bg-surface/70"
                       : "bg-surface/40 border-line/5 opacity-40"
                   }
                 `}
+                style={
+                  isBuying
+                    ? {
+                        boxShadow: "0 0 16px rgba(166,133,48,0.15), 0 0 4px rgba(166,133,48,0.1)",
+                      }
+                    : undefined
+                }
               >
+                {/* Purchase success flash overlay */}
+                {isBuying && (
+                  <motion.div
+                    initial={{ opacity: 0.5 }}
+                    animate={{ opacity: 0 }}
+                    transition={{ duration: 0.6 }}
+                    className="absolute inset-0 pointer-events-none z-10"
+                    style={{
+                      background: "radial-gradient(ellipse at center, rgba(166,133,48,0.12) 0%, transparent 70%)",
+                    }}
+                  />
+                )}
+
+                {/* Success checkmark overlay */}
+                {isBuying && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.3 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.5 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                    className="absolute inset-0 flex items-center justify-center pointer-events-none z-20"
+                  >
+                    <motion.span
+                      initial={{ opacity: 1 }}
+                      animate={{ opacity: 0 }}
+                      transition={{ delay: 0.3, duration: 0.3 }}
+                      className="text-3xl"
+                    >
+                      ✓
+                    </motion.span>
+                  </motion.div>
+                )}
                 {/* Emoji + Name */}
                 <div className="text-2xl mb-1">{item.emoji}</div>
                 <div className="text-xs text-sand font-medium truncate">
@@ -291,29 +372,41 @@ export function Catalog({ onPurchase }: CatalogProps) {
                       const maxQty = Math.floor(remaining / effectivePrice);
                       if (maxQty <= 1) return null;
                       return (
-                        <button
+                        <motion.button
                           key="MAX"
                           onClick={() => setQty(item.id, "MAX")}
+                          animate={
+                            currentQtySelection === "MAX"
+                              ? { scale: [1, 1.08, 1] }
+                              : { scale: 1 }
+                          }
+                          transition={{ duration: 0.25 }}
                           className={`
                             px-1.5 py-0.5 rounded text-[9px] transition-colors
                             ${
                               currentQtySelection === "MAX"
-                                ? "bg-[#9B6B6B]/15 text-[#9B6B6B] border border-[#9B6B6B]/25"
+                                ? "bg-[#9B6B6B]/15 text-[#9B6B6B] border border-[#9B6B6B]/25 animate-pulse"
                                 : "bg-surface-bright/80 text-ash/65 hover:text-[#9B6B6B]/60"
                             }
                           `}
                         >
                           MAX
-                        </button>
+                        </motion.button>
                       );
                     }
                     const qTotal = effectivePrice * q;
                     const qAfford = qTotal <= remaining;
                     if (!qAfford && q > 1) return null;
                     return (
-                      <button
+                      <motion.button
                         key={q}
                         onClick={() => setQty(item.id, q)}
+                        animate={
+                          currentQtySelection === q
+                            ? { scale: [1, 1.1, 1] }
+                            : { scale: 1 }
+                        }
+                        transition={{ duration: 0.2, type: "spring", stiffness: 400, damping: 15 }}
                         className={`
                           px-1.5 py-0.5 rounded text-[9px] transition-colors
                           ${
@@ -324,17 +417,19 @@ export function Catalog({ onPurchase }: CatalogProps) {
                         `}
                       >
                         ×{q}
-                      </button>
+                      </motion.button>
                     );
                   })}
                 </div>
 
                 {/* Buy button */}
-                <button
+                <motion.button
                   onClick={() => handleBuy(item)}
                   disabled={!canAfford || isBuying}
+                  whileTap={canAfford && !isBuying ? { scale: 0.94 } : undefined}
+                  transition={{ type: "spring", stiffness: 500, damping: 20 }}
                   className={`
-                    w-full mt-2 py-1.5 rounded-lg text-[10px] font-medium uppercase tracking-wider transition-all
+                    relative w-full mt-2 py-1.5 rounded-lg text-[10px] font-medium uppercase tracking-wider transition-all overflow-hidden
                     ${
                       canAfford
                         ? currentQtySelection === "MAX"
@@ -347,11 +442,11 @@ export function Catalog({ onPurchase }: CatalogProps) {
                   {isBuying
                     ? "✓"
                     : currentQtySelection === "MAX"
-                    ? `${t("catalog.buyMax", locale)} (${qty.toLocaleString()}) — ${formatCurrency(totalPrice, true)}`
+                    ? <>{t("catalog.buyMax", locale)} ({qty.toLocaleString()}) — <AnimatedPrice value={totalPrice} compact /></>
                     : qty > 1
-                    ? `${t("catalog.buy", locale)} ${qty} — ${formatCurrency(totalPrice, totalPrice >= 1000000)}`
+                    ? <>{t("catalog.buy", locale)} {qty} — <AnimatedPrice value={totalPrice} compact={totalPrice >= 1000000} /></>
                     : t("catalog.buy", locale)}
-                </button>
+                </motion.button>
               </motion.div>
             );
           })}
