@@ -98,8 +98,15 @@ export function ProductCard({ product, onAuthorize, autoFocusBuy }: ProductCardP
               }}
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center">
-              <div className="text-5xl opacity-15">📦</div>
+            <div className="w-full h-full flex flex-col items-center justify-center gap-2 bg-gradient-to-br from-surface-bright/40 via-surface/20 to-transparent">
+              <div className="text-4xl opacity-25">
+                {assetLabel(product.assetClass, locale).split(" ")[0] || "📦"}
+              </div>
+              {product.sourceDomain && (
+                <span className="text-[10px] text-ash/30 font-mono tracking-wider">
+                  {product.sourceDomain}
+                </span>
+              )}
             </div>
           )}
 

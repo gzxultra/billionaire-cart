@@ -160,6 +160,22 @@ export function OmniBox() {
     setTimeout(() => setBatchResult(null), 4000);
   }, [batchUrls, saveProduct]);
 
+  const handleClipboardPaste = useCallback(async () => {
+    try {
+      const text = await navigator.clipboard.readText();
+      const urlMatch = text.match(/https?:\/\/[^\s<>"']+/i);
+      if (urlMatch) {
+        const cleanUrl = urlMatch[0].replace(/[),;.]+$/, '');
+        setUrl(cleanUrl);
+        setPasteFlash(true);
+        setTimeout(() => setPasteFlash(false), 600);
+        setTimeout(() => parseUrl(cleanUrl), 50);
+      }
+    } catch {
+      // Clipboard API not available or permission denied — silently ignore
+    }
+  }, [parseUrl]);
+
   const handleManualSubmit = () => {
     const price = parseFloat(manualPrice.replace(/[,$]/g, ""));
     if (!manualTitle.trim() || isNaN(price) || price <= 0) {
@@ -293,6 +309,17 @@ export function OmniBox() {
               disabled:opacity-50
             "
           />
+          <button
+            onClick={handleClipboardPaste}
+            disabled={loading}
+            className="p-2 text-ash/35 hover:text-stone/60 disabled:opacity-30 transition-colors shrink-0"
+            title={t("omni.clipboardPaste", locale)}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="8" y="2" width="8" height="4" rx="1" />
+              <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+            </svg>
+          </button>
           <button
             onClick={() => parseUrl()}
             disabled={loading || !url.trim()}
@@ -429,6 +456,47 @@ export function OmniBox() {
           </button>
         )}
       </div>
+
+      {/* Empty state — first-use onboarding */}
+      <AnimatePresence>
+        {savedProducts.length === 0 && !product && !loading && !showManual && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            className="space-y-5 pt-2"
+          >
+            {/* How it works — 3 steps */}
+            <div className="flex items-center justify-center gap-2 sm:gap-5">
+              {[
+                { icon: "📋", label: t("omni.step1", locale) },
+                { icon: "⚡", label: t("omni.step2", locale) },
+                { icon: "💳", label: t("omni.step3", locale) },
+              ].map((step, i) => (
+                <div key={i} className="flex items-center gap-2 sm:gap-4">
+                  {i > 0 && <span className="text-ash/20 text-sm">→</span>}
+                  <div className="flex flex-col items-center gap-1.5">
+                    <span className="text-lg sm:text-xl">{step.icon}</span>
+                    <span className="text-[10px] text-ash/50 font-medium tracking-wide">{step.label}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Supported sites */}
+            <div className="text-center space-y-2.5">
+              <div className="flex items-center justify-center gap-2 flex-wrap">
+                {["Amazon", "eBay", "Walmart", "Best Buy", "Etsy", "淘宝", "京东"].map((site) => (
+                  <span key={site} className="text-[10px] px-2.5 py-1 rounded-full border border-line/15 bg-surface/30 text-ash/40 font-mono">
+                    {site}
+                  </span>
+                ))}
+              </div>
+              <p className="text-[10px] text-ash/30">{t("omni.supportedSites", locale)}</p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Recent products history */}
       <AnimatePresence>

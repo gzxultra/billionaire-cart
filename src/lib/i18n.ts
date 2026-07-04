@@ -139,6 +139,26 @@ const strings: Record<string, Record<Locale, string>> = {
     en: "Retry",
     zh: "重试",
   },
+  "omni.clipboardPaste": {
+    en: "Paste from clipboard",
+    zh: "从剪贴板粘贴",
+  },
+  "omni.step1": {
+    en: "Paste link",
+    zh: "粘贴链接",
+  },
+  "omni.step2": {
+    en: "Auto-parse",
+    zh: "自动解析",
+  },
+  "omni.step3": {
+    en: "One-click buy",
+    zh: "一键购买",
+  },
+  "omni.supportedSites": {
+    en: "Supports 1000+ stores worldwide",
+    zh: "支持全球 1000+ 电商网站",
+  },
 
   // ─── Share Receipt ─────────────────────────────────────────────
   "share.title": { en: "Share Receipt", zh: "分享" },
