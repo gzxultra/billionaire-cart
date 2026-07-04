@@ -50,7 +50,7 @@ export function BlackCard() {
           <div className="text-[8px] uppercase tracking-[0.4em] text-stone/40 font-mono">
             {t("card.brand", locale)}
           </div>
-          <div className="text-[7px] uppercase tracking-[0.2em] text-ash/25 mt-0.5 font-mono">
+          <div className="text-[7px] uppercase tracking-[0.2em] text-ash/35 mt-0.5 font-mono">
             {t("card.type", locale)}
           </div>
         </div>
@@ -58,20 +58,20 @@ export function BlackCard() {
 
       {/* Balance */}
       <div className="absolute top-1/2 left-6 -translate-y-1/2">
-        <div className="text-[8px] uppercase tracking-[0.2em] text-ash/30 mb-0.5 font-mono">
+        <div className="text-[8px] uppercase tracking-[0.2em] text-ash/42 mb-0.5 font-mono">
           {t("card.remaining", locale)}
         </div>
-        <div className="text-xl sm:text-2xl font-serif text-sand/90">
+        <div className="text-xl sm:text-2xl font-serif text-sand">
           {formatCurrency(remaining, true)}
         </div>
         {/* Progress bar */}
-        <div className="w-40 h-0.5 bg-surface-bright/30 rounded-full mt-2">
+        <div className="w-40 h-0.5 bg-surface-bright/45 rounded-full mt-2">
           <div
             className="h-full bg-stone/60 rounded-full transition-all duration-500"
             style={{ width: `${Math.min(spentPercent, 100)}%` }}
           />
         </div>
-        <div className="text-[7px] text-ash/25 mt-1 font-mono">
+        <div className="text-[7px] text-ash/35 mt-1 font-mono">
           {spentPercent.toFixed(4)}% {t("card.depleted", locale)}
         </div>
       </div>
@@ -82,12 +82,12 @@ export function BlackCard() {
           <div className="text-[9px] uppercase tracking-[0.25em] text-ash/50">
             {billionaire.name}
           </div>
-          <div className="text-[7px] text-ash/25 mt-0.5 font-mono">
+          <div className="text-[7px] text-ash/35 mt-0.5 font-mono">
             {billionaire.company}
           </div>
         </div>
         <div className="text-right">
-          <div className="text-[8px] text-ash/25 font-mono">
+          <div className="text-[8px] text-ash/35 font-mono">
             {purchases.length} {t("card.items", locale)}
           </div>
           {monthlyBurn > 0 && (

@@ -27,39 +27,39 @@
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: rgba(155, 139, 122, 0.12);
+    background: rgba(168, 146, 121, 0.18);
     border-radius: 2px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(155, 139, 122, 0.25);
+    background: rgba(168, 146, 121, 0.3);
   }
 
   /* Selection */
   ::selection {
-    background: rgba(155, 139, 122, 0.25);
-    color: #E8E4DF;
+    background: rgba(168, 146, 121, 0.3);
+    color: #EEEBE6;
   }
 }
 
 @layer components {
   .card-panel {
-    @apply bg-surface/60 border border-line/10 rounded-xl shadow-card;
+    @apply bg-surface/70 border border-line/20 rounded-xl shadow-card backdrop-blur-sm;
   }
 
   .card-panel-hover {
-    @apply card-panel hover:border-stone/10 hover:bg-surface/80 transition-all duration-300;
+    @apply card-panel hover:border-stone/15 hover:bg-surface/90 transition-all duration-300;
   }
 
   .card-panel-accent {
-    @apply bg-surface/60 border-l-2 border-l-stone/30 border border-line/10 rounded-xl shadow-card;
+    @apply bg-surface/70 border-l-2 border-l-stone/40 border border-line/20 rounded-xl shadow-card backdrop-blur-sm;
   }
 
   .card-panel-champagne {
-    @apply bg-surface/60 border-l-2 border-l-champagne/30 border border-line/10 rounded-xl shadow-card;
+    @apply bg-surface/70 border-l-2 border-l-champagne/40 border border-line/20 rounded-xl shadow-card backdrop-blur-sm;
   }
 
   .section-label {
-    @apply text-[11px] uppercase tracking-[0.2em] text-stone/50 font-medium font-sans;
+    @apply text-[11px] uppercase tracking-[0.2em] text-stone/60 font-medium font-sans;
   }
 
   .mono-number {

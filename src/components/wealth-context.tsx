@@ -145,7 +145,7 @@ export function WealthContext() {
 
       {/* Progress bar with milestones */}
       <div className="relative">
-        <div className="w-full h-2 bg-surface-bright/50 rounded-full overflow-hidden">
+        <div className="w-full h-2 bg-surface-bright/60 rounded-full overflow-hidden">
           <motion.div
             className="h-full rounded-full"
             style={{
@@ -171,7 +171,7 @@ export function WealthContext() {
               className="absolute top-3 -translate-x-1/2"
               style={{ left: `${pos}%` }}
             >
-              <div className="text-[8px] text-ash/30 whitespace-nowrap">
+              <div className="text-[8px] text-ash/42 whitespace-nowrap">
                 {m.emoji} {locale === "zh" ? m.labelZh : m.label}
               </div>
             </div>
@@ -185,7 +185,7 @@ export function WealthContext() {
           {passedMilestones.map((m) => (
             <span
               key={m.label}
-              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-stone/10 border border-stone/15 text-[9px] text-stone/70"
+              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-stone/20 border border-stone/20 text-[9px] text-stone/70"
             >
               {m.emoji} {locale === "zh" ? m.labelZh : m.label}
             </span>
@@ -195,9 +195,9 @@ export function WealthContext() {
 
       {/* Next milestone */}
       {nextMilestone && (
-        <div className="text-[10px] text-ash/40">
+        <div className="text-[10px] text-ash/50">
           {t("wealth.nextMilestone", locale)}:{" "}
-          <span className="text-stone/50">
+          <span className="text-stone/70">
             {nextMilestone.emoji} {locale === "zh" ? nextMilestone.labelZh : nextMilestone.label} (
             {formatCurrency(nextMilestone.amount, true)})
           </span>
@@ -210,8 +210,8 @@ export function WealthContext() {
 
       {/* Absurdity comparisons */}
       {topComparisons.length > 0 && (
-        <div className="space-y-1.5 pt-2 border-t border-line/10">
-          <div className="text-[10px] uppercase tracking-[0.2em] text-ash/30 mb-1">
+        <div className="space-y-1.5 pt-2 border-t border-line/18">
+          <div className="text-[10px] uppercase tracking-[0.2em] text-ash/42 mb-1">
             {t("wealth.equivalentTo", locale)}
           </div>
           {topComparisons.map((c) =>
@@ -237,9 +237,9 @@ export function WealthContext() {
 
       {/* Earn-back context */}
       {earnBackTime && (
-        <div className="text-[10px] text-ash/40 pt-2 border-t border-line/10">
+        <div className="text-[10px] text-ash/50 pt-2 border-t border-line/18">
           ⏱ {selectedBillionaire.name} {t("wealth.earnBack", locale)}{" "}
-          <span className="text-stone/60">{earnBackTime}</span>
+          <span className="text-stone/70">{earnBackTime}</span>
         </div>
       )}
     </div>

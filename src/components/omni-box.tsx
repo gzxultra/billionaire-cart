@@ -245,7 +245,7 @@ export function OmniBox() {
       {/* Hero input — the core interaction */}
       <div className="relative group">
         <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-r from-stone/0 via-stone/20 to-stone/0 opacity-0 group-focus-within:opacity-100 transition-opacity duration-500" />
-        <div className={`relative flex items-center bg-surface/80 backdrop-blur-md border rounded-2xl overflow-hidden transition-all duration-300 ${pasteFlash ? "border-sage/60 shadow-[0_0_20px_rgba(143,160,134,0.2)]" : "border-line/30 focus-within:border-stone/40"}`}>
+        <div className={`relative flex items-center bg-surface/80 backdrop-blur-md border rounded-2xl overflow-hidden transition-all duration-300 ${pasteFlash ? "border-sage/60 shadow-[0_0_20px_rgba(143,160,134,0.2)]" : "border-line/35 focus-within:border-stone/40"}`}>
           {/* Paste detection flash overlay */}
           <AnimatePresence>
             {pasteFlash && (
@@ -259,12 +259,12 @@ export function OmniBox() {
             )}
           </AnimatePresence>
           {/* Search icon + ⌘K hint */}
-          <div className="pl-5 pr-1 text-ash/30 flex items-center gap-1.5">
+          <div className="pl-5 pr-1 text-ash/40 flex items-center gap-1.5">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
               <circle cx="11" cy="11" r="8" />
               <path d="m21 21-4.35-4.35" />
             </svg>
-            <kbd className="hidden sm:inline-flex items-center text-[9px] px-1.5 py-0.5 rounded bg-surface-bright/40 text-ash/25 font-mono border border-line/10 leading-none">⌘K</kbd>
+            <kbd className="hidden sm:inline-flex items-center text-[9px] px-1.5 py-0.5 rounded bg-surface-bright/60 text-ash/35 font-mono border border-line/18 leading-none">⌘K</kbd>
           </div>
           <input
             ref={inputRef}
@@ -279,7 +279,7 @@ export function OmniBox() {
             disabled={loading}
             className="
               flex-1 px-2 py-4 bg-transparent
-              text-sand/90 placeholder:text-ash/30
+              text-sand placeholder:text-ash/40
               focus:outline-none
               transition-all duration-300 text-sm
               disabled:opacity-50
@@ -290,7 +290,7 @@ export function OmniBox() {
             disabled={loading || !url.trim()}
             className="
               mr-2 px-5 py-2 rounded-xl text-xs font-semibold uppercase tracking-wider
-              bg-stone/15 text-stone hover:bg-stone/25
+              bg-stone/20 text-stone hover:bg-stone/30
               disabled:opacity-30 transition-all duration-200
               whitespace-nowrap
             "
@@ -351,7 +351,7 @@ export function OmniBox() {
                 </button>
                 <button
                   onClick={handleBatchParse}
-                  className="text-[10px] px-3 py-1 rounded-lg bg-stone/15 text-stone font-semibold hover:bg-stone/25 transition-colors"
+                  className="text-[10px] px-3 py-1 rounded-lg bg-stone/20 text-stone font-semibold hover:bg-stone/30 transition-colors"
                 >
                   {t("batch.parseAll", locale)}
                 </button>
@@ -370,7 +370,7 @@ export function OmniBox() {
             exit={{ opacity: 0 }}
             className="flex items-center gap-3 px-1"
           >
-            <div className="flex-1 h-1.5 rounded-full bg-surface-bright/30 overflow-hidden">
+            <div className="flex-1 h-1.5 rounded-full bg-surface-bright/60 overflow-hidden">
               <motion.div
                 className="h-full bg-stone/50 rounded-full"
                 initial={{ width: 0 }}
@@ -404,7 +404,7 @@ export function OmniBox() {
             setShowManual(!showManual);
             setShowHistory(false);
           }}
-          className="text-[11px] text-ash/40 hover:text-stone/60 transition-colors"
+          className="text-[11px] text-ash/40 hover:text-stone/80 transition-colors"
         >
           {showManual ? t("omni.backToUrl", locale) : t("omni.manual", locale)}
         </button>
@@ -414,7 +414,7 @@ export function OmniBox() {
               setShowHistory(!showHistory);
               setShowManual(false);
             }}
-            className="text-[11px] text-ash/40 hover:text-stone/60 transition-colors flex items-center gap-1"
+            className="text-[11px] text-ash/40 hover:text-stone/80 transition-colors flex items-center gap-1"
           >
             <span>🕐</span>
             {showHistory ? t("omni.hideHistory", locale) : t("omni.recentItems", locale, { n: recentProducts.length })}
@@ -431,15 +431,15 @@ export function OmniBox() {
             exit={{ opacity: 0, height: 0 }}
             className="overflow-hidden"
           >
-            <div className="rounded-xl bg-surface/40 border border-line/15 divide-y divide-line/10">
+            <div className="rounded-xl bg-surface/50 border border-line/22 divide-y divide-line/10">
               {recentProducts.map((sp) => (
                 <motion.div
                   key={sp.id}
-                  className="flex items-center gap-3 p-3 hover:bg-surface/60 transition-colors cursor-pointer group/item"
+                  className="flex items-center gap-3 p-3 hover:bg-surface/70 transition-colors cursor-pointer group/item"
                   onClick={() => handleRepurchase(sp)}
                 >
                   {/* Thumbnail */}
-                  <div className="w-10 h-10 rounded-lg overflow-hidden shrink-0 bg-surface-bright/50">
+                  <div className="w-10 h-10 rounded-lg overflow-hidden shrink-0 bg-surface-bright/60">
                     {sp.product.imageUrl ? (
                       <img
                         src={proxyImage(sp.product.imageUrl) || ""}
@@ -465,7 +465,7 @@ export function OmniBox() {
                           onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
                         />
                       )}
-                      <span className="text-xs text-sand/80 truncate font-medium">
+                      <span className="text-xs text-sand truncate font-medium">
                         {sp.product.title}
                       </span>
                     </div>
@@ -473,11 +473,11 @@ export function OmniBox() {
                       <span className="text-[11px] text-champagne font-serif">
                         {formatCurrency(sp.product.price)}
                       </span>
-                      <span className="text-[10px] text-ash/30">
+                      <span className="text-[10px] text-ash/40">
                         {timeAgo(sp.parsedAt, locale)}
                       </span>
                       {sp.purchaseCount > 0 && (
-                        <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-stone/10 text-stone/60">
+                        <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-stone/20 text-stone/80">
                           ×{sp.purchaseCount}
                         </span>
                       )}
@@ -491,7 +491,7 @@ export function OmniBox() {
                         e.stopPropagation();
                         handleRepurchase(sp);
                       }}
-                      className="text-[10px] px-2 py-1 rounded-lg bg-stone/10 text-stone/70 hover:bg-stone/20 transition-colors opacity-0 group-hover/item:opacity-100"
+                      className="text-[10px] px-2 py-1 rounded-lg bg-stone/20 text-stone/80 hover:bg-stone/20 transition-colors opacity-0 group-hover/item:opacity-100"
                     >
                       {t("omni.rebuy", locale)}
                     </button>
@@ -500,7 +500,7 @@ export function OmniBox() {
                         e.stopPropagation();
                         removeSavedProduct(sp.id);
                       }}
-                      className="text-ash/20 hover:text-[#9B6B6B]/60 transition-colors opacity-0 group-hover/item:opacity-100 p-1"
+                      className="text-ash/30 hover:text-[#9B6B6B]/60 transition-colors opacity-0 group-hover/item:opacity-100 p-1"
                       title="Remove"
                     >
                       ✕
@@ -527,7 +527,7 @@ export function OmniBox() {
               value={manualTitle}
               onChange={(e) => setManualTitle(e.target.value)}
               placeholder={t("omni.productName", locale)}
-              className="w-full px-4 py-3 rounded-lg bg-surface/60 border border-line/20 text-sand/80 placeholder:text-ash/25 text-sm focus:outline-none focus:border-stone/40"
+              className="w-full px-4 py-3 rounded-lg bg-surface/70 border border-line/28 text-sand placeholder:text-ash/35 text-sm focus:outline-none focus:border-stone/40"
             />
             <div className="flex gap-3">
               <input
@@ -535,12 +535,12 @@ export function OmniBox() {
                 value={manualPrice}
                 onChange={(e) => setManualPrice(e.target.value)}
                 placeholder={t("omni.price", locale)}
-                className="flex-1 px-4 py-3 rounded-lg bg-surface/60 border border-line/20 text-sand/80 placeholder:text-ash/25 text-sm focus:outline-none focus:border-stone/40"
+                className="flex-1 px-4 py-3 rounded-lg bg-surface/70 border border-line/28 text-sand placeholder:text-ash/35 text-sm focus:outline-none focus:border-stone/40"
               />
               <select
                 value={manualClass}
                 onChange={(e) => setManualClass(e.target.value as AssetClass)}
-                className="px-3 py-3 rounded-lg bg-surface/60 border border-line/20 text-ash text-sm focus:outline-none focus:border-stone/40"
+                className="px-3 py-3 rounded-lg bg-surface/70 border border-line/28 text-ash text-sm focus:outline-none focus:border-stone/40"
               >
                 {ASSET_OPTION_VALUES.map((cls) => (
                   <option key={cls} value={cls}>
@@ -551,7 +551,7 @@ export function OmniBox() {
             </div>
             <button
               onClick={handleManualSubmit}
-              className="w-full py-3 rounded-lg bg-stone/15 text-stone text-sm font-medium hover:bg-stone/25 transition-colors"
+              className="w-full py-3 rounded-lg bg-stone/20 text-stone text-sm font-medium hover:bg-stone/30 transition-colors"
             >
               {t("omni.addItem", locale)}
             </button>
@@ -575,7 +575,7 @@ export function OmniBox() {
               <button
                 onClick={() => parseUrl(lastFailedUrl)}
                 disabled={loading}
-                className="shrink-0 text-[10px] px-2.5 py-1 rounded-lg bg-stone/10 text-stone/60 hover:bg-stone/20 transition-colors font-medium disabled:opacity-30"
+                className="shrink-0 text-[10px] px-2.5 py-1 rounded-lg bg-stone/20 text-stone/80 hover:bg-stone/20 transition-colors font-medium disabled:opacity-30"
               >
                 {t("omni.retry", locale)}
               </button>
@@ -586,20 +586,20 @@ export function OmniBox() {
 
       {/* Loading skeleton */}
       {loading && (
-        <div className="p-4 rounded-xl bg-surface/40 border border-line/10 space-y-3">
+        <div className="p-4 rounded-xl bg-surface/50 border border-line/18 space-y-3">
           <div className="flex gap-4 animate-pulse">
-            <div className="w-24 h-24 rounded-lg bg-surface-bright/30" />
+            <div className="w-24 h-24 rounded-lg bg-surface-bright/60" />
             <div className="flex-1 space-y-2 py-1">
-              <div className="h-4 bg-surface-bright/30 rounded w-3/4" />
+              <div className="h-4 bg-surface-bright/60 rounded w-3/4" />
               <div className="h-3 bg-surface-bright/20 rounded w-1/2" />
-              <div className="h-5 bg-surface-bright/30 rounded w-1/3 mt-2" />
+              <div className="h-5 bg-surface-bright/60 rounded w-1/3 mt-2" />
             </div>
           </div>
           <div className="flex items-center gap-2">
             <div className="h-2 w-2 rounded-full bg-stone/40 animate-bounce" style={{ animationDelay: "0ms" }} />
             <div className="h-2 w-2 rounded-full bg-stone/40 animate-bounce" style={{ animationDelay: "150ms" }} />
             <div className="h-2 w-2 rounded-full bg-stone/40 animate-bounce" style={{ animationDelay: "300ms" }} />
-            <span className="text-[10px] text-ash/30 ml-1">{t("omni.analyzing", locale)}</span>
+            <span className="text-[10px] text-ash/40 ml-1">{t("omni.analyzing", locale)}</span>
           </div>
         </div>
       )}

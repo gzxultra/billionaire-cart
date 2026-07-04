@@ -57,7 +57,7 @@ export function ProductCard({ product, onAuthorize, autoFocusBuy }: ProductCardP
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: -20, scale: 0.97 }}
       transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-      className="relative rounded-2xl overflow-hidden bg-surface/70 border border-line/15 backdrop-blur-xl"
+      className="relative rounded-2xl overflow-hidden bg-surface/70 border border-line/22 backdrop-blur-xl"
     >
       {/* Swipe-to-buy background layer */}
       <motion.div
@@ -109,7 +109,7 @@ export function ProductCard({ product, onAuthorize, autoFocusBuy }: ProductCardP
                 {formatCurrency(product.price)}
               </span>
               {product.originalPrice != null && product.originalCurrency && (
-                <span className="block text-[10px] text-ash/40 font-mono text-right mt-0.5">
+                <span className="block text-[10px] text-ash/50 font-mono text-right mt-0.5">
                   {product.originalCurrency === "CNY" ? "¥" : product.originalCurrency}
                   {product.originalPrice.toLocaleString()}
                 </span>
@@ -119,14 +119,14 @@ export function ProductCard({ product, onAuthorize, autoFocusBuy }: ProductCardP
 
           {/* Category badge — top left */}
           <div className="absolute top-3 left-3 flex items-center gap-2">
-            <span className="text-[10px] px-2.5 py-1 rounded-full bg-base/60 backdrop-blur-md text-sand/70 font-mono border border-line/20 shadow-sm">
+            <span className="text-[10px] px-2.5 py-1 rounded-full bg-base/60 backdrop-blur-md text-sand/70 font-mono border border-line/25 shadow-sm">
               {assetLabel(product.assetClass, locale)}
             </span>
           </div>
 
           {/* Swipe hint — top right */}
           <div className="absolute top-3 right-3">
-            <span className="text-[9px] px-2 py-0.5 rounded-full bg-base/40 backdrop-blur-md text-ash/40 font-mono border border-line/10">
+            <span className="text-[9px] px-2 py-0.5 rounded-full bg-base/40 backdrop-blur-md text-ash/50 font-mono border border-line/18">
               {t("product.swipeHint", locale)}
             </span>
           </div>
@@ -138,7 +138,7 @@ export function ProductCard({ product, onAuthorize, autoFocusBuy }: ProductCardP
           <div className="flex items-start gap-3">
             {/* Source favicon — larger */}
             {product.favicon && product.sourceDomain && (
-              <div className="w-8 h-8 rounded-lg bg-surface-bright/50 border border-line/15 flex items-center justify-center shrink-0 mt-0.5 overflow-hidden">
+              <div className="w-8 h-8 rounded-lg bg-surface-bright/60 border border-line/22 flex items-center justify-center shrink-0 mt-0.5 overflow-hidden">
                 <img
                   src={product.favicon}
                   alt=""
@@ -154,7 +154,7 @@ export function ProductCard({ product, onAuthorize, autoFocusBuy }: ProductCardP
                 {product.title}
               </h3>
               {product.sourceDomain && (
-                <span className="text-[11px] text-ash/40 mt-1 block">
+                <span className="text-[11px] text-ash/50 mt-1 block">
                   {product.sourceDomain}
                 </span>
               )}
@@ -178,7 +178,7 @@ export function ProductCard({ product, onAuthorize, autoFocusBuy }: ProductCardP
                   +{formatCurrency(product.monthlyOverhead)}
                   {t("bankrupt.monthly", locale)}
                 </span>
-                <span className="text-ash/30">
+                <span className="text-ash/42">
                   {t("product.hiddenCosts", locale)}
                 </span>
               </div>
@@ -208,7 +208,7 @@ export function ProductCard({ product, onAuthorize, autoFocusBuy }: ProductCardP
 
           {/* Quick buy hint */}
           <div className="text-center">
-            <span className="text-[9px] text-ash/25 font-mono">
+            <span className="text-[9px] text-ash/35 font-mono">
               {t("product.enterHint", locale)}
             </span>
           </div>

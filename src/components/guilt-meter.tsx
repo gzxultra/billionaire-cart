@@ -135,7 +135,7 @@ export function GuiltMeter() {
         {t("guilt.title", locale)}
       </h2>
 
-      <p className="text-[10px] text-ash/30 italic font-mono">
+      <p className="text-[10px] text-ash/42 italic font-mono">
         {t("guilt.couldHave", locale, { amount: formatCurrency(totalSpent, true) })}
       </p>
 
@@ -154,7 +154,7 @@ export function GuiltMeter() {
               <div className="text-xs text-ash">
                 {item.count.toLocaleString()} {t(item.labelKey, locale)}
               </div>
-              <div className="text-[10px] text-ash/40 mt-0.5 font-mono">
+              <div className="text-[10px] text-ash/50 mt-0.5 font-mono">
                 {t(item.descKey, locale, item.descVars)}
               </div>
             </div>
@@ -164,7 +164,7 @@ export function GuiltMeter() {
 
       {/* GDP comparison */}
       {(countryBeaten || countryNext) && (
-        <div className="pt-3 border-t border-line/10 space-y-1.5">
+        <div className="pt-3 border-t border-line/18 space-y-1.5">
           {countryBeaten && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-[11px] text-ash/60">
               {countryBeaten.flag} {t("guilt.gdpBeaten", locale)}{" "}
@@ -173,7 +173,7 @@ export function GuiltMeter() {
             </motion.div>
           )}
           {countryNext && (
-            <div className="text-[10px] text-ash/30 font-mono">
+            <div className="text-[10px] text-ash/42 font-mono">
               {countryNext.flag} {t("guilt.gdpNext", locale)}:{" "}
               <span className="text-ash/50">{countryNext.name}</span> —{" "}
               {formatCurrency(countryNext.gdp - totalSpent, true)} to go
@@ -183,9 +183,9 @@ export function GuiltMeter() {
       )}
 
       {/* Guilt-o-meter */}
-      <div className="pt-3 border-t border-line/10">
+      <div className="pt-3 border-t border-line/18">
         <div className="flex items-center justify-between mb-1.5">
-          <span className="text-[10px] text-ash/30 uppercase tracking-wider font-mono">
+          <span className="text-[10px] text-ash/42 uppercase tracking-wider font-mono">
             {t("guilt.guiltLevel", locale)}
           </span>
           <span className="text-[10px] text-ash/50">

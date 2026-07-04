@@ -54,7 +54,7 @@ export function SpendingSpeed() {
   let verdictColor = "";
   if (spendRate === 0) {
     verdict = t("speed.idle", locale);
-    verdictColor = "text-ash/30";
+    verdictColor = "text-ash/42";
   } else if (ratio < 0.5) {
     verdict = t("speed.barelyDent", locale);
     verdictColor = "text-sage/60";
@@ -102,7 +102,7 @@ export function SpendingSpeed() {
         <div>
           <div className="text-2xl font-serif text-stone tabular-nums">
             {formatCurrency(spendRate)}
-            <span className="text-[10px] text-ash/40 ml-1">{t("speed.perSec", locale)}</span>
+            <span className="text-[10px] text-ash/50 ml-1">{t("speed.perSec", locale)}</span>
           </div>
           <div className={`text-xs mt-1 ${verdictColor}`}>{verdict}</div>
         </div>
@@ -136,14 +136,14 @@ export function SpendingSpeed() {
 
       {/* Context row */}
       <div className="flex items-center justify-between text-[10px]">
-        <span className="text-ash/30">
+        <span className="text-ash/42">
           {t("speed.last60", locale)}:{" "}
           <span className="text-ash/60">
             {formatCurrency(totalThisMinute, true)}
           </span>
         </span>
         {eps > 0 && (
-          <span className="text-ash/30">
+          <span className="text-ash/42">
             {t("speed.vsEarnings", locale)}:{" "}
             <span
               className={ratio > 1 ? "text-stone/80" : "text-sage/60"}
@@ -156,7 +156,7 @@ export function SpendingSpeed() {
 
       {/* Time to bankruptcy */}
       {timeToBankrupt && timeToBankrupt > 0 && remaining > 0 && (
-        <div className="text-[10px] text-[#9B6B6B]/40 pt-1 border-t border-line/10">
+        <div className="text-[10px] text-[#9B6B6B]/40 pt-1 border-t border-line/18">
           ⚠ {t("speed.bankruptIn", locale)}{" "}
           <span className="text-stone/80">{formatTime(timeToBankrupt)}</span>
         </div>

@@ -87,14 +87,14 @@ export function CheckoutAnimation({
 
         {/* Card label */}
         <div className="absolute top-8 right-8">
-          <div className="text-[10px] uppercase tracking-[0.3em] text-stone/50 font-sans">
+          <div className="text-[10px] uppercase tracking-[0.3em] text-stone/70 font-sans">
             {t("card.brand", locale)}
           </div>
         </div>
 
         {/* Amount */}
         <div className="absolute top-1/2 left-8 -translate-y-1/2">
-          <div className="text-[10px] uppercase tracking-[0.15em] text-ash/30 mb-1">
+          <div className="text-[10px] uppercase tracking-[0.15em] text-ash/42 mb-1">
             {t("checkout.amount", locale)}
           </div>
           <motion.div
@@ -109,7 +109,7 @@ export function CheckoutAnimation({
 
         {/* Cardholder */}
         <div className="absolute bottom-8 left-8">
-          <div className="text-[10px] uppercase tracking-[0.3em] text-ash/40">
+          <div className="text-[10px] uppercase tracking-[0.3em] text-ash/50">
             {billionaire.name}
           </div>
         </div>

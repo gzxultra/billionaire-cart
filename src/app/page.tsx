@@ -174,17 +174,17 @@ export default function Home() {
       <ComboStreak />
 
       {/* Header */}
-      <header className="relative z-10 sticky top-0 bg-base/85 backdrop-blur-xl">
+      <header className="relative z-10 sticky top-0 bg-base/80 backdrop-blur-xl border-b border-line/10">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-7 h-7 rounded-md bg-surface-bright flex items-center justify-center text-xs border border-line/20">
+            <div className="w-7 h-7 rounded-md bg-surface-bright flex items-center justify-center text-xs border border-line/30">
               💳
             </div>
             <div>
-              <h1 className="text-sm font-medium text-sand/90 tracking-wide">
+              <h1 className="text-sm font-medium text-sand tracking-wide">
                 {t("app.title", locale)}
               </h1>
-              <p className="text-[10px] text-ash/40 mt-0.5 hidden sm:block">
+              <p className="text-[10px] text-ash/60 mt-0.5 hidden sm:block">
                 {t("app.subtitle", locale)}
               </p>
             </div>
@@ -193,7 +193,7 @@ export default function Home() {
             {/* Language toggle */}
             <button
               onClick={toggleLocale}
-              className="px-2 py-1 rounded-md text-[11px] font-medium text-stone/60 hover:text-stone bg-surface-bright/50 border border-line/15 hover:border-stone/15 transition-all"
+              className="px-2 py-1 rounded-md text-[11px] font-medium text-stone/70 hover:text-stone bg-surface-bright/60 border border-line/20 hover:border-stone/20 transition-all"
               title={locale === "en" ? "切换到中文" : "Switch to English"}
             >
               {locale === "en" ? "中" : "EN"}
@@ -201,7 +201,7 @@ export default function Home() {
             <ShareReceipt />
             <button
               onClick={toggleSound}
-              className="text-ash/40 hover:text-stone/50 transition-colors text-sm"
+              className="text-ash/50 hover:text-stone/60 transition-colors text-sm"
               title={soundEnabled ? "Mute" : "Unmute"}
             >
               {soundEnabled ? "🔊" : "🔇"}
@@ -209,7 +209,7 @@ export default function Home() {
             {selectedBillionaire && (
               <button
                 onClick={handleReset}
-                className="text-[10px] text-ash/30 hover:text-[#9B6B6B]/60 transition-colors uppercase tracking-wider font-medium"
+                className="text-[10px] text-ash/40 hover:text-[#9B6B6B]/70 transition-colors uppercase tracking-wider font-medium"
               >
                 {t("app.reset", locale)}
               </button>
@@ -223,13 +223,13 @@ export default function Home() {
             className={`overflow-hidden transition-all duration-300 ease-out ${stickyVisible ? "max-h-14 opacity-100" : "max-h-0 opacity-0"}`}
           >
             <div className="max-w-3xl mx-auto px-4 sm:px-6 pb-2.5">
-              <div className="flex items-center bg-surface/60 backdrop-blur-md border border-line/20 rounded-xl overflow-hidden">
-                <div className="pl-3 pr-1 text-ash/25 flex items-center gap-1">
+              <div className="flex items-center bg-surface/70 backdrop-blur-md border border-line/25 rounded-xl overflow-hidden shadow-stone-sm">
+                <div className="pl-3 pr-1 text-ash/35 flex items-center gap-1">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                     <circle cx="11" cy="11" r="8" />
                     <path d="m21 21-4.35-4.35" />
                   </svg>
-                  <kbd className="hidden sm:inline-flex text-[8px] px-1 py-px rounded bg-surface-bright/30 text-ash/20 font-mono border border-line/8 leading-none">⌘K</kbd>
+                  <kbd className="hidden sm:inline-flex text-[8px] px-1 py-px rounded bg-surface-bright/40 text-ash/42 font-mono border border-line/12 leading-none">⌘K</kbd>
                 </div>
                 <input
                   ref={stickyInputRef}
@@ -240,12 +240,12 @@ export default function Home() {
                   onPaste={handleStickyPaste}
                   placeholder={t("omni.placeholder", locale)}
                   disabled={stickyLoading}
-                  className="flex-1 px-2 py-2 bg-transparent text-sand/80 placeholder:text-ash/25 focus:outline-none text-xs disabled:opacity-50"
+                  className="flex-1 px-2 py-2 bg-transparent text-sand/90 placeholder:text-ash/35 focus:outline-none text-xs disabled:opacity-50"
                 />
                 <button
                   onClick={handleStickyParse}
                   disabled={stickyLoading || !stickyUrl.trim()}
-                  className="mr-1.5 px-3 py-1 rounded-lg text-[10px] font-semibold uppercase tracking-wider bg-stone/15 text-stone hover:bg-stone/25 disabled:opacity-30 transition-all whitespace-nowrap"
+                  className="mr-1.5 px-3 py-1 rounded-lg text-[10px] font-semibold uppercase tracking-wider bg-stone/20 text-stone hover:bg-stone/30 disabled:opacity-30 transition-all whitespace-nowrap"
                 >
                   {stickyLoading ? "…" : t("omni.parse", locale)}
                 </button>
@@ -255,7 +255,7 @@ export default function Home() {
         )}
 
         {/* Gradient underline */}
-        <div className="h-px bg-gradient-to-r from-transparent via-stone/10 to-transparent" />
+        <div className="h-px bg-gradient-to-r from-transparent via-stone/15 to-transparent" />
       </header>
 
       <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 sm:py-10 space-y-5 sm:space-y-8 relative z-10">
@@ -353,7 +353,7 @@ export default function Home() {
       <footer className="mt-20 relative z-10">
         <div className="h-px bg-gradient-to-r from-transparent via-line/15 to-transparent" />
         <div className="max-w-3xl mx-auto px-4 py-8 text-center">
-          <p className="text-[10px] text-ash/25 tracking-wide">
+          <p className="text-[10px] text-ash/35 tracking-wide">
             {t("app.footer", locale)}
           </p>
         </div>

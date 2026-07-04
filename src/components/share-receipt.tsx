@@ -120,14 +120,14 @@ export function ShareReceipt() {
                   <div className="text-champagne text-lg font-serif tracking-wider">
                     BILLIONAIRE CART
                   </div>
-                  <div className="text-[10px] text-ash/30 uppercase tracking-[0.3em] mt-1">
+                  <div className="text-[10px] text-ash/42 uppercase tracking-[0.3em] mt-1">
                     Transaction Receipt
                   </div>
                 </div>
 
                 {/* Identity */}
                 <div className="mb-6">
-                  <div className="text-sand/80 text-base font-medium">
+                  <div className="text-sand text-base font-medium">
                     {billionaire.emoji} {billionaire.name}
                   </div>
                   <div className="text-ash/50 text-xs">{billionaire.company}</div>
@@ -136,25 +136,25 @@ export function ShareReceipt() {
                 {/* Financials */}
                 <div className="grid grid-cols-2 gap-4 mb-6">
                   <div>
-                    <div className="text-[9px] text-ash/30 uppercase">Net Worth</div>
+                    <div className="text-[9px] text-ash/42 uppercase">Net Worth</div>
                     <div className="text-champagne font-serif text-sm">
                       {formatCurrency(netWorth, true)}
                     </div>
                   </div>
                   <div>
-                    <div className="text-[9px] text-ash/30 uppercase">Deployed</div>
+                    <div className="text-[9px] text-ash/42 uppercase">Deployed</div>
                     <div className="text-sand/70 font-serif text-sm">
                       {formatCurrency(totalSpent, true)}
                     </div>
                   </div>
                   <div>
-                    <div className="text-[9px] text-ash/30 uppercase">Remaining</div>
+                    <div className="text-[9px] text-ash/42 uppercase">Remaining</div>
                     <div className="text-ash/80 font-serif text-sm">
                       {formatCurrency(netWorth - totalSpent, true)}
                     </div>
                   </div>
                   <div>
-                    <div className="text-[9px] text-ash/30 uppercase">Burn / Mo</div>
+                    <div className="text-[9px] text-ash/42 uppercase">Burn / Mo</div>
                     <div className="text-[#9B6B6B]/70 font-serif text-sm">
                       -{formatCurrency(monthlyBurn, true)}
                     </div>
@@ -163,7 +163,7 @@ export function ShareReceipt() {
 
                 {/* Top purchases */}
                 <div className="border-t border-line/30 pt-4 mb-6">
-                  <div className="text-[9px] text-ash/30 uppercase mb-3">
+                  <div className="text-[9px] text-ash/42 uppercase mb-3">
                     Top Acquisitions
                   </div>
                   {[...purchases]
@@ -172,7 +172,7 @@ export function ShareReceipt() {
                     .map((p, i) => (
                       <div
                         key={p.id}
-                        className="flex justify-between items-center py-1.5 border-b border-line/10"
+                        className="flex justify-between items-center py-1.5 border-b border-line/18"
                       >
                         <span className="text-xs text-ash/80 truncate max-w-[300px]">
                           {i + 1}. {p.product.title}

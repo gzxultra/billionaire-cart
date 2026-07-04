@@ -17,7 +17,7 @@ export function Achievements() {
         <h2 className="section-label">
           {t("achievements.title", locale)}
         </h2>
-        <span className="text-[10px] text-ash/30 font-mono tabular-nums">
+        <span className="text-[10px] text-ash/42 font-mono tabular-nums">
           {unlocked.length}/{achievements.length}
         </span>
       </div>
@@ -31,7 +31,7 @@ export function Achievements() {
             transition={{ delay: i * 0.04 }}
             className="
               flex flex-col items-center gap-1 p-3 rounded-lg
-              bg-stone/10 border border-stone/20
+              bg-stone/20 border border-stone/20
               shadow-stone-sm
             "
             title={`${a.name}: ${a.description}`}
@@ -48,7 +48,7 @@ export function Achievements() {
                     ? "text-champagne"
                     : a.rarity === "rare"
                     ? "text-slate-300"
-                    : "text-stone/60"
+                    : "text-stone/70"
                 }
               `}
             >
@@ -62,13 +62,13 @@ export function Achievements() {
             key={a.id}
             className="
               flex flex-col items-center gap-1 p-3 rounded-lg
-              bg-surface/30 border border-line/10
+              bg-surface/30 border border-line/18
               opacity-40
             "
             title={a.description}
           >
             <span className="text-2xl grayscale">🔒</span>
-            <span className="text-[9px] text-ash/30 text-center">
+            <span className="text-[9px] text-ash/42 text-center">
               {t("achievements.locked", locale)}
             </span>
           </div>

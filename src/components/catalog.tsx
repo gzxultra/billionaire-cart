@@ -153,10 +153,10 @@ export function Catalog({ onPurchase }: CatalogProps) {
               if (e.target.value.trim()) setActiveTier("all");
             }}
             placeholder={t("catalog.search", locale)}
-            className="w-full px-3 py-2 pl-8 rounded-lg bg-surface/60 border border-line/20 text-sand/80 placeholder:text-ash/25 text-xs focus:outline-none focus:border-stone/40 transition-colors"
+            className="w-full px-3 py-2 pl-8 rounded-lg bg-surface/70 border border-line/25 text-sand placeholder:text-ash/35 text-xs focus:outline-none focus:border-stone/40 transition-colors"
           />
           <svg
-            className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-ash/30"
+            className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-ash/42"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -168,7 +168,7 @@ export function Catalog({ onPurchase }: CatalogProps) {
           {searchQuery && (
             <button
               onClick={() => setSearchQuery("")}
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-ash/30 hover:text-ash/80 text-xs"
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-ash/42 hover:text-ash/80 text-xs"
             >
               ✕
             </button>
@@ -179,7 +179,7 @@ export function Catalog({ onPurchase }: CatalogProps) {
         <select
           value={sortMode}
           onChange={(e) => setSortMode(e.target.value as SortMode)}
-          className="px-2 py-2 rounded-lg bg-surface/60 border border-line/20 text-ash/80 text-xs focus:outline-none focus:border-stone/40 cursor-pointer"
+          className="px-2 py-2 rounded-lg bg-surface/70 border border-line/25 text-ash/80 text-xs focus:outline-none focus:border-stone/40 cursor-pointer"
         >
           <option value="default">{t("catalog.sort.default", locale)}</option>
           <option value="priceAsc">{t("catalog.sort.priceAsc", locale)}</option>
@@ -201,8 +201,8 @@ export function Catalog({ onPurchase }: CatalogProps) {
               px-3 py-1.5 rounded-lg text-xs whitespace-nowrap transition-all
               ${
                 activeTier === tier
-                  ? "bg-stone/15 text-stone border border-stone/30"
-                  : "bg-surface/40 text-ash/50 border border-line/10 hover:text-ash/80"
+                  ? "bg-stone/20 text-stone border border-stone/30"
+                  : "bg-surface/55 text-ash/50 border border-line/18 hover:text-ash/80"
               }
             `}
           >
@@ -232,19 +232,19 @@ export function Catalog({ onPurchase }: CatalogProps) {
                   relative p-3 rounded-xl border transition-all duration-200
                   ${
                     isBuying
-                      ? "bg-stone/10 border-stone/40 scale-95"
+                      ? "bg-stone/20 border-stone/40 scale-95"
                       : canAfford
-                      ? "bg-surface/50 border-line/15 hover:border-stone/20 hover:bg-surface/70"
+                      ? "bg-surface/50 border-line/22 hover:border-stone/20 hover:bg-surface/70"
                       : "bg-surface/20 border-line/5 opacity-40"
                   }
                 `}
               >
                 {/* Emoji + Name */}
                 <div className="text-2xl mb-1">{item.emoji}</div>
-                <div className="text-xs text-sand/80 font-medium truncate">
+                <div className="text-xs text-sand font-medium truncate">
                   {item.name}
                 </div>
-                <div className="text-[10px] text-ash/40 mt-0.5 truncate">
+                <div className="text-[10px] text-ash/50 mt-0.5 truncate">
                   {item.description}
                 </div>
 
@@ -269,7 +269,7 @@ export function Catalog({ onPurchase }: CatalogProps) {
                             ${
                               currentQtySelection === "MAX"
                                 ? "bg-[#9B6B6B]/15 text-[#9B6B6B] border border-[#9B6B6B]/25"
-                                : "bg-surface-bright/50 text-ash/30 hover:text-[#9B6B6B]/60"
+                                : "bg-surface-bright/60 text-ash/42 hover:text-[#9B6B6B]/60"
                             }
                           `}
                         >
@@ -289,7 +289,7 @@ export function Catalog({ onPurchase }: CatalogProps) {
                           ${
                             currentQtySelection === q
                               ? "bg-stone/20 text-stone"
-                              : "bg-surface-bright/50 text-ash/30 hover:text-ash/60"
+                              : "bg-surface-bright/60 text-ash/42 hover:text-ash/60"
                           }
                         `}
                       >
@@ -309,8 +309,8 @@ export function Catalog({ onPurchase }: CatalogProps) {
                       canAfford
                         ? currentQtySelection === "MAX"
                           ? "bg-[#9B6B6B]/10 text-[#9B6B6B] hover:bg-[#9B6B6B]/15 border border-[#9B6B6B]/15"
-                          : "bg-stone/10 text-stone hover:bg-stone/20"
-                        : "bg-surface-bright/30 text-ash/15 cursor-not-allowed"
+                          : "bg-stone/20 text-stone hover:bg-stone/20"
+                        : "bg-surface-bright/45 text-ash/15 cursor-not-allowed"
                     }
                   `}
                 >
@@ -332,7 +332,7 @@ export function Catalog({ onPurchase }: CatalogProps) {
       {displayItems.length === 0 && (
         <div className="text-center py-8">
           <div className="text-2xl mb-2 opacity-30">🔍</div>
-          <div className="text-xs text-ash/30">{t("catalog.noResults", locale)}</div>
+          <div className="text-xs text-ash/42">{t("catalog.noResults", locale)}</div>
         </div>
       )}
 

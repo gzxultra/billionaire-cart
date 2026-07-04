@@ -165,7 +165,7 @@ export function BankruptOverlay() {
             className="grid grid-cols-3 gap-3 text-center"
           >
             <div>
-              <div className="text-[9px] text-ash/30 uppercase">
+              <div className="text-[9px] text-ash/42 uppercase">
                 {t("bankrupt.fortune", locale)}
               </div>
               <div className="text-xs font-serif text-ash/60">
@@ -173,13 +173,13 @@ export function BankruptOverlay() {
               </div>
             </div>
             <div>
-              <div className="text-[9px] text-ash/30 uppercase">{t("bankrupt.items", locale)}</div>
+              <div className="text-[9px] text-ash/42 uppercase">{t("bankrupt.items", locale)}</div>
               <div className="text-xs font-serif text-ash/60">
                 {purchases.length}
               </div>
             </div>
             <div>
-              <div className="text-[9px] text-ash/30 uppercase">
+              <div className="text-[9px] text-ash/42 uppercase">
                 {t("bankrupt.trophies", locale)}
               </div>
               <div className="text-xs font-serif text-ash/60">
@@ -194,10 +194,10 @@ export function BankruptOverlay() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1.5 }}
-              className="text-[10px] text-ash/30"
+              className="text-[10px] text-ash/42"
             >
               {t("bankrupt.mostExpensive", locale)}:{" "}
-              <span className="text-stone/50">
+              <span className="text-stone/70">
                 {topPurchase.product.title} (
                 {formatCurrency(topPurchase.product.price, true)})
               </span>
@@ -216,7 +216,7 @@ export function BankruptOverlay() {
                 setDismissed(true);
                 setShow(false);
               }}
-              className="px-4 py-2 rounded-lg bg-surface-bright/50 text-ash/50 text-xs hover:text-ash/80 transition-colors"
+              className="px-4 py-2 rounded-lg bg-surface-bright/60 text-ash/50 text-xs hover:text-ash/80 transition-colors"
             >
               {t("bankrupt.keepGoing", locale)}
             </button>
@@ -226,7 +226,7 @@ export function BankruptOverlay() {
                 setShow(false);
                 reset();
               }}
-              className="px-4 py-2 rounded-lg bg-stone/15 text-stone text-xs hover:bg-stone/25 transition-colors"
+              className="px-4 py-2 rounded-lg bg-stone/20 text-stone text-xs hover:bg-stone/30 transition-colors"
             >
               {t("bankrupt.newIdentity", locale)}
             </button>

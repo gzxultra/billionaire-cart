@@ -34,7 +34,7 @@ export function EasterEggOverlay({ egg, onDismiss }: EasterEggOverlayProps) {
     rainbow:
       "bg-gradient-to-r from-stone/10 via-champagne/10 to-stone/10",
     gold_rain: "bg-gradient-to-b from-champagne/12 to-transparent",
-    explosion: "bg-stone/10",
+    explosion: "bg-stone/20",
     matrix: "bg-sage/10",
     fire: "bg-gradient-to-t from-stone/15 via-champagne/8 to-transparent",
   };
@@ -63,7 +63,7 @@ export function EasterEggOverlay({ egg, onDismiss }: EasterEggOverlayProps) {
               <div className="absolute inset-0 rounded-2xl border border-stone/30 animate-pulse" />
 
               <div className="text-5xl mb-3">{egg.emoji}</div>
-              <div className="text-[10px] uppercase tracking-[0.4em] text-stone/60 mb-1">
+              <div className="text-[10px] uppercase tracking-[0.4em] text-stone/70 mb-1">
                 Easter Egg Discovered
               </div>
               <div className="text-lg font-serif text-stone">{egg.name}</div>

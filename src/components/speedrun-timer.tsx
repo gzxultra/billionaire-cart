@@ -173,7 +173,7 @@ export function SpeedrunTimer() {
           </p>
           <button
             onClick={startTimer}
-            className="px-6 py-2.5 rounded-xl bg-stone/15 text-stone text-sm font-medium hover:bg-stone/25 transition-all border border-stone/20 hover:border-stone/40"
+            className="px-6 py-2.5 rounded-xl bg-stone/20 text-stone text-sm font-medium hover:bg-stone/30 transition-all border border-stone/20 hover:border-stone/40"
           >
             🏁 Start Speedrun
           </button>
@@ -187,14 +187,14 @@ export function SpeedrunTimer() {
             <div className="text-3xl font-serif text-stone tabular-nums tracking-wide">
               {formatTimer(elapsed)}
             </div>
-            <div className="text-[10px] text-ash/30 mt-1">
+            <div className="text-[10px] text-ash/42 mt-1">
               {purchases.length - startPurchasesRef.current} items ·{" "}
               {formatCurrency(totalSpent, true)} spent
             </div>
           </div>
 
           {/* Progress bar */}
-          <div className="relative w-full h-3 bg-surface-bright/50 rounded-full overflow-hidden">
+          <div className="relative w-full h-3 bg-surface-bright/60 rounded-full overflow-hidden">
             <motion.div
               className="h-full rounded-full"
               style={{
@@ -217,7 +217,7 @@ export function SpeedrunTimer() {
 
           {/* Remaining */}
           <div className="flex justify-between text-[10px]">
-            <span className="text-ash/30">
+            <span className="text-ash/42">
               Remaining:{" "}
               <span className={remaining < netWorth * 0.1 ? "text-[#9B6B6B]/60" : "text-ash/60"}>
                 {formatCurrency(remaining, true)}
@@ -229,7 +229,7 @@ export function SpeedrunTimer() {
                 finishedRef.current = true;
                 cancelAnimationFrame(rafRef.current);
               }}
-              className="text-ash/30 hover:text-[#9B6B6B]/60 transition-colors"
+              className="text-ash/42 hover:text-[#9B6B6B]/60 transition-colors"
             >
               ✕ Abort
             </button>
@@ -248,7 +248,7 @@ export function SpeedrunTimer() {
             <div className="text-4xl mb-2">
               {isNewRecord ? "🏆" : "🏁"}
             </div>
-            <div className="text-[10px] uppercase tracking-[0.4em] text-stone/60">
+            <div className="text-[10px] uppercase tracking-[0.4em] text-stone/70">
               {isNewRecord ? "New Record!" : "Speedrun Complete"}
             </div>
             <div className="text-3xl font-serif text-stone tabular-nums">
@@ -262,7 +262,7 @@ export function SpeedrunTimer() {
             <div className="flex gap-2 justify-center pt-2">
               <button
                 onClick={startTimer}
-                className="px-4 py-2 rounded-lg bg-stone/15 text-stone text-xs hover:bg-stone/25 transition-colors"
+                className="px-4 py-2 rounded-lg bg-stone/20 text-stone text-xs hover:bg-stone/30 transition-colors"
               >
                 🔄 Try Again
               </button>
