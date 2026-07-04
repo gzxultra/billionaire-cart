@@ -135,6 +135,10 @@ const strings: Record<string, Record<Locale, string>> = {
     en: "Achievement Unlocked",
     zh: "成就解锁",
   },
+  "omni.retry": {
+    en: "Retry",
+    zh: "重试",
+  },
 
   // ─── Share Receipt ─────────────────────────────────────────────
   "share.title": { en: "Share Receipt", zh: "分享" },

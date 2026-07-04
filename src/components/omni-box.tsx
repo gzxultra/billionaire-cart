@@ -11,20 +11,10 @@ import { CheckoutAnimation } from "./checkout-animation";
 import { useLocale } from "@/lib/use-locale";
 import { t } from "@/lib/i18n";
 
-const ASSET_OPTIONS: { value: AssetClass; label: string }[] = [
-  { value: "supercar", label: "🏎️ Supercar" },
-  { value: "yacht", label: "🛥️ Yacht" },
-  { value: "aircraft", label: "✈️ Aircraft" },
-  { value: "real_estate", label: "🏰 Real Estate" },
-  { value: "rv_trailer", label: "🏕️ RV / Trailer" },
-  { value: "commercial_tech", label: "🖥️ Commercial Tech" },
-  { value: "coffee_equipment", label: "☕ Coffee" },
-  { value: "custom_keyboard", label: "⌨️ Keyboard" },
-  { value: "luxury_fashion", label: "👗 Fashion" },
-  { value: "jewelry", label: "💎 Jewelry" },
-  { value: "art", label: "🎨 Art" },
-  { value: "electronics", label: "📱 Electronics" },
-  { value: "other", label: "📦 Other" },
+const ASSET_OPTION_VALUES: AssetClass[] = [
+  "supercar", "yacht", "aircraft", "real_estate", "rv_trailer",
+  "commercial_tech", "coffee_equipment", "custom_keyboard",
+  "luxury_fashion", "jewelry", "art", "electronics", "other",
 ];
 
 export function OmniBox() {
@@ -41,6 +31,7 @@ export function OmniBox() {
   const [batchUrls, setBatchUrls] = useState<string[]>([]);
   const [batchProgress, setBatchProgress] = useState<{ current: number; total: number; success: number } | null>(null);
   const [batchResult, setBatchResult] = useState<{ success: number; total: number } | null>(null);
+  const [lastFailedUrl, setLastFailedUrl] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -80,6 +71,7 @@ export function OmniBox() {
     setError(null);
     setProduct(null);
     setParseSource(null);
+    setLastFailedUrl(null);
 
     try {
       const res = await fetch("/api/parse", {
@@ -101,6 +93,7 @@ export function OmniBox() {
         }, 100);
       } else {
         setError(data.error || t("omni.parseFail", locale));
+        setLastFailedUrl(target);
         setShowManual(true);
         // Pre-fill manual with whatever we got
         if (data.product?.title) setManualTitle(data.product.title);
@@ -108,6 +101,7 @@ export function OmniBox() {
       }
     } catch {
       setError(t("omni.networkError", locale));
+      setLastFailedUrl(target);
       setShowManual(true);
     } finally {
       setLoading(false);
@@ -316,7 +310,7 @@ export function OmniBox() {
             className="flex items-center gap-2 px-1"
           >
             <span className="text-[10px] px-2 py-0.5 rounded-full bg-sage/10 text-sage/70 font-mono border border-sage/15">
-              {parseSource === "json-ld" ? "Schema.org" : parseSource === "amazon" ? "Amazon" : parseSource === "ebay" ? "eBay" : parseSource === "taobao" ? "淘宝/天猫" : parseSource === "jd" ? "京东 JD" : parseSource === "product-meta" ? "Product Meta" : parseSource === "og-meta" ? "OpenGraph" : parseSource === "ai" ? "AI" : "Extracted"}
+              {parseSource === "json-ld" ? "Schema.org" : parseSource === "amazon" ? "Amazon" : parseSource === "ebay" ? "eBay" : parseSource === "taobao" ? "淘宝/天猫" : parseSource === "jd" ? "京东 JD" : parseSource === "walmart" ? "Walmart" : parseSource === "bestbuy" ? "Best Buy" : parseSource === "etsy" ? "Etsy" : parseSource === "product-meta" ? "Product Meta" : parseSource === "og-meta" ? "OpenGraph" : parseSource === "ai" ? "AI" : "Extracted"}
             </span>
             {product.sourceDomain && (
               <span className="flex items-center gap-1 text-[10px] text-ash/40">
@@ -548,9 +542,9 @@ export function OmniBox() {
                 onChange={(e) => setManualClass(e.target.value as AssetClass)}
                 className="px-3 py-3 rounded-lg bg-surface/60 border border-line/20 text-ash text-sm focus:outline-none focus:border-stone/40"
               >
-                {ASSET_OPTIONS.map((opt) => (
-                  <option key={opt.value} value={opt.value}>
-                    {opt.label}
+                {ASSET_OPTION_VALUES.map((cls) => (
+                  <option key={cls} value={cls}>
+                    {assetLabel(cls, locale)}
                   </option>
                 ))}
               </select>
@@ -565,16 +559,27 @@ export function OmniBox() {
         )}
       </AnimatePresence>
 
-      {/* Error */}
+      {/* Error + Retry */}
       <AnimatePresence>
         {error && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="text-xs text-[#9B6B6B]/70 px-1"
+            className="flex items-center gap-2 px-1"
           >
-            {error}
+            <span className="text-xs text-[#9B6B6B]/70 flex-1">
+              {error}
+            </span>
+            {lastFailedUrl && (
+              <button
+                onClick={() => parseUrl(lastFailedUrl)}
+                disabled={loading}
+                className="shrink-0 text-[10px] px-2.5 py-1 rounded-lg bg-stone/10 text-stone/60 hover:bg-stone/20 transition-colors font-medium disabled:opacity-30"
+              >
+                {t("omni.retry", locale)}
+              </button>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

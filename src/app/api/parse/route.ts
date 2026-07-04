@@ -353,6 +353,148 @@ function extractJDData(html: string, url: string): Partial<ParsedProduct> | null
   };
 }
 
+// ─── Walmart extraction ─────────────────────────────────────────────
+function extractWalmartData(html: string, url: string): Partial<ParsedProduct> | null {
+  if (!/walmart\.(com|ca)/i.test(url)) return null;
+
+  let title = "";
+  const titlePatterns = [
+    /<h1[^>]*class="[^"]*prod-ProductTitle[^"]*"[^>]*>([^<]+)/i,
+    /itemprop="name"[^>]*>([^<]+)/i,
+    /"productName"\s*:\s*"([^"]+)"/i,
+    /"name"\s*:\s*"([^"]{5,200})"/,
+  ];
+  for (const pat of titlePatterns) {
+    const m = html.match(pat);
+    if (m) { title = m[1].trim(); break; }
+  }
+
+  let price = 0;
+  const pricePatterns = [
+    /itemprop="price"[^>]*content="([\d.]+)"/i,
+    /"currentPrice"\s*:\s*([\d.]+)/,
+    /"price"\s*:\s*"?([\d.]+)"?/,
+    /class="[^"]*price-main[^"]*"[\s\S]*?\$([\d,]+(?:\.\d{2})?)/i,
+    /data-automation="buybox-price"[\s\S]*?\$([\d,]+(?:\.\d{2})?)/i,
+  ];
+  for (const pat of pricePatterns) {
+    const m = html.match(pat);
+    if (m) {
+      price = parseFloat(m[1].replace(/,/g, ""));
+      if (price > 0) break;
+    }
+  }
+
+  let imageUrl: string | null = null;
+  const imgMatch = html.match(/"heroImage(?:Url)?"\s*:\s*"(https?:\/\/[^"]+)"/i)
+    || html.match(/property="og:image"[^>]*content="([^"]+)"/i);
+  if (imgMatch) imageUrl = imgMatch[1];
+
+  if (!title && !price) return null;
+
+  const itemMatch = url.match(/\/ip\/(?:[^/]*\/)?([\d]+)/i);
+  return {
+    title: title || undefined,
+    price: price || undefined,
+    imageUrl: imageUrl || undefined,
+    description: itemMatch ? `Walmart #${itemMatch[1]}` : "Walmart",
+  };
+}
+
+// ─── Best Buy extraction ────────────────────────────────────────────
+function extractBestBuyData(html: string, url: string): Partial<ParsedProduct> | null {
+  if (!/bestbuy\.(com|ca)/i.test(url)) return null;
+
+  let title = "";
+  const titlePatterns = [
+    /class="sku-title"[^>]*>[\s\S]*?<h1[^>]*>([^<]+)/i,
+    /class="heading-5 v-fw-regular"[^>]*>([^<]+)/i,
+    /"name"\s*:\s*"([^"]{5,200})"/,
+  ];
+  for (const pat of titlePatterns) {
+    const m = html.match(pat);
+    if (m) { title = m[1].trim(); break; }
+  }
+
+  let price = 0;
+  const pricePatterns = [
+    /class="priceView-hero-price priceView-customer-price"[\s\S]*?<span[^>]*>\$([\d,]+(?:\.\d{2})?)/i,
+    /"currentPrice"\s*:\s*([\d.]+)/,
+    /itemprop="price"[^>]*content="([\d.]+)"/i,
+    /"price"\s*:\s*"?([\d.]+)"?/,
+    /data-testid="customer-price"[\s\S]*?\$([\d,]+(?:\.\d{2})?)/i,
+  ];
+  for (const pat of pricePatterns) {
+    const m = html.match(pat);
+    if (m) {
+      price = parseFloat(m[1].replace(/,/g, ""));
+      if (price > 0) break;
+    }
+  }
+
+  let imageUrl: string | null = null;
+  const imgMatch = html.match(/class="primary-image"[^>]*src="([^"]+)"/i)
+    || html.match(/"thumbnailImage"\s*:\s*"([^"]+)"/i);
+  if (imgMatch) imageUrl = imgMatch[1];
+
+  if (!title && !price) return null;
+
+  const skuMatch = url.match(/skuId=(\d+)/i)
+    || url.match(/\/(\d{7})\.p/i);
+  return {
+    title: title || undefined,
+    price: price || undefined,
+    imageUrl: imageUrl || undefined,
+    description: skuMatch ? `Best Buy SKU: ${skuMatch[1]}` : "Best Buy",
+  };
+}
+
+// ─── Etsy extraction ────────────────────────────────────────────────
+function extractEtsyData(html: string, url: string): Partial<ParsedProduct> | null {
+  if (!/etsy\.com/i.test(url)) return null;
+
+  let title = "";
+  const titlePatterns = [
+    /property="og:title"[^>]*content="([^"]+)"/i,
+    /<h1[^>]*data-listing-id[^>]*>([^<]+)/i,
+    /"name"\s*:\s*"([^"]{5,200})"/,
+  ];
+  for (const pat of titlePatterns) {
+    const m = html.match(pat);
+    if (m) { title = m[1].trim(); break; }
+  }
+
+  let price = 0;
+  const pricePatterns = [
+    /"price"\s*:\s*"?([\d.]+)"?/,
+    /itemprop="price"[^>]*content="([\d.]+)"/i,
+    /class="[^"]*wt-text-title-03[^"]*"[^>]*>\s*\$([\d,]+(?:\.\d{2})?)/i,
+    /data-buy-box-listing-price[^>]*>\s*\$([\d,]+(?:\.\d{2})?)/i,
+  ];
+  for (const pat of pricePatterns) {
+    const m = html.match(pat);
+    if (m) {
+      price = parseFloat(m[1].replace(/,/g, ""));
+      if (price > 0) break;
+    }
+  }
+
+  let imageUrl: string | null = null;
+  const imgMatch = html.match(/property="og:image"[^>]*content="([^"]+)"/i)
+    || html.match(/data-listing-card-image[\s\S]*?src="([^"]+)"/i);
+  if (imgMatch) imageUrl = imgMatch[1];
+
+  if (!title && !price) return null;
+
+  const listingMatch = url.match(/listing\/(\d+)/i);
+  return {
+    title: title || undefined,
+    price: price || undefined,
+    imageUrl: imageUrl || undefined,
+    description: listingMatch ? `Etsy #${listingMatch[1]}` : "Etsy",
+  };
+}
+
 // ─── OG / Twitter / standard meta tags ──────────────────────────────
 function extractMetaTags(html: string): { title: string; price: string; image: string; description: string; favicon: string } {
   const getMetaContent = (property: string): string => {
@@ -544,7 +686,10 @@ export async function POST(request: NextRequest) {
     const ebayData = extractEbayData(html, url);
     const taobaoData = extractTaobaoData(html, url);
     const jdData = extractJDData(html, url);
-    const platformData = amazonData || ebayData || taobaoData || jdData;
+    const walmartData = extractWalmartData(html, url);
+    const bestBuyData = extractBestBuyData(html, url);
+    const etsyData = extractEtsyData(html, url);
+    const platformData = amazonData || ebayData || taobaoData || jdData || walmartData || bestBuyData || etsyData;
 
     // ── Layer 4: OG / Twitter meta tags ──
     const meta = extractMetaTags(html);
@@ -586,7 +731,7 @@ export async function POST(request: NextRequest) {
     const { assetClass, monthlyOverhead } = classifyProduct(finalTitle, price);
 
     // Track which source provided data
-    const source = jsonLd ? "json-ld" : amazonData ? "amazon" : ebayData ? "ebay" : taobaoData ? "taobao" : jdData ? "jd" : productMeta.price ? "product-meta" : meta.title ? "og-meta" : aiResult ? "ai" : "regex";
+    const source = jsonLd ? "json-ld" : amazonData ? "amazon" : ebayData ? "ebay" : taobaoData ? "taobao" : jdData ? "jd" : walmartData ? "walmart" : bestBuyData ? "bestbuy" : etsyData ? "etsy" : productMeta.price ? "product-meta" : meta.title ? "og-meta" : aiResult ? "ai" : "regex";
 
     // Carry through original currency if a platform extractor provided it
     const origPrice = platformData?.originalPrice;
