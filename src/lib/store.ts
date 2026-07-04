@@ -24,6 +24,7 @@ interface CartState {
   reset: () => void;
   saveProduct: (product: ParsedProduct) => void;
   removeSavedProduct: (id: string) => void;
+  clearAllSavedProducts: () => void;
   incrementPurchaseCount: (id: string) => void;
   setActiveParsed: (product: ParsedProduct | null) => void;
 }
@@ -106,6 +107,10 @@ export const useCartStore = create<CartState>()(
 
       removeSavedProduct: (id: string) => {
         set({ savedProducts: get().savedProducts.filter((sp) => sp.id !== id) });
+      },
+
+      clearAllSavedProducts: () => {
+        set({ savedProducts: [] });
       },
 
       incrementPurchaseCount: (id: string) => {

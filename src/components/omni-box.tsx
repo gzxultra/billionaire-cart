@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useCartStore } from "@/lib/store";
 import { classifyProduct } from "@/lib/asset-classifier";
 import { ParsedProduct, ParseResponse, AssetClass, SavedProduct } from "@/lib/types";
-import { generateId, ASSET_LABELS, formatCurrency, timeAgo } from "@/lib/format";
+import { generateId, ASSET_LABELS, assetLabel, formatCurrency, timeAgo } from "@/lib/format";
 import { ProductCard } from "./product-card";
 import { CheckoutAnimation } from "./checkout-animation";
 import { useLocale } from "@/lib/use-locale";
@@ -38,6 +38,9 @@ export function OmniBox() {
   const [parseSource, setParseSource] = useState<string | null>(null);
   const [showHistory, setShowHistory] = useState(false);
   const [pasteFlash, setPasteFlash] = useState(false);
+  const [batchUrls, setBatchUrls] = useState<string[]>([]);
+  const [batchProgress, setBatchProgress] = useState<{ current: number; total: number; success: number } | null>(null);
+  const [batchResult, setBatchResult] = useState<{ success: number; total: number } | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -113,14 +116,54 @@ export function OmniBox() {
 
   const handlePaste = useCallback((e: React.ClipboardEvent) => {
     const pasted = e.clipboardData.getData("text");
-    if (pasted && /^https?:\/\//i.test(pasted.trim())) {
-      // Flash the input border to signal "detected URL, auto-parsing"
+    // Extract all URLs from pasted text
+    const urlPattern = /https?:\/\/[^\s<>"']+/gi;
+    const urls = (pasted.match(urlPattern) || []).map((u) => u.replace(/[),;.]+$/, ""));
+    const uniqueUrls = Array.from(new Set(urls));
+
+    if (uniqueUrls.length > 1) {
+      // Multi-URL paste — show batch prompt
+      e.preventDefault();
+      setBatchUrls(uniqueUrls);
+      setBatchResult(null);
       setPasteFlash(true);
       setTimeout(() => setPasteFlash(false), 600);
-      // Auto-parse URLs on paste
-      setTimeout(() => parseUrl(pasted.trim()), 50);
+    } else if (uniqueUrls.length === 1) {
+      // Single URL paste — original behavior
+      setPasteFlash(true);
+      setTimeout(() => setPasteFlash(false), 600);
+      setTimeout(() => parseUrl(uniqueUrls[0]), 50);
     }
   }, [parseUrl]);
+
+  const handleBatchParse = useCallback(async () => {
+    const urls = batchUrls;
+    setBatchUrls([]);
+    setBatchResult(null);
+    let successCount = 0;
+
+    for (let i = 0; i < urls.length; i++) {
+      setBatchProgress({ current: i + 1, total: urls.length, success: successCount });
+      try {
+        const res = await fetch("/api/parse", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ url: urls[i] }),
+        });
+        const data: ParseResponse = await res.json();
+        if (data.success && data.product) {
+          saveProduct(data.product);
+          successCount++;
+        }
+      } catch {
+        // Skip failed URLs
+      }
+    }
+
+    setBatchProgress(null);
+    setBatchResult({ success: successCount, total: urls.length });
+    setTimeout(() => setBatchResult(null), 4000);
+  }, [batchUrls, saveProduct]);
 
   const handleManualSubmit = () => {
     const price = parseFloat(manualPrice.replace(/[,$]/g, ""));
@@ -286,6 +329,74 @@ export function OmniBox() {
                 {product.sourceDomain}
               </span>
             )}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Batch URL prompt */}
+      <AnimatePresence>
+        {batchUrls.length > 1 && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="overflow-hidden"
+          >
+            <div className="flex items-center justify-between p-3 rounded-xl bg-sage/8 border border-sage/15">
+              <span className="text-xs text-sage/80">
+                {t("batch.detected", locale, { n: batchUrls.length })}
+              </span>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setBatchUrls([])}
+                  className="text-[10px] px-2 py-1 text-ash/40 hover:text-ash/60 transition-colors"
+                >
+                  {t("batch.cancel", locale)}
+                </button>
+                <button
+                  onClick={handleBatchParse}
+                  className="text-[10px] px-3 py-1 rounded-lg bg-stone/15 text-stone font-semibold hover:bg-stone/25 transition-colors"
+                >
+                  {t("batch.parseAll", locale)}
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Batch progress / result */}
+      <AnimatePresence>
+        {batchProgress && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="flex items-center gap-3 px-1"
+          >
+            <div className="flex-1 h-1.5 rounded-full bg-surface-bright/30 overflow-hidden">
+              <motion.div
+                className="h-full bg-stone/50 rounded-full"
+                initial={{ width: 0 }}
+                animate={{ width: `${(batchProgress.current / batchProgress.total) * 100}%` }}
+                transition={{ duration: 0.3 }}
+              />
+            </div>
+            <span className="text-[10px] text-ash/40 font-mono shrink-0">
+              {t("batch.progress", locale, { current: batchProgress.current, total: batchProgress.total })}
+            </span>
+          </motion.div>
+        )}
+        {batchResult && (
+          <motion.div
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            className="px-1"
+          >
+            <span className="text-[10px] px-2 py-0.5 rounded-full bg-sage/10 text-sage/70 font-mono border border-sage/15">
+              ✓ {t("batch.done", locale, { success: batchResult.success, total: batchResult.total })}
+            </span>
           </motion.div>
         )}
       </AnimatePresence>

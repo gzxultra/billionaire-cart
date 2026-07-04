@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, useMotionValue, useTransform, PanInfo } from "framer-motion";
 import { ParsedProduct } from "@/lib/types";
-import { formatCurrency, ASSET_LABELS } from "@/lib/format";
+import { formatCurrency, assetLabel } from "@/lib/format";
 import { useLocale } from "@/lib/use-locale";
 import { t } from "@/lib/i18n";
 
@@ -114,7 +114,7 @@ export function ProductCard({ product, onAuthorize, autoFocusBuy }: ProductCardP
           {/* Category badge — top left */}
           <div className="absolute top-3 left-3 flex items-center gap-2">
             <span className="text-[10px] px-2.5 py-1 rounded-full bg-base/60 backdrop-blur-md text-sand/70 font-mono border border-line/20 shadow-sm">
-              {ASSET_LABELS[product.assetClass] || product.assetClass}
+              {assetLabel(product.assetClass, locale)}
             </span>
           </div>
 

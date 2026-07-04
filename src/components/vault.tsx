@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useCartStore, selectTotalSpent, selectMonthlyBurn } from "@/lib/store";
-import { formatCurrency, timeAgo, ASSET_LABELS } from "@/lib/format";
+import { formatCurrency, timeAgo, assetLabel } from "@/lib/format";
 import { useLocale } from "@/lib/use-locale";
 import { t } from "@/lib/i18n";
 
@@ -89,7 +89,7 @@ export function Vault() {
                     {formatCurrency(purchase.product.price)}
                   </span>
                   <span className="text-[9px] px-1.5 py-0.5 rounded bg-surface-bright/30 text-ash/40">
-                    {ASSET_LABELS[purchase.product.assetClass] || purchase.product.assetClass}
+                    {assetLabel(purchase.product.assetClass, locale)}
                   </span>
                   {purchase.product.monthlyOverhead > 0 && (
                     <span className="text-[9px] text-[#9B6B6B]/50">

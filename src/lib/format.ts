@@ -54,3 +54,26 @@ export const ASSET_LABELS: Record<string, string> = {
   electronics: "📱 Electronics",
   other: "📦 Other",
 };
+
+/** Return the i18n-aware asset label. Falls back to ASSET_LABELS (English). */
+export function assetLabel(cls: string, locale?: "en" | "zh"): string {
+  if (!locale || locale === "en") return ASSET_LABELS[cls] || "📦 Other";
+  // Dynamic import avoided — inline lookup for zh
+  const ZH_LABELS: Record<string, string> = {
+    supercar: "🏎️ 超跑",
+    yacht: "🛥️ 游艇",
+    aircraft: "✈️ 飞机",
+    real_estate: "🏰 房产",
+    rv_trailer: "🏕️ 房车",
+    commercial_tech: "🖥️ 商用科技",
+    luxury_fashion: "👗 奢侈品",
+    jewelry: "💎 珠宝",
+    coffee_equipment: "☕ 咖啡设备",
+    custom_keyboard: "⌨️ 键盘",
+    industrial_equipment: "🔧 工业设备",
+    art: "🎨 艺术品",
+    electronics: "📱 电子产品",
+    other: "📦 其他",
+  };
+  return ZH_LABELS[cls] || ASSET_LABELS[cls] || "📦 其他";
+}

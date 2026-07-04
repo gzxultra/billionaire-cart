@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { useCartStore, selectTotalSpent } from "@/lib/store";
-import { formatCurrency, ASSET_LABELS } from "@/lib/format";
+import { formatCurrency, assetLabel } from "@/lib/format";
 import { useLocale } from "@/lib/use-locale";
 import { t } from "@/lib/i18n";
 
@@ -56,7 +56,7 @@ export function CategoryBreakdown() {
       const data = map.get(assetClass)!;
       result.push({
         assetClass,
-        label: (ASSET_LABELS[assetClass] || assetClass).replace(/^[^\w]*\s*/, ""),
+        label: assetLabel(assetClass, locale).replace(/^[^\w]*\s*/, ""),
         amount: data.amount,
         count: data.count,
         percent: totalSpent > 0 ? (data.amount / totalSpent) * 100 : 0,
@@ -65,7 +65,7 @@ export function CategoryBreakdown() {
     }
 
     return result.sort((a, b) => b.amount - a.amount);
-  }, [purchases, totalSpent]);
+  }, [purchases, totalSpent, locale]);
 
   if (purchases.length < 2) return null;
 
@@ -156,7 +156,7 @@ export function CategoryBreakdown() {
         <div className="mt-4 pt-3 border-t border-line/10 text-[10px] text-ash/40">
           {t("category.biggest", locale)}:{" "}
           <span className="text-stone/60">
-            {ASSET_LABELS[topCategory.assetClass] || topCategory.assetClass}
+            {assetLabel(topCategory.assetClass, locale)}
           </span>{" "}
           — {formatCurrency(topCategory.amount, true)} ({topCategory.count}{" "}
           {topCategory.count === 1

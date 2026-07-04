@@ -1,9 +1,10 @@
 "use client";
 
+import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCartStore } from "@/lib/store";
-import { SavedProduct } from "@/lib/types";
-import { formatCurrency, ASSET_LABELS, timeAgo } from "@/lib/format";
+import { SavedProduct, AssetClass } from "@/lib/types";
+import { formatCurrency, assetLabel, timeAgo } from "@/lib/format";
 import { useLocale } from "@/lib/use-locale";
 import { t } from "@/lib/i18n";
 
@@ -11,16 +12,70 @@ interface PurchaseFeedProps {
   onRepurchase: (product: SavedProduct) => void;
 }
 
+const FILTER_CLASSES: (AssetClass | "all")[] = [
+  "all",
+  "supercar",
+  "yacht",
+  "aircraft",
+  "real_estate",
+  "rv_trailer",
+  "luxury_fashion",
+  "jewelry",
+  "electronics",
+  "other",
+];
+
 export function PurchaseFeed({ onRepurchase }: PurchaseFeedProps) {
   const savedProducts = useCartStore((s) => s.savedProducts);
   const removeSavedProduct = useCartStore((s) => s.removeSavedProduct);
+  const clearAllSavedProducts = useCartStore((s) => s.clearAllSavedProducts);
   const locale = useLocale((s) => s.locale);
+
+  const [search, setSearch] = useState("");
+  const [filterClass, setFilterClass] = useState<AssetClass | "all">("all");
+  const [confirmClear, setConfirmClear] = useState(false);
+
+  // Derive available filter tabs from actual data
+  const availableClasses = useMemo(() => {
+    const classes = new Set(savedProducts.map((sp) => sp.product.assetClass));
+    return FILTER_CLASSES.filter((c) => c === "all" || classes.has(c));
+  }, [savedProducts]);
+
+  // Filtered products
+  const filtered = useMemo(() => {
+    let items = savedProducts;
+    if (filterClass !== "all") {
+      items = items.filter((sp) => sp.product.assetClass === filterClass);
+    }
+    if (search.trim()) {
+      const q = search.toLowerCase().trim();
+      items = items.filter(
+        (sp) =>
+          sp.product.title.toLowerCase().includes(q) ||
+          (sp.product.sourceDomain || "").toLowerCase().includes(q) ||
+          (sp.product.description || "").toLowerCase().includes(q)
+      );
+    }
+    return items;
+  }, [savedProducts, filterClass, search]);
 
   if (savedProducts.length === 0) return null;
 
   // Group: recently purchased (purchaseCount > 0) vs just parsed
-  const purchased = savedProducts.filter((sp) => sp.purchaseCount > 0);
-  const browsed = savedProducts.filter((sp) => sp.purchaseCount === 0);
+  const purchased = filtered.filter((sp) => sp.purchaseCount > 0);
+  const browsed = filtered.filter((sp) => sp.purchaseCount === 0);
+
+  const handleClear = () => {
+    if (!confirmClear) {
+      setConfirmClear(true);
+      setTimeout(() => setConfirmClear(false), 3000);
+      return;
+    }
+    clearAllSavedProducts();
+    setConfirmClear(false);
+    setSearch("");
+    setFilterClass("all");
+  };
 
   return (
     <div className="space-y-4">
@@ -35,7 +90,78 @@ export function PurchaseFeed({ onRepurchase }: PurchaseFeedProps) {
             {savedProducts.length}
           </span>
         </div>
+        {/* Clear all button */}
+        <button
+          onClick={handleClear}
+          className={`text-[10px] px-2 py-0.5 rounded transition-colors ${
+            confirmClear
+              ? "bg-[#9B6B6B]/15 text-[#9B6B6B]/70 border border-[#9B6B6B]/20"
+              : "text-ash/30 hover:text-ash/50"
+          }`}
+        >
+          {confirmClear
+            ? t("feed.clearConfirm", locale, { n: savedProducts.length })
+            : t("feed.clearAll", locale)}
+        </button>
       </div>
+
+      {/* Search + filter bar — shows when 4+ items */}
+      {savedProducts.length > 3 && (
+        <div className="space-y-2">
+          {/* Search input */}
+          <div className="relative">
+            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-ash/25">
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.35-4.35" />
+              </svg>
+            </div>
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder={t("feed.search", locale)}
+              className="w-full pl-8 pr-3 py-2 rounded-lg bg-surface/40 border border-line/12 text-sand/70 placeholder:text-ash/20 text-xs focus:outline-none focus:border-stone/30 transition-colors"
+            />
+          </div>
+
+          {/* Asset class filter pills */}
+          {availableClasses.length > 2 && (
+            <div className="flex gap-1.5 overflow-x-auto scrollbar-hide pb-0.5">
+              {availableClasses.map((cls) => (
+                <button
+                  key={cls}
+                  onClick={() => setFilterClass(cls)}
+                  className={`shrink-0 px-2.5 py-1 rounded-full text-[10px] font-medium transition-all border ${
+                    filterClass === cls
+                      ? "bg-stone/15 text-stone border-stone/20"
+                      : "text-ash/35 hover:text-ash/50 border-transparent hover:border-line/15"
+                  }`}
+                >
+                  {cls === "all"
+                    ? t("feed.all", locale)
+                    : assetLabel(cls, locale).split(" ").slice(0, 2).join(" ")}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* No results */}
+      {filtered.length === 0 && (search || filterClass !== "all") && (
+        <div className="text-center py-4">
+          <span className="text-xs text-ash/30">{t("feed.noResults", locale)}</span>
+        </div>
+      )}
 
       {/* Purchased items — horizontal scrollable strip */}
       {purchased.length > 0 && (
@@ -177,7 +303,7 @@ function FeedCard({ item, onRepurchase, onRemove, locale, dimmed }: FeedCardProp
         </div>
         <div className="flex items-center justify-between pt-0.5">
           <span className="text-[9px] text-ash/25 font-mono truncate">
-            {ASSET_LABELS[product.assetClass]?.split(" ")[0] || "📦"}
+            {assetLabel(product.assetClass, locale).split(" ").slice(0, 2).join(" ")}
           </span>
           <span className="text-[9px] px-1.5 py-0.5 rounded bg-stone/10 text-stone/50 opacity-0 group-hover:opacity-100 transition-opacity font-medium">
             {t("omni.rebuy", locale)}

@@ -325,6 +325,31 @@ const strings: Record<string, Record<Locale, string>> = {
   "feed.title": { en: "Recent Items", zh: "最近商品" },
   "feed.purchased": { en: "Purchased", zh: "已购买" },
   "feed.browsed": { en: "Browsed", zh: "浏览过" },
+  "feed.search": { en: "Search items…", zh: "搜索商品…" },
+  "feed.all": { en: "All", zh: "全部" },
+  "feed.clearAll": { en: "Clear All", zh: "清空" },
+  "feed.clearConfirm": {
+    en: "Clear all {n} items?",
+    zh: "清空全部 {n} 个商品？",
+  },
+  "feed.cleared": { en: "History cleared", zh: "已清空" },
+  "feed.noResults": { en: "No matching items", zh: "无匹配商品" },
+
+  // ─── Batch Parse ──────────────────────────────────────────────
+  "batch.detected": {
+    en: "{n} URLs detected — parse all?",
+    zh: "检测到 {n} 个链接 — 全部解析？",
+  },
+  "batch.parseAll": { en: "Parse All", zh: "全部解析" },
+  "batch.cancel": { en: "Cancel", zh: "取消" },
+  "batch.progress": {
+    en: "Parsing {current}/{total}…",
+    zh: "正在解析 {current}/{total}…",
+  },
+  "batch.done": {
+    en: "{success}/{total} parsed successfully",
+    zh: "成功解析 {success}/{total} 个商品",
+  },
 
   // ─── Achievements (additions) ──────────────────────────────────
   "achievements.locked": { en: "???", zh: "???" },
@@ -342,6 +367,22 @@ const strings: Record<string, Record<Locale, string>> = {
   "reactions.mood.panicking": { en: "Panicking", zh: "慌了" },
   "reactions.mood.desperate": { en: "Desperate", zh: "绝望" },
   "reactions.mood.ruined": { en: "Ruined", zh: "破产了" },
+
+  // ─── Asset Class Labels (i18n) ──────────────────────────────────
+  "asset.supercar": { en: "🏎️ Supercar", zh: "🏎️ 超跑" },
+  "asset.yacht": { en: "🛥️ Yacht", zh: "🛥️ 游艇" },
+  "asset.aircraft": { en: "✈️ Aircraft", zh: "✈️ 飞机" },
+  "asset.real_estate": { en: "🏰 Real Estate", zh: "🏰 房产" },
+  "asset.rv_trailer": { en: "🏕️ RV / Trailer", zh: "🏕️ 房车" },
+  "asset.commercial_tech": { en: "🖥️ Commercial Tech", zh: "🖥️ 商用科技" },
+  "asset.luxury_fashion": { en: "👗 Luxury Fashion", zh: "👗 奢侈品" },
+  "asset.jewelry": { en: "💎 Jewelry", zh: "💎 珠宝" },
+  "asset.coffee_equipment": { en: "☕ Coffee Equipment", zh: "☕ 咖啡设备" },
+  "asset.custom_keyboard": { en: "⌨️ Custom Keyboard", zh: "⌨️ 键盘" },
+  "asset.industrial_equipment": { en: "🔧 Industrial", zh: "🔧 工业设备" },
+  "asset.art": { en: "🎨 Art", zh: "🎨 艺术品" },
+  "asset.electronics": { en: "📱 Electronics", zh: "📱 电子产品" },
+  "asset.other": { en: "📦 Other", zh: "📦 其他" },
 
   // ─── Share Receipt (additions) ─────────────────────────────────
   "share.acquisitions": { en: "Acquisitions", zh: "消费记录" },
