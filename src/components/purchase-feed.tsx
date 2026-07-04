@@ -173,7 +173,7 @@ function FeedCard({ item, onRepurchase, onRemove, locale, dimmed }: FeedCardProp
           <span className="text-xs font-serif text-champagne">
             {formatCurrency(product.price)}
           </span>
-          <span className="text-[9px] text-ash/30">{timeAgo(item.parsedAt)}</span>
+          <span className="text-[9px] text-ash/30">{timeAgo(item.parsedAt, locale)}</span>
         </div>
         <div className="flex items-center justify-between pt-0.5">
           <span className="text-[9px] text-ash/25 font-mono truncate">

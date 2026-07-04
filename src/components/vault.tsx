@@ -101,7 +101,7 @@ export function Vault() {
 
               {/* Timestamp */}
               <span className="text-[9px] text-ash/25 shrink-0 hidden sm:block">
-                {timeAgo(purchase.timestamp)}
+                {timeAgo(purchase.timestamp, locale)}
               </span>
 
               {/* Remove button */}

@@ -307,6 +307,11 @@ const strings: Record<string, Record<Locale, string>> = {
   "reactions.reaction": { en: "{name}'s Reaction", zh: "{name} 的反应" },
   "reactions.stress": { en: "Stress Level", zh: "压力指数" },
 
+  // ─── Checkout Animation ─────────────────────────────────────────
+  "checkout.amount": { en: "Amount", zh: "金额" },
+  "checkout.authorized": { en: "✓ Authorized", zh: "✓ 已授权" },
+  "checkout.authorizing": { en: "Authorizing…", zh: "授权中…" },
+
   // ─── Bankrupt text additions ───────────────────────────────────
   "bankrupt.monthly": { en: "/mo", zh: "/月" },
 

@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCartStore, selectTotalSpent, selectNetWorth } from "@/lib/store";
 import { formatCurrency } from "@/lib/format";
+import { useLocale } from "@/lib/use-locale";
+import { t } from "@/lib/i18n";
 
 export function BankruptOverlay() {
   const selectedBillionaire = useCartStore((s) => s.selectedBillionaire);
@@ -12,6 +14,7 @@ export function BankruptOverlay() {
   const purchases = useCartStore((s) => s.purchases);
   const achievements = useCartStore((s) => s.achievements);
   const reset = useCartStore((s) => s.reset);
+  const locale = useLocale((s) => s.locale);
 
   const [show, setShow] = useState(false);
   const [dismissed, setDismissed] = useState(false);
@@ -110,10 +113,10 @@ export function BankruptOverlay() {
             transition={{ delay: 0.5 }}
           >
             <div className="text-[#9B6B6B]/80 text-[10px] uppercase tracking-[0.5em] mb-2">
-              Account Status
+              {t("bankrupt.status", locale)}
             </div>
             <h2 className="text-4xl sm:text-5xl font-serif text-[#9B6B6B]/90 tracking-tight">
-              DEPLETED
+              {t("bankrupt.depleted", locale)}
             </h2>
           </motion.div>
 
@@ -134,10 +137,10 @@ export function BankruptOverlay() {
             {/* Card content */}
             <div className="absolute top-6 left-6">
               <div className="text-[8px] uppercase tracking-[0.3em] text-[#9B6B6B]/40">
-                Billionaire Cart
+                {t("card.brand", locale)}
               </div>
               <div className="text-[7px] uppercase tracking-[0.2em] text-[#9B6B6B]/20 mt-0.5">
-                ✕ CANCELLED
+                {t("bankrupt.cancelled", locale)}
               </div>
             </div>
 
@@ -163,21 +166,21 @@ export function BankruptOverlay() {
           >
             <div>
               <div className="text-[9px] text-ash/30 uppercase">
-                Fortune
+                {t("bankrupt.fortune", locale)}
               </div>
               <div className="text-xs font-serif text-ash/60">
                 {formatCurrency(netWorth, true)}
               </div>
             </div>
             <div>
-              <div className="text-[9px] text-ash/30 uppercase">Items</div>
+              <div className="text-[9px] text-ash/30 uppercase">{t("bankrupt.items", locale)}</div>
               <div className="text-xs font-serif text-ash/60">
                 {purchases.length}
               </div>
             </div>
             <div>
               <div className="text-[9px] text-ash/30 uppercase">
-                Trophies
+                {t("bankrupt.trophies", locale)}
               </div>
               <div className="text-xs font-serif text-ash/60">
                 {unlockedCount}/{achievements.length}
@@ -193,7 +196,7 @@ export function BankruptOverlay() {
               transition={{ delay: 1.5 }}
               className="text-[10px] text-ash/30"
             >
-              Most expensive acquisition:{" "}
+              {t("bankrupt.mostExpensive", locale)}:{" "}
               <span className="text-stone/50">
                 {topPurchase.product.title} (
                 {formatCurrency(topPurchase.product.price, true)})
@@ -215,7 +218,7 @@ export function BankruptOverlay() {
               }}
               className="px-4 py-2 rounded-lg bg-surface-bright/50 text-ash/50 text-xs hover:text-ash/80 transition-colors"
             >
-              Keep Going (Debt Mode)
+              {t("bankrupt.keepGoing", locale)}
             </button>
             <button
               onClick={() => {
@@ -225,7 +228,7 @@ export function BankruptOverlay() {
               }}
               className="px-4 py-2 rounded-lg bg-stone/15 text-stone text-xs hover:bg-stone/25 transition-colors"
             >
-              New Identity
+              {t("bankrupt.newIdentity", locale)}
             </button>
           </motion.div>
         </motion.div>

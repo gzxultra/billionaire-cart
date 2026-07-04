@@ -7,6 +7,8 @@ import { formatCurrency } from "@/lib/format";
 import { playAuthorize, playSparkle } from "@/lib/sounds";
 import { useCartStore } from "@/lib/store";
 import { ParticleBurst } from "@/components/particle-burst";
+import { useLocale } from "@/lib/use-locale";
+import { t } from "@/lib/i18n";
 
 interface CheckoutAnimationProps {
   product: ParsedProduct;
@@ -21,6 +23,7 @@ export function CheckoutAnimation({
 }: CheckoutAnimationProps) {
   const [phase, setPhase] = useState<"card" | "authorize" | "done">("card");
   const soundEnabled = useCartStore((s) => s.soundEnabled);
+  const locale = useLocale((s) => s.locale);
 
   useEffect(() => {
     // Phase 1: Show card (0.4s)
@@ -85,14 +88,14 @@ export function CheckoutAnimation({
         {/* Card label */}
         <div className="absolute top-8 right-8">
           <div className="text-[10px] uppercase tracking-[0.3em] text-stone/50 font-sans">
-            Billionaire Cart
+            {t("card.brand", locale)}
           </div>
         </div>
 
         {/* Amount */}
         <div className="absolute top-1/2 left-8 -translate-y-1/2">
           <div className="text-[10px] uppercase tracking-[0.15em] text-ash/30 mb-1">
-            Amount
+            {t("checkout.amount", locale)}
           </div>
           <motion.div
             initial={{ opacity: 0 }}
@@ -125,7 +128,7 @@ export function CheckoutAnimation({
               ${phase === "done" ? "text-sage" : "text-stone"}
             `}
           >
-            {phase === "done" ? "✓ Authorized" : "Authorizing..."}
+            {phase === "done" ? t("checkout.authorized", locale) : t("checkout.authorizing", locale)}
           </motion.div>
         </div>
 

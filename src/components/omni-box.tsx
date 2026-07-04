@@ -367,7 +367,7 @@ export function OmniBox() {
                         {formatCurrency(sp.product.price)}
                       </span>
                       <span className="text-[10px] text-ash/30">
-                        {timeAgo(sp.parsedAt)}
+                        {timeAgo(sp.parsedAt, locale)}
                       </span>
                       {sp.purchaseCount > 0 && (
                         <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-stone/10 text-stone/60">
