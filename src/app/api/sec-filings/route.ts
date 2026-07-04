@@ -73,7 +73,8 @@ async function fetchSecFilings(
     const accDashed = accNums[idx].replace(/-/g, "");
     const accFormatted = accNums[idx];
     const cikClean = companyCik.replace(/^0+/, "");
-    const primaryDoc = primaryDocs[idx];
+    // Strip XSL stylesheet prefix (e.g., "xslF345X06/file.xml" -> "file.xml")
+    const primaryDoc = primaryDocs[idx].replace(/^xsl[^/]*\//, "");
     const xmlUrl = `https://www.sec.gov/Archives/edgar/data/${cikClean}/${accDashed}/${primaryDoc}`;
 
     try {

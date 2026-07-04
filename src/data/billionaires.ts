@@ -12,7 +12,7 @@ export const billionaires: Billionaire[] = [
     earningsPerSecond: 1585,
     ticker: "TSLA",
     wikiTitle: "Elon_Musk",
-    sec: { companyCik: "0001318605", filingName: "Musk Elon", ticker: "TSLA" },
+    sec: { companyCik: "0001494730", filingName: "Musk Elon", ticker: "TSLA" },
     signaturePurchases: [
       { name: "Twitter / X", nameZh: "推特 / X", price: 44_000_000_000, year: 2022, description: "Acquired the social media platform, renamed it X", descriptionZh: "收购社交媒体平台，更名为 X", emoji: "🐦" },
       { name: "5 Bel Air Mansions", nameZh: "5栋贝莱尔豪宅", price: 100_000_000, year: 2019, description: "Bought five mansions in Bel Air, later sold most", descriptionZh: "在贝莱尔购入五栋豪宅，后出售大部分", emoji: "🏠" },
@@ -76,7 +76,7 @@ export const billionaires: Billionaire[] = [
     earningsPerSecond: 1110,
     ticker: "AMZN",
     wikiTitle: "Jeff_Bezos",
-    sec: { companyCik: "0001018724", filingName: "Bezos Jeffrey", ticker: "AMZN" },
+    sec: { companyCik: "0001043298", filingName: "Bezos Jeffrey", ticker: "AMZN" },
     signaturePurchases: [
       { name: "Washington Post", nameZh: "华盛顿邮报", price: 250_000_000, year: 2013, description: "Bought the iconic newspaper personally", descriptionZh: "个人收购标志性报纸", emoji: "📰" },
       { name: "Whole Foods Market", nameZh: "全食超市", price: 13_700_000_000, year: 2017, description: "Amazon's entry into brick-and-mortar grocery", descriptionZh: "亚马逊进军线下生鲜零售", emoji: "🥑" },
@@ -109,7 +109,7 @@ export const billionaires: Billionaire[] = [
     earningsPerSecond: 951,
     ticker: "META",
     wikiTitle: "Mark_Zuckerberg",
-    sec: { companyCik: "0001326801", filingName: "Zuckerberg Mark", ticker: "META" },
+    sec: { companyCik: "0001548760", filingName: "Zuckerberg Mark", ticker: "META" },
     signaturePurchases: [
       { name: "WhatsApp", nameZh: "WhatsApp", price: 19_000_000_000, year: 2014, description: "Largest tech acquisition at the time", descriptionZh: "当时最大的科技收购案", emoji: "💬" },
       { name: "Instagram", nameZh: "Instagram", price: 1_000_000_000, year: 2012, description: "Photo-sharing platform, now a social media giant", descriptionZh: "照片分享平台，现为社媒巨头", emoji: "📸" },
@@ -171,7 +171,7 @@ export const billionaires: Billionaire[] = [
     earningsPerSecond: 888,
     ticker: "ORCL",
     wikiTitle: "Larry_Ellison",
-    sec: { companyCik: "0001341439", filingName: "ELLISON LAWRENCE", ticker: "ORCL" },
+    sec: { companyCik: "0000901999", filingName: "ELLISON LAWRENCE", ticker: "ORCL" },
     signaturePurchases: [
       { name: "98% of Lanai Island, Hawaii", nameZh: "夏威夷拉奈岛 98%", price: 300_000_000, year: 2012, description: "Bought nearly the entire Hawaiian island", descriptionZh: "买下了几乎整座夏威夷岛", emoji: "🌴" },
       { name: "Yacht Musashi (88m)", nameZh: "武藏号游艇（88米）", price: 160_000_000, year: 2013, description: "Named after the legendary Japanese swordsman", descriptionZh: "以日本传奇剑客命名", emoji: "⛵" },
@@ -202,7 +202,7 @@ export const billionaires: Billionaire[] = [
     earningsPerSecond: 476,
     ticker: "BRK-B",
     wikiTitle: "Warren_Buffett",
-    sec: { companyCik: "0001067983", filingName: "BUFFETT WARREN", ticker: "BRK-B" },
+    sec: { companyCik: "0000315090", filingName: "BUFFETT WARREN", ticker: "BRK-B" },
     signaturePurchases: [
       { name: "BNSF Railway", nameZh: "BNSF 铁路", price: 44_000_000_000, year: 2010, description: "Berkshire's largest acquisition — an entire railroad", descriptionZh: "伯克希尔最大收购案——一整条铁路", emoji: "🚂" },
       { name: "Heinz (with 3G Capital)", nameZh: "亨氏（联合3G资本）", price: 28_000_000_000, year: 2013, description: "Iconic ketchup and food company", descriptionZh: "标志性番茄酱及食品公司", emoji: "🍅" },
@@ -232,7 +232,7 @@ export const billionaires: Billionaire[] = [
     earningsPerSecond: 380,
     ticker: "MSFT",
     wikiTitle: "Bill_Gates",
-    sec: { companyCik: "0000789019", filingName: "GATES WILLIAM", ticker: "MSFT" },
+    sec: { companyCik: "0000902012", filingName: "GATES WILLIAM", ticker: "MSFT" },
     signaturePurchases: [
       { name: "Four Seasons Hotels (50%)", nameZh: "四季酒店（50%股份）", price: 2_210_000_000, year: 2021, description: "Acquired controlling stake with Saudi prince", descriptionZh: "与沙特王子联合控股", emoji: "🏨" },
       { name: "Codex Leicester (Da Vinci)", nameZh: "莱斯特手稿（达芬奇）", price: 30_800_000, year: 1994, description: "Leonardo da Vinci's scientific manuscript", descriptionZh: "达芬奇科学手稿", emoji: "📜" },
@@ -264,7 +264,7 @@ export const billionaires: Billionaire[] = [
     earningsPerSecond: 317,
     ticker: "MSFT",
     wikiTitle: "Steve_Ballmer",
-    sec: { companyCik: "0000789019", filingName: "BALLMER STEVEN", ticker: "MSFT" },
+    sec: { companyCik: "0000902015", filingName: "BALLMER STEVEN", ticker: "MSFT" },
     signaturePurchases: [
       { name: "LA Clippers", nameZh: "洛杉矶快船队", price: 2_000_000_000, year: 2014, description: "NBA franchise, record price at the time", descriptionZh: "NBA 球队，当时的创纪录价格", emoji: "🏀" },
       { name: "Intuit Dome (Arena)", nameZh: "Intuit Dome（球馆）", price: 2_000_000_000, year: 2024, description: "Brand new arena for the Clippers", descriptionZh: "快船队全新主场球馆", emoji: "🏟️" },
@@ -321,7 +321,7 @@ export const billionaires: Billionaire[] = [
     earningsPerSecond: 1268,
     ticker: "NVDA",
     wikiTitle: "Jensen_Huang",
-    sec: { companyCik: "0001045810", filingName: "HUANG JEN HSUN", ticker: "NVDA" },
+    sec: { companyCik: "0001197649", filingName: "HUANG JEN HSUN", ticker: "NVDA" },
     signaturePurchases: [
       { name: "NVIDIA Stock (70M+ Shares)", nameZh: "英伟达股票（7000万+股）", price: 0, year: 2024, description: "Co-founded NVIDIA in 1993 at a Denny's booth", descriptionZh: "1993年在 Denny's 餐厅创立英伟达", emoji: "💚" },
       { name: "Leather Jacket Collection", nameZh: "皮夹克收藏", price: 50_000, year: 2024, description: "His signature look — always on stage in leather", descriptionZh: "标志性穿搭——总是穿着皮夹克上台", emoji: "🧥" },
