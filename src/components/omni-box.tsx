@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useCartStore } from "@/lib/store";
 import { classifyProduct } from "@/lib/asset-classifier";
 import { ParsedProduct, ParseResponse, AssetClass, SavedProduct } from "@/lib/types";
-import { generateId, ASSET_LABELS, assetLabel, formatCurrency, timeAgo } from "@/lib/format";
+import { generateId, ASSET_LABELS, assetLabel, formatCurrency, timeAgo, proxyImage } from "@/lib/format";
 import { ProductCard } from "./product-card";
 import { CheckoutAnimation } from "./checkout-animation";
 import { useLocale } from "@/lib/use-locale";
@@ -264,15 +264,17 @@ export function OmniBox() {
               />
             )}
           </AnimatePresence>
-          {/* Search icon */}
-          <div className="pl-5 pr-2 text-ash/30">
+          {/* Search icon + ⌘K hint */}
+          <div className="pl-5 pr-1 text-ash/30 flex items-center gap-1.5">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
               <circle cx="11" cy="11" r="8" />
               <path d="m21 21-4.35-4.35" />
             </svg>
+            <kbd className="hidden sm:inline-flex items-center text-[9px] px-1.5 py-0.5 rounded bg-surface-bright/40 text-ash/25 font-mono border border-line/10 leading-none">⌘K</kbd>
           </div>
           <input
             ref={inputRef}
+            id="omnibox-input"
             type="url"
             value={url}
             onChange={(e) => setUrl(e.target.value)}
@@ -446,7 +448,7 @@ export function OmniBox() {
                   <div className="w-10 h-10 rounded-lg overflow-hidden shrink-0 bg-surface-bright/50">
                     {sp.product.imageUrl ? (
                       <img
-                        src={sp.product.imageUrl}
+                        src={proxyImage(sp.product.imageUrl) || ""}
                         alt=""
                         className="w-full h-full object-cover"
                         onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}

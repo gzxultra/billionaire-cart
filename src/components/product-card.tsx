@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, useMotionValue, useTransform, PanInfo } from "framer-motion";
 import { ParsedProduct } from "@/lib/types";
-import { formatCurrency, assetLabel } from "@/lib/format";
+import { formatCurrency, assetLabel, proxyImage } from "@/lib/format";
 import { useLocale } from "@/lib/use-locale";
 import { t } from "@/lib/i18n";
 
@@ -85,7 +85,7 @@ export function ProductCard({ product, onAuthorize, autoFocusBuy }: ProductCardP
         <div className="relative w-full aspect-[2/1] bg-surface-bright/20 overflow-hidden">
           {product.imageUrl ? (
             <img
-              src={product.imageUrl}
+              src={proxyImage(product.imageUrl) || ""}
               alt={product.title}
               className="w-full h-full object-cover"
               onError={(e) => {
@@ -108,6 +108,12 @@ export function ProductCard({ product, onAuthorize, autoFocusBuy }: ProductCardP
               <span className="text-xl font-serif text-champagne tracking-tight">
                 {formatCurrency(product.price)}
               </span>
+              {product.originalPrice != null && product.originalCurrency && (
+                <span className="block text-[10px] text-ash/40 font-mono text-right mt-0.5">
+                  {product.originalCurrency === "CNY" ? "¥" : product.originalCurrency}
+                  {product.originalPrice.toLocaleString()}
+                </span>
+              )}
             </div>
           </div>
 

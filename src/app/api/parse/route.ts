@@ -269,6 +269,7 @@ function extractTaobaoData(html: string, url: string): Partial<ParsedProduct> | 
 
   // Convert CNY to USD (approximate, will be supplemented by live rates if available)
   const isCNY = price > 0 && price < 50000 && /taobao|tmall|tb\.cn/i.test(url);
+  const originalCNY = isCNY ? price : undefined;
   if (isCNY && price > 0) {
     price = Math.round(price * 0.14 * 100) / 100; // ~7.1 CNY/USD
   }
@@ -286,6 +287,8 @@ function extractTaobaoData(html: string, url: string): Partial<ParsedProduct> | 
     price: price || undefined,
     imageUrl: imageUrl || undefined,
     description: itemMatch ? `${source} #${itemMatch[1]}` : source,
+    originalPrice: originalCNY,
+    originalCurrency: originalCNY ? "CNY" : undefined,
   };
 }
 
@@ -325,6 +328,7 @@ function extractJDData(html: string, url: string): Partial<ParsedProduct> | null
   }
 
   // Convert CNY to USD
+  const originalCNY = price > 0 && price < 100000 ? price : undefined;
   if (price > 0 && price < 100000) {
     price = Math.round(price * 0.14 * 100) / 100;
   }
@@ -341,6 +345,8 @@ function extractJDData(html: string, url: string): Partial<ParsedProduct> | null
     price: price || undefined,
     imageUrl: imageUrl || undefined,
     description: skuMatch ? `京东 JD SKU: ${skuMatch[1]}` : "京东 JD.com",
+    originalPrice: originalCNY,
+    originalCurrency: originalCNY ? "CNY" : undefined,
   };
 }
 
@@ -579,6 +585,10 @@ export async function POST(request: NextRequest) {
     // Track which source provided data
     const source = jsonLd ? "json-ld" : amazonData ? "amazon" : ebayData ? "ebay" : taobaoData ? "taobao" : jdData ? "jd" : productMeta.price ? "product-meta" : meta.title ? "og-meta" : aiResult ? "ai" : "regex";
 
+    // Carry through original currency if a platform extractor provided it
+    const origPrice = platformData?.originalPrice;
+    const origCurrency = platformData?.originalCurrency;
+
     const product: ParsedProduct = {
       title: finalTitle,
       price: price || 99.99, // fallback
@@ -589,6 +599,8 @@ export async function POST(request: NextRequest) {
       monthlyOverhead,
       sourceDomain: hostname,
       favicon,
+      originalPrice: origPrice,
+      originalCurrency: origCurrency,
     };
 
     cache.set(url, product);

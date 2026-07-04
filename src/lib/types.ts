@@ -37,6 +37,8 @@ export interface ParsedProduct {
   monthlyOverhead: number;
   sourceDomain?: string;
   favicon?: string;
+  originalPrice?: number;    // Price in original currency before USD conversion
+  originalCurrency?: string; // ISO currency code, e.g. "CNY"
 }
 
 export interface SavedProduct {

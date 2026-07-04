@@ -65,6 +65,27 @@ export default function Home() {
     return () => obs.disconnect();
   }, [selectedBillionaire]);
 
+  // ⌘K / Ctrl+K — global shortcut to focus OmniBox from anywhere
+  useEffect(() => {
+    if (!selectedBillionaire) return;
+    const handler = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        if (stickyVisible && stickyInputRef.current) {
+          stickyInputRef.current.focus();
+        } else {
+          const omniInput = document.getElementById("omnibox-input") as HTMLInputElement | null;
+          if (omniInput) {
+            omniInput.scrollIntoView({ behavior: "smooth", block: "center" });
+            setTimeout(() => omniInput.focus(), 300);
+          }
+        }
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [selectedBillionaire, stickyVisible]);
+
   const handleStickyParse = useCallback(async () => {
     const target = stickyUrl.trim();
     if (!target) return;
@@ -203,11 +224,12 @@ export default function Home() {
           >
             <div className="max-w-3xl mx-auto px-4 sm:px-6 pb-2.5">
               <div className="flex items-center bg-surface/60 backdrop-blur-md border border-line/20 rounded-xl overflow-hidden">
-                <div className="pl-3 pr-1.5 text-ash/25">
+                <div className="pl-3 pr-1 text-ash/25 flex items-center gap-1">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                     <circle cx="11" cy="11" r="8" />
                     <path d="m21 21-4.35-4.35" />
                   </svg>
+                  <kbd className="hidden sm:inline-flex text-[8px] px-1 py-px rounded bg-surface-bright/30 text-ash/20 font-mono border border-line/8 leading-none">⌘K</kbd>
                 </div>
                 <input
                   ref={stickyInputRef}

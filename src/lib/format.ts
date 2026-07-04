@@ -1,3 +1,10 @@
+/** Proxy an external image URL through our server to bypass hotlinking / referrer blocks. */
+export function proxyImage(url: string | null | undefined): string | null {
+  if (!url) return null;
+  if (url.startsWith("data:") || url.startsWith("/") || url.startsWith("blob:")) return url;
+  return `/api/image-proxy?url=${encodeURIComponent(url)}`;
+}
+
 export function formatCurrency(amount: number, compact = false): string {
   if (compact) {
     if (amount >= 1_000_000_000_000) return `$${(amount / 1_000_000_000_000).toFixed(2)}T`;

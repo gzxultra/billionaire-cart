@@ -4,7 +4,7 @@ import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCartStore } from "@/lib/store";
 import { SavedProduct, AssetClass } from "@/lib/types";
-import { formatCurrency, assetLabel, timeAgo } from "@/lib/format";
+import { formatCurrency, assetLabel, timeAgo, proxyImage } from "@/lib/format";
 import { useLocale } from "@/lib/use-locale";
 import { t } from "@/lib/i18n";
 
@@ -243,7 +243,7 @@ function FeedCard({ item, onRepurchase, onRemove, locale, dimmed }: FeedCardProp
       <div className="relative w-full aspect-[3/2] bg-surface-bright/20 overflow-hidden">
         {product.imageUrl ? (
           <img
-            src={product.imageUrl}
+            src={proxyImage(product.imageUrl) || ""}
             alt=""
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             onError={(e) => {
