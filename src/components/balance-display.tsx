@@ -5,6 +5,7 @@ import { useCartStore, selectTotalSpent, selectMonthlyBurn, selectNetWorth } fro
 import { formatCurrency } from "@/lib/format";
 import { useLocale } from "@/lib/use-locale";
 import { t } from "@/lib/i18n";
+import { useCurrency } from "@/lib/use-currency";
 
 export function BalanceDisplay() {
   const locale = useLocale((s) => s.locale);
@@ -14,6 +15,8 @@ export function BalanceDisplay() {
   const monthlyBurn = useCartStore(selectMonthlyBurn);
   const purchaseCount = useCartStore((s) => s.purchases.length);
   const remaining = netWorth - totalSpent;
+  const formatConverted = useCurrency((s) => s.formatConverted);
+  const currency = useCurrency((s) => s.currency);
 
   // Market drift simulation
   const [drift, setDrift] = useState(0);
@@ -35,13 +38,19 @@ export function BalanceDisplay() {
   if (!selectedBillionaire) return null;
 
   const displayBalance = remaining + drift;
+  const convertedBalance = formatConverted(displayBalance, true);
 
   return (
-    <div className="w-full">
+    <div className="w-full" role="region" aria-label={t("balance.title", locale)}>
       <div className="section-label mb-2">
         {t("balance.title", locale)}
       </div>
       <AnimatedNumber value={displayBalance} className="text-3xl sm:text-5xl lg:text-6xl font-serif text-sand/95 tracking-tight" />
+      {currency !== "USD" && convertedBalance && (
+        <div className="text-sm text-ash/40 font-mono mt-1">
+          ≈ {convertedBalance}
+        </div>
+      )}
 
       <div className="grid grid-cols-3 gap-4 mt-6">
         <div>
@@ -49,6 +58,11 @@ export function BalanceDisplay() {
           <div className="text-sm font-serif text-champagne">
             {formatCurrency(totalSpent, true)}
           </div>
+          {currency !== "USD" && (
+            <div className="text-[9px] text-ash/30 font-mono">
+              {formatConverted(totalSpent, true)}
+            </div>
+          )}
         </div>
         <div>
           <div className="text-[10px] uppercase tracking-[0.2em] text-ash/40 mb-1">{t("balance.burn", locale)}</div>
@@ -96,7 +110,7 @@ function AnimatedNumber({ value, className }: { value: number; className?: strin
   }, [value]);
 
   return (
-    <span className={className}>
+    <span className={className} aria-live="polite" aria-atomic="true">
       {formatCurrency(displayValue, true)}
     </span>
   );

@@ -5,6 +5,7 @@ import { persist } from "zustand/middleware";
 import { Billionaire, Purchase, Achievement } from "@/lib/types";
 import { billionaires } from "@/data/billionaires";
 import { achievements as defaultAchievements, checkAchievements } from "@/data/achievements";
+import { useLiveData } from "@/lib/use-live-data";
 
 interface CartState {
   selectedBillionaire: Billionaire | null;
@@ -18,6 +19,17 @@ interface CartState {
   reset: () => void;
 }
 
+function resolveBillionaire(id: string): Billionaire | null {
+  // Try live data first, then fall back to static
+  const liveState = useLiveData.getState();
+  if (liveState.loaded) {
+    const merged = liveState.getMerged();
+    const found = merged.find((x) => x.id === id);
+    if (found) return found;
+  }
+  return billionaires.find((x) => x.id === id) || null;
+}
+
 export const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
@@ -27,7 +39,7 @@ export const useCartStore = create<CartState>()(
       soundEnabled: true,
 
       selectBillionaire: (id: string) => {
-        const b = billionaires.find((x) => x.id === id) || null;
+        const b = resolveBillionaire(id);
         set({ selectedBillionaire: b, purchases: [], achievements: defaultAchievements });
       },
 

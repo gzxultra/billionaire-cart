@@ -255,7 +255,26 @@ const strings: Record<string, Record<Locale, string>> = {
 
   // ─── Combo Streak ──────────────────────────────────────────────
   "combo.streak": { en: "COMBO", zh: "连击" },
+
+  // ─── Identity (live data) ──────────────────────────────────────
+  "identity.live": { en: "LIVE", zh: "实时" },
+  "identity.currency": { en: "Currency", zh: "货币" },
+
+  // ─── Black Card ────────────────────────────────────────────────
+  "card.brand": { en: "Billionaire Cart", zh: "亿万富翁购物车" },
+  "card.type": { en: "Black Card", zh: "黑卡" },
+  "card.remaining": { en: "Remaining", zh: "剩余" },
+  "card.depleted": { en: "depleted", zh: "已消耗" },
+  "card.items": { en: "items", zh: "件" },
+
+  // ─── Billionaire Reactions (i18n) ──────────────────────────────
+  "reactions.reaction": { en: "{name}'s Reaction", zh: "{name} 的反应" },
+  "reactions.stress": { en: "Stress Level", zh: "压力指数" },
+
+  // ─── Bankrupt text additions ───────────────────────────────────
+  "bankrupt.monthly": { en: "/mo", zh: "/月" },
 };
+
 
 /**
  * Get a translated string by key and locale.
