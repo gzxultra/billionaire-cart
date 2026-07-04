@@ -14,7 +14,7 @@ export default function Error({
   }, [error]);
 
   return (
-    <div className="min-h-screen bg-[#0C0C0E] flex items-center justify-center p-6">
+    <div className="min-h-screen bg-base flex items-center justify-center p-6">
       <div className="max-w-sm text-center space-y-4">
         <div className="text-4xl">💳</div>
         <h2 className="text-lg font-serif text-[#E8E4DF]/90">
@@ -25,7 +25,7 @@ export default function Error({
         </p>
         <button
           onClick={reset}
-          className="px-4 py-2 rounded-lg bg-[#9B8B7A]/15 text-[#9B8B7A] text-xs hover:bg-[#9B8B7A]/25 transition-colors"
+          className="px-4 py-2 rounded-lg bg-stone/15 text-stone text-xs hover:bg-stone/25 transition-colors"
         >
           Try again
         </button>

@@ -25,7 +25,7 @@ export function BlackCard() {
       animate={{ opacity: 1, y: 0 }}
       className="
         relative w-full aspect-[1.586/1] max-w-md mx-auto rounded-2xl overflow-hidden
-        bg-gradient-to-br from-surface-dim via-base to-surface
+        bg-gradient-to-br from-[#151518] via-[#101014] to-[#1C1C22]
       "
       style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(155,139,122,0.06)" }}
       whileHover={{ scale: 1.005 }}
@@ -61,11 +61,11 @@ export function BlackCard() {
         <div className="text-[8px] uppercase tracking-[0.2em] text-ash/42 mb-0.5 font-mono">
           {t("card.remaining", locale)}
         </div>
-        <div className="text-xl sm:text-2xl font-serif text-sand">
+        <div className="text-xl sm:text-2xl font-serif text-[#EEEBE6]">
           {formatCurrency(remaining, true)}
         </div>
         {/* Progress bar */}
-        <div className="w-40 h-0.5 bg-surface-bright/45 rounded-full mt-2">
+        <div className="w-40 h-0.5 bg-[#26262E]/45 rounded-full mt-2">
           <div
             className="h-full bg-stone/60 rounded-full transition-all duration-500"
             style={{ width: `${Math.min(spentPercent, 100)}%` }}

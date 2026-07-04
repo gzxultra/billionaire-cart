@@ -9,7 +9,7 @@ export default function GlobalError({
 }) {
   return (
     <html>
-      <body style={{ background: "#0C0C0E", margin: 0 }}>
+      <body style={{ background: "#F8F5F0", margin: 0 }}>
         <div style={{
           minHeight: "100vh",
           display: "flex",
@@ -40,7 +40,7 @@ export default function GlobalError({
                 padding: "8px 16px",
                 borderRadius: "8px",
                 background: "rgba(155,139,122,0.15)",
-                color: "#9B8B7A",
+                color: "#8C7A65",
                 fontSize: "12px",
                 border: "none",
                 cursor: "pointer",

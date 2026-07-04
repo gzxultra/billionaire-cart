@@ -104,7 +104,7 @@ export function IdentitySelector() {
                     isSelected
                       ? hasPhoto
                         ? ""
-                        : "bg-stone-gradient text-sand shadow-stone-sm"
+                        : "bg-stone-gradient text-white shadow-stone-sm"
                       : hasPhoto
                       ? ""
                       : "bg-surface-bright text-ash/80"

@@ -10,30 +10,31 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        base: "#101014",
+        base: "#F8F5F0",
         surface: {
-          DEFAULT: "#1C1C22",
-          bright: "#26262E",
-          dim: "#151518",
+          DEFAULT: "#FFFFFF",
+          bright: "#F0EBE4",
+          dim: "#F5F1EB",
         },
-        line: "#363640",
+        line: "#E2D9CE",
         stone: {
-          DEFAULT: "#A89279",
-          light: "#C4AD92",
-          dim: "rgba(168,146,121,0.18)",
-          muted: "rgba(168,146,121,0.45)",
+          DEFAULT: "#8C7A65",
+          light: "#A89279",
+          dim: "rgba(140,122,101,0.10)",
+          muted: "rgba(140,122,101,0.35)",
         },
         champagne: {
-          DEFAULT: "#D1AD70",
-          light: "#DEC48B",
-          dim: "rgba(209,173,112,0.18)",
+          DEFAULT: "#A68530",
+          light: "#C4A04A",
+          dim: "rgba(166,133,48,0.10)",
         },
         sage: {
-          DEFAULT: "#82A38E",
-          dim: "rgba(130,163,142,0.18)",
+          DEFAULT: "#5A8A68",
+          dim: "rgba(90,138,104,0.10)",
         },
-        sand: "#EEEBE6",
-        ash: "#807A73",
+        sand: "#2A2520",
+        ash: "#8C847B",
+        ink: "#1A1714",
       },
       fontFamily: {
         sans: ["var(--font-inter)", "Inter", "system-ui", "sans-serif"],
@@ -42,22 +43,22 @@ const config: Config = {
       },
       backgroundImage: {
         "stone-gradient":
-          "linear-gradient(135deg, #8A7A68 0%, #A89279 50%, #C4AD92 100%)",
+          "linear-gradient(135deg, #8C7A65 0%, #A89279 50%, #C4AD92 100%)",
         "champagne-gradient":
-          "linear-gradient(135deg, #A68B50 0%, #D1AD70 50%, #DEC48B 100%)",
+          "linear-gradient(135deg, #8A7030 0%, #A68530 50%, #C4A04A 100%)",
         "card-gradient":
-          "linear-gradient(145deg, #1C1C22 0%, #101014 50%, #1C1C22 100%)",
+          "linear-gradient(145deg, #FFFFFF 0%, #FAF7F3 50%, #FFFFFF 100%)",
         "card-shine":
-          "linear-gradient(135deg, transparent 0%, rgba(168,146,121,0.05) 50%, transparent 100%)",
+          "linear-gradient(135deg, transparent 0%, rgba(166,133,48,0.04) 50%, transparent 100%)",
       },
       boxShadow: {
-        "stone-sm": "0 0 10px rgba(168,146,121,0.1)",
-        stone: "0 0 20px rgba(168,146,121,0.12)",
-        "stone-lg": "0 0 40px rgba(168,146,121,0.15)",
-        "champagne-sm": "0 0 10px rgba(209,173,112,0.1)",
-        champagne: "0 0 20px rgba(209,173,112,0.12)",
-        glass: "0 8px 32px rgba(0,0,0,0.4)",
-        card: "0 1px 3px rgba(0,0,0,0.25), 0 4px 16px rgba(0,0,0,0.12)",
+        "stone-sm": "0 0 10px rgba(140,122,101,0.08)",
+        stone: "0 0 20px rgba(140,122,101,0.08)",
+        "stone-lg": "0 0 40px rgba(140,122,101,0.1)",
+        "champagne-sm": "0 0 10px rgba(166,133,48,0.08)",
+        champagne: "0 0 20px rgba(166,133,48,0.08)",
+        glass: "0 8px 32px rgba(0,0,0,0.06)",
+        card: "0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)",
       },
       animation: {
         "stone-pulse": "stone-pulse 3s ease-in-out infinite",
@@ -68,8 +69,8 @@ const config: Config = {
       },
       keyframes: {
         "stone-pulse": {
-          "0%, 100%": { boxShadow: "0 0 20px rgba(168,146,121,0.08)" },
-          "50%": { boxShadow: "0 0 40px rgba(168,146,121,0.16)" },
+          "0%, 100%": { boxShadow: "0 0 20px rgba(140,122,101,0.05)" },
+          "50%": { boxShadow: "0 0 40px rgba(140,122,101,0.10)" },
         },
         shimmer: {
           "0%": { backgroundPosition: "-200% 0" },
