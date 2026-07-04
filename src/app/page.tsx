@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { useCartStore } from "@/lib/store";
 import { useLocale } from "@/lib/use-locale";
 import { t } from "@/lib/i18n";
@@ -46,6 +46,75 @@ export default function Home() {
 
   // Easter egg state
   const [activeEgg, setActiveEgg] = useState<EasterEgg | null>(null);
+
+  // Sticky OmniBox — shows a compact input bar in the header when the inline OmniBox scrolls out of view
+  const omniSectionRef = useRef<HTMLElement>(null);
+  const stickyInputRef = useRef<HTMLInputElement>(null);
+  const [stickyVisible, setStickyVisible] = useState(false);
+  const [stickyUrl, setStickyUrl] = useState("");
+  const [stickyLoading, setStickyLoading] = useState(false);
+
+  useEffect(() => {
+    const target = omniSectionRef.current;
+    if (!target) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => setStickyVisible(!entry.isIntersecting),
+      { threshold: 0, rootMargin: "-80px 0px 0px 0px" }
+    );
+    obs.observe(target);
+    return () => obs.disconnect();
+  }, [selectedBillionaire]);
+
+  const handleStickyParse = useCallback(async () => {
+    const target = stickyUrl.trim();
+    if (!target) return;
+    setStickyLoading(true);
+    try {
+      const res = await fetch("/api/parse", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: target }),
+      });
+      const data = await res.json();
+      if (data.success && data.product) {
+        useCartStore.getState().saveProduct(data.product);
+        useCartStore.getState().setActiveParsed(data.product);
+        setStickyUrl("");
+        // Scroll to the inline OmniBox to show the parsed product
+        omniSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    } catch {
+      // Ignore — will use inline OmniBox on failure
+    } finally {
+      setStickyLoading(false);
+    }
+  }, [stickyUrl]);
+
+  const handleStickyPaste = useCallback((e: React.ClipboardEvent) => {
+    const pasted = e.clipboardData.getData("text");
+    if (pasted && /^https?:\/\//i.test(pasted.trim())) {
+      setStickyUrl(pasted.trim());
+      setTimeout(() => {
+        setStickyLoading(true);
+        fetch("/api/parse", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ url: pasted.trim() }),
+        })
+          .then((r) => r.json())
+          .then((data) => {
+            if (data.success && data.product) {
+              useCartStore.getState().saveProduct(data.product);
+              useCartStore.getState().setActiveParsed(data.product);
+              setStickyUrl("");
+              omniSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+            }
+          })
+          .catch(() => {})
+          .finally(() => setStickyLoading(false));
+      }, 50);
+    }
+  }, []);
 
   const handlePurchase = useCallback((totalPrice: number) => {
     setLastPurchasePrice(totalPrice);
@@ -126,6 +195,43 @@ export default function Home() {
             )}
           </div>
         </div>
+
+        {/* Sticky OmniBox input — slides in when inline OmniBox scrolls out */}
+        {selectedBillionaire && (
+          <div
+            className={`overflow-hidden transition-all duration-300 ease-out ${stickyVisible ? "max-h-14 opacity-100" : "max-h-0 opacity-0"}`}
+          >
+            <div className="max-w-3xl mx-auto px-4 sm:px-6 pb-2.5">
+              <div className="flex items-center bg-surface/60 backdrop-blur-md border border-line/20 rounded-xl overflow-hidden">
+                <div className="pl-3 pr-1.5 text-ash/25">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                    <circle cx="11" cy="11" r="8" />
+                    <path d="m21 21-4.35-4.35" />
+                  </svg>
+                </div>
+                <input
+                  ref={stickyInputRef}
+                  type="url"
+                  value={stickyUrl}
+                  onChange={(e) => setStickyUrl(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleStickyParse()}
+                  onPaste={handleStickyPaste}
+                  placeholder={t("omni.placeholder", locale)}
+                  disabled={stickyLoading}
+                  className="flex-1 px-2 py-2 bg-transparent text-sand/80 placeholder:text-ash/25 focus:outline-none text-xs disabled:opacity-50"
+                />
+                <button
+                  onClick={handleStickyParse}
+                  disabled={stickyLoading || !stickyUrl.trim()}
+                  className="mr-1.5 px-3 py-1 rounded-lg text-[10px] font-semibold uppercase tracking-wider bg-stone/15 text-stone hover:bg-stone/25 disabled:opacity-30 transition-all whitespace-nowrap"
+                >
+                  {stickyLoading ? "…" : t("omni.parse", locale)}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Gradient underline */}
         <div className="h-px bg-gradient-to-r from-transparent via-stone/10 to-transparent" />
       </header>
@@ -150,7 +256,7 @@ export default function Home() {
             </section>
 
             {/* ★ OmniBox — HERO position, the core shopping interaction */}
-            <section className="card-panel-champagne p-5 sm:p-8 stagger-section relative overflow-hidden">
+            <section ref={omniSectionRef} className="card-panel-champagne p-5 sm:p-8 stagger-section relative overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-stone/[0.03] to-transparent pointer-events-none" />
               <div className="relative">
                 <div className="flex items-center gap-2 mb-4">

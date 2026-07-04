@@ -37,6 +37,7 @@ export function OmniBox() {
   const [toast, setToast] = useState<string | null>(null);
   const [parseSource, setParseSource] = useState<string | null>(null);
   const [showHistory, setShowHistory] = useState(false);
+  const [pasteFlash, setPasteFlash] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -113,6 +114,9 @@ export function OmniBox() {
   const handlePaste = useCallback((e: React.ClipboardEvent) => {
     const pasted = e.clipboardData.getData("text");
     if (pasted && /^https?:\/\//i.test(pasted.trim())) {
+      // Flash the input border to signal "detected URL, auto-parsing"
+      setPasteFlash(true);
+      setTimeout(() => setPasteFlash(false), 600);
       // Auto-parse URLs on paste
       setTimeout(() => parseUrl(pasted.trim()), 50);
     }
@@ -204,7 +208,19 @@ export function OmniBox() {
       {/* Hero input — the core interaction */}
       <div className="relative group">
         <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-r from-stone/0 via-stone/20 to-stone/0 opacity-0 group-focus-within:opacity-100 transition-opacity duration-500" />
-        <div className="relative flex items-center bg-surface/80 backdrop-blur-md border border-line/30 rounded-2xl overflow-hidden focus-within:border-stone/40 transition-all duration-300">
+        <div className={`relative flex items-center bg-surface/80 backdrop-blur-md border rounded-2xl overflow-hidden transition-all duration-300 ${pasteFlash ? "border-sage/60 shadow-[0_0_20px_rgba(143,160,134,0.2)]" : "border-line/30 focus-within:border-stone/40"}`}>
+          {/* Paste detection flash overlay */}
+          <AnimatePresence>
+            {pasteFlash && (
+              <motion.div
+                initial={{ opacity: 0.5 }}
+                animate={{ opacity: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.6 }}
+                className="absolute inset-0 bg-sage/10 pointer-events-none z-0 rounded-2xl"
+              />
+            )}
+          </AnimatePresence>
           {/* Search icon */}
           <div className="pl-5 pr-2 text-ash/30">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
@@ -255,7 +271,7 @@ export function OmniBox() {
             className="flex items-center gap-2 px-1"
           >
             <span className="text-[10px] px-2 py-0.5 rounded-full bg-sage/10 text-sage/70 font-mono border border-sage/15">
-              {parseSource === "json-ld" ? "Schema.org" : parseSource === "amazon" ? "Amazon" : parseSource === "product-meta" ? "Product Meta" : parseSource === "og-meta" ? "OpenGraph" : parseSource === "ai" ? "AI" : "Extracted"}
+              {parseSource === "json-ld" ? "Schema.org" : parseSource === "amazon" ? "Amazon" : parseSource === "ebay" ? "eBay" : parseSource === "taobao" ? "淘宝/天猫" : parseSource === "jd" ? "京东 JD" : parseSource === "product-meta" ? "Product Meta" : parseSource === "og-meta" ? "OpenGraph" : parseSource === "ai" ? "AI" : "Extracted"}
             </span>
             {product.sourceDomain && (
               <span className="flex items-center gap-1 text-[10px] text-ash/40">

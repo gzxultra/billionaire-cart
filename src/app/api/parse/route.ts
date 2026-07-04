@@ -181,6 +181,169 @@ function extractAmazonData(html: string, url: string): Partial<ParsedProduct> | 
   };
 }
 
+// ─── eBay extraction ────────────────────────────────────────────────
+function extractEbayData(html: string, url: string): Partial<ParsedProduct> | null {
+  if (!/ebay\.(com|co\.uk|de|fr|com\.au|ca|it|es)/i.test(url)) return null;
+
+  // eBay item number from URL
+  const itemMatch = url.match(/\/itm\/(?:[^/]*\/)?(\d{10,14})/i)
+    || url.match(/item=(\d{10,14})/i);
+
+  let title = "";
+  // eBay uses a specific h1 class or vim-title
+  const titleMatch = html.match(/class="x-item-title__mainTitle"[^>]*>[\s\S]*?<span[^>]*>([^<]+)/i)
+    || html.match(/id="itemTitle"[^>]*>\s*(?:<span[^>]*>[^<]*<\/span>\s*)?([^<]+)/i)
+    || html.match(/<h1[^>]*class="[^"]*it-ttl[^"]*"[^>]*>[\s\S]*?<span[^>]*>([^<]+)/i);
+  if (titleMatch) title = titleMatch[1].trim();
+
+  let price = 0;
+  // eBay price patterns — BIN price, current bid, etc.
+  const pricePatterns = [
+    /class="x-price-primary"[^>]*>[\s\S]*?<span[^>]*>(?:US\s*)?\$\s*([\d,]+(?:\.\d{2})?)/i,
+    /id="prcIsum"[^>]*>(?:US\s*)?\$\s*([\d,]+(?:\.\d{2})?)/i,
+    /id="mm-saleDscPrc"[^>]*>(?:US\s*)?\$\s*([\d,]+(?:\.\d{2})?)/i,
+    /"price"\s*:\s*"?([\d,.]+)"?\s*,\s*"priceCurrency"/i,
+    /itemprop="price"[^>]*content="([\d.]+)"/i,
+  ];
+  for (const pat of pricePatterns) {
+    const m = html.match(pat);
+    if (m) {
+      price = parseFloat(m[1].replace(/,/g, ""));
+      if (price > 0) break;
+    }
+  }
+
+  // eBay image
+  let imageUrl: string | null = null;
+  const imgMatch = html.match(/class="ux-image-magnify__container"[\s\S]*?<img[^>]*src="([^"]+)"/i)
+    || html.match(/id="icImg"[^>]*src="([^"]+)"/i);
+  if (imgMatch) imageUrl = imgMatch[1];
+
+  if (!title && !price) return null;
+
+  return {
+    title: title || undefined,
+    price: price || undefined,
+    imageUrl: imageUrl || undefined,
+    description: itemMatch ? `eBay Item: ${itemMatch[1]}` : undefined,
+  };
+}
+
+// ─── 淘宝 / 天猫 extraction ────────────────────────────────────────
+function extractTaobaoData(html: string, url: string): Partial<ParsedProduct> | null {
+  if (!/taobao\.com|tmall\.com|tb\.cn/i.test(url)) return null;
+
+  // Taobao item id from URL
+  const itemMatch = url.match(/[?&]id=(\d+)/i)
+    || url.match(/item\.(?:taobao|tmall)\.com\/item\.htm.*[?&]id=(\d+)/i);
+
+  let title = "";
+  // Taobao/Tmall title patterns (SSR rendered data, meta tags, or embedded JSON)
+  const titlePatterns = [
+    /<title[^>]*>([^<]*)-[^<]*淘宝[^<]*<\/title>/i,
+    /<title[^>]*>([^<]*)-[^<]*天猫[^<]*<\/title>/i,
+    /"title"\s*:\s*"([^"]{5,200})"/,
+    /data-title="([^"]+)"/i,
+  ];
+  for (const pat of titlePatterns) {
+    const m = html.match(pat);
+    if (m) { title = m[1].trim(); break; }
+  }
+
+  let price = 0;
+  // Taobao / Tmall price patterns (CNY ¥)
+  const pricePatterns = [
+    /"price"\s*:\s*"?([\d.]+)"?/,
+    /class="[^"]*tm-price[^"]*"[^>]*>(?:¥\s*)?([\d.]+)/i,
+    /class="[^"]*tb-rmb-num[^"]*"[^>]*>([\d.]+)/i,
+    /¥\s*([\d,]+(?:\.\d{1,2})?)/,
+    /data-price="([\d.]+)"/i,
+  ];
+  for (const pat of pricePatterns) {
+    const m = html.match(pat);
+    if (m) {
+      price = parseFloat(m[1].replace(/,/g, ""));
+      if (price > 0) break;
+    }
+  }
+
+  // Convert CNY to USD (approximate, will be supplemented by live rates if available)
+  const isCNY = price > 0 && price < 50000 && /taobao|tmall|tb\.cn/i.test(url);
+  if (isCNY && price > 0) {
+    price = Math.round(price * 0.14 * 100) / 100; // ~7.1 CNY/USD
+  }
+
+  let imageUrl: string | null = null;
+  const imgMatch = html.match(/data-src="(\/\/img[^"]+)"/i)
+    || html.match(/"pic(?:Url)?"\s*:\s*"((?:https?:)?\/\/[^"]+)"/i);
+  if (imgMatch) imageUrl = imgMatch[1].startsWith("//") ? `https:${imgMatch[1]}` : imgMatch[1];
+
+  if (!title && !price) return null;
+
+  const source = /tmall/i.test(url) ? "天猫 Tmall" : "淘宝 Taobao";
+  return {
+    title: title || undefined,
+    price: price || undefined,
+    imageUrl: imageUrl || undefined,
+    description: itemMatch ? `${source} #${itemMatch[1]}` : source,
+  };
+}
+
+// ─── 京东 JD extraction ─────────────────────────────────────────────
+function extractJDData(html: string, url: string): Partial<ParsedProduct> | null {
+  if (!/jd\.(com|hk)/i.test(url)) return null;
+
+  // JD SKU from URL
+  const skuMatch = url.match(/\/(\d{5,15})\.html/i)
+    || url.match(/[?&]sku=(\d+)/i);
+
+  let title = "";
+  const titlePatterns = [
+    /<title[^>]*>([^<]*)-京东<\/title>/i,
+    /class="sku-name"[^>]*>\s*([^<]+)/i,
+    /class="itemInfo-wrap"[\s\S]*?<div[^>]*class="[^"]*name[^"]*"[^>]*>([^<]+)/i,
+    /"name"\s*:\s*"([^"]{5,200})"/,
+  ];
+  for (const pat of titlePatterns) {
+    const m = html.match(pat);
+    if (m) { title = m[1].trim(); break; }
+  }
+
+  let price = 0;
+  const pricePatterns = [
+    /class="p-price"[^>]*>[\s\S]*?<span[^>]*>(?:¥\s*)?([\d.]+)/i,
+    /"p"\s*:\s*"?([\d.]+)"?/,
+    /data-price="([\d.]+)"/i,
+    /¥\s*([\d,]+(?:\.\d{1,2})?)/,
+  ];
+  for (const pat of pricePatterns) {
+    const m = html.match(pat);
+    if (m) {
+      price = parseFloat(m[1].replace(/,/g, ""));
+      if (price > 0) break;
+    }
+  }
+
+  // Convert CNY to USD
+  if (price > 0 && price < 100000) {
+    price = Math.round(price * 0.14 * 100) / 100;
+  }
+
+  let imageUrl: string | null = null;
+  const imgMatch = html.match(/id="spec-img"[^>]*(?:data-origin|src)="(\/\/[^"]+)"/i)
+    || html.match(/"imageUrl"\s*:\s*"((?:https?:)?\/\/[^"]+)"/i);
+  if (imgMatch) imageUrl = imgMatch[1].startsWith("//") ? `https:${imgMatch[1]}` : imgMatch[1];
+
+  if (!title && !price) return null;
+
+  return {
+    title: title || undefined,
+    price: price || undefined,
+    imageUrl: imageUrl || undefined,
+    description: skuMatch ? `京东 JD SKU: ${skuMatch[1]}` : "京东 JD.com",
+  };
+}
+
 // ─── OG / Twitter / standard meta tags ──────────────────────────────
 function extractMetaTags(html: string): { title: string; price: string; image: string; description: string; favicon: string } {
   const getMetaContent = (property: string): string => {
@@ -367,8 +530,12 @@ export async function POST(request: NextRequest) {
     // ── Layer 2: Product meta tags ──
     const productMeta = extractProductMeta(html);
 
-    // ── Layer 3: Amazon-specific ──
+    // ── Layer 3: Platform-specific extractors ──
     const amazonData = extractAmazonData(html, url);
+    const ebayData = extractEbayData(html, url);
+    const taobaoData = extractTaobaoData(html, url);
+    const jdData = extractJDData(html, url);
+    const platformData = amazonData || ebayData || taobaoData || jdData;
 
     // ── Layer 4: OG / Twitter meta tags ──
     const meta = extractMetaTags(html);
@@ -380,10 +547,10 @@ export async function POST(request: NextRequest) {
     let aiResult: Partial<ParsedProduct> | null = null;
 
     // Merge: prefer more structured sources
-    const title = jsonLd?.title || amazonData?.title || meta.title || "";
-    let price = jsonLd?.price || productMeta.price || amazonData?.price || regexPrice || 0;
-    let imageUrl = jsonLd?.imageUrl || meta.image || null;
-    let description = jsonLd?.description || amazonData?.description || meta.description || "";
+    const title = jsonLd?.title || platformData?.title || meta.title || "";
+    let price = jsonLd?.price || productMeta.price || platformData?.price || regexPrice || 0;
+    let imageUrl = jsonLd?.imageUrl || platformData?.imageUrl || meta.image || null;
+    let description = jsonLd?.description || platformData?.description || meta.description || "";
 
     // If we still lack critical data, try AI
     if (!title || price === 0) {
@@ -410,7 +577,7 @@ export async function POST(request: NextRequest) {
     const { assetClass, monthlyOverhead } = classifyProduct(finalTitle, price);
 
     // Track which source provided data
-    const source = jsonLd ? "json-ld" : amazonData ? "amazon" : productMeta.price ? "product-meta" : meta.title ? "og-meta" : aiResult ? "ai" : "regex";
+    const source = jsonLd ? "json-ld" : amazonData ? "amazon" : ebayData ? "ebay" : taobaoData ? "taobao" : jdData ? "jd" : productMeta.price ? "product-meta" : meta.title ? "og-meta" : aiResult ? "ai" : "regex";
 
     const product: ParsedProduct = {
       title: finalTitle,
