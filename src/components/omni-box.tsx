@@ -4,9 +4,11 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCartStore } from "@/lib/store";
 import { classifyProduct } from "@/lib/asset-classifier";
-import { ParsedProduct, ParseResponse, AssetClass, SavedProduct } from "@/lib/types";
+import { ParsedProduct, AssetClass, SavedProduct } from "@/lib/types";
 import { generateId, ASSET_LABELS, assetLabel, formatCurrency, timeAgo, proxyImage } from "@/lib/format";
 import { applyWealthDna } from "@/lib/wealth-dna";
+import { useUrlParse } from "@/lib/use-url-parse";
+import { toast } from "@/lib/use-toast";
 import { ProductCard } from "./product-card";
 import { CheckoutAnimation } from "./checkout-animation";
 import { useLocale } from "@/lib/use-locale";
@@ -20,19 +22,14 @@ const ASSET_OPTION_VALUES: AssetClass[] = [
 
 export function OmniBox() {
   const [url, setUrl] = useState("");
-  const [loading, setLoading] = useState(false);
   const [product, setProduct] = useState<ParsedProduct | null>(null);
-  const [error, setError] = useState<string | null>(null);
   const [showCheckout, setShowCheckout] = useState(false);
   const [showManual, setShowManual] = useState(false);
-  const [toast, setToast] = useState<string | null>(null);
-  const [parseSource, setParseSource] = useState<string | null>(null);
   const [showHistory, setShowHistory] = useState(false);
   const [pasteFlash, setPasteFlash] = useState(false);
   const [batchUrls, setBatchUrls] = useState<string[]>([]);
   const [batchProgress, setBatchProgress] = useState<{ current: number; total: number; success: number } | null>(null);
   const [batchResult, setBatchResult] = useState<{ success: number; total: number } | null>(null);
-  const [lastFailedUrl, setLastFailedUrl] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -40,6 +37,9 @@ export function OmniBox() {
   const [manualTitle, setManualTitle] = useState("");
   const [manualPrice, setManualPrice] = useState("");
   const [manualClass, setManualClass] = useState<AssetClass>("other");
+
+  // Shared parse hook — replaces duplicated fetch logic
+  const { loading, error, parseSource, lastFailedUrl, parseUrl: doParse, clearError } = useUrlParse();
 
   const selectedBillionaire = useCartStore((s) => s.selectedBillionaire);
   const addPurchase = useCartStore((s) => s.addPurchase);
@@ -68,46 +68,20 @@ export function OmniBox() {
   const parseUrl = useCallback(async (inputUrl?: string) => {
     const target = (inputUrl || url).trim();
     if (!target) return;
-    setLoading(true);
-    setError(null);
     setProduct(null);
-    setParseSource(null);
-    setLastFailedUrl(null);
 
-    try {
-      const res = await fetch("/api/parse", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url: target }),
-      });
-
-      const data: ParseResponse & { source?: string } = await res.json();
-
-      if (data.success && data.product) {
-        setProduct(data.product);
-        setParseSource(data.source || null);
-        // Auto-save to history
-        saveProduct(data.product);
-        // Auto-scroll to product card
+    await doParse(target, {
+      onSuccess: (parsed) => {
+        setProduct(parsed);
         setTimeout(() => {
           cardRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
         }, 100);
-      } else {
-        setError(data.error || t("omni.parseFail", locale));
-        setLastFailedUrl(target);
+      },
+      onError: (msg) => {
         setShowManual(true);
-        // Pre-fill manual with whatever we got
-        if (data.product?.title) setManualTitle(data.product.title);
-        if (data.product?.price) setManualPrice(String(data.product.price));
-      }
-    } catch {
-      setError(t("omni.networkError", locale));
-      setLastFailedUrl(target);
-      setShowManual(true);
-    } finally {
-      setLoading(false);
-    }
-  }, [url, saveProduct, locale]);
+      },
+    });
+  }, [url, doParse]);
 
   const handlePaste = useCallback((e: React.ClipboardEvent) => {
     const pasted = e.clipboardData.getData("text");
@@ -145,7 +119,7 @@ export function OmniBox() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ url: urls[i] }),
         });
-        const data: ParseResponse = await res.json();
+        const data = await res.json();
         if (data.success && data.product) {
           saveProduct(data.product);
           successCount++;
@@ -179,7 +153,7 @@ export function OmniBox() {
   const handleManualSubmit = () => {
     const price = parseFloat(manualPrice.replace(/[,$]/g, ""));
     if (!manualTitle.trim() || isNaN(price) || price <= 0) {
-      setError(t("omni.validError", locale));
+      toast(t("omni.validError", locale));
       return;
     }
     const { assetClass, monthlyOverhead } = classifyProduct(manualTitle, price);
@@ -201,7 +175,7 @@ export function OmniBox() {
     setProduct(parsed);
     saveProduct(parsed);
     setShowManual(false);
-    setError(null);
+    clearError();
   };
 
   const handleAuthorize = () => {
@@ -240,8 +214,7 @@ export function OmniBox() {
     setManualClass("other");
 
     if (newlyUnlocked.length > 0) {
-      setToast(`🏆 ${t("omni.achievementUnlocked", locale)}: ${newlyUnlocked.join(", ")}`);
-      setTimeout(() => setToast(null), 4000);
+      toast(`🏆 ${t("omni.achievementUnlocked", locale)}: ${newlyUnlocked.join(", ")}`, 4000);
     }
   };
 
@@ -697,20 +670,6 @@ export function OmniBox() {
             billionaire={selectedBillionaire}
             onComplete={handleCheckoutComplete}
           />
-        )}
-      </AnimatePresence>
-
-      {/* Achievement toast */}
-      <AnimatePresence>
-        {toast && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="fixed bottom-8 left-1/2 -translate-x-1/2 px-6 py-3 rounded-xl bg-stone/20 border border-stone/40 text-stone text-sm backdrop-blur-md z-50"
-          >
-            {toast}
-          </motion.div>
         )}
       </AnimatePresence>
     </div>

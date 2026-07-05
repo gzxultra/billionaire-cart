@@ -1,11 +1,12 @@
 "use client";
 
 import { useState, useCallback, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { useCartStore, selectRemaining } from "@/lib/store";
 import { catalogItems, CatalogItem } from "@/data/catalog";
 import { generateId } from "@/lib/format";
 import { playAuthorize, playSparkle } from "@/lib/sounds";
+import { toast } from "@/lib/use-toast";
 import { ParticleBurst } from "./particle-burst";
 import { useLocale } from "@/lib/use-locale";
 import { t, tierLabel } from "@/lib/i18n";
@@ -28,7 +29,6 @@ export function Catalog({ onPurchase }: CatalogProps) {
   const [activeTier, setActiveTier] = useState<CatalogItem["tier"] | "all">(
     "everyday"
   );
-  const [toast, setToast] = useState<string | null>(null);
   const [showBurst, setShowBurst] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortMode, setSortMode] = useState<SortMode>("default");
@@ -127,11 +127,9 @@ export function Catalog({ onPurchase }: CatalogProps) {
       onPurchase?.(totalCost);
 
       if (lastUnlocked.length > 0) {
-        setToast(`🏆 ${lastUnlocked.join(", ")}`);
-        setTimeout(() => setToast(null), 4000);
+        toast(`🏆 ${lastUnlocked.join(", ")}`, 4000);
       } else if (actualQty > 1) {
-        setToast(`✓ ${actualQty.toLocaleString()}× ${item.name}`);
-        setTimeout(() => setToast(null), 3000);
+        toast(`✓ ${actualQty.toLocaleString()}× ${item.name}`);
       }
     },
     [selectedBillionaire, soundEnabled, addPurchase, onPurchase]
@@ -284,19 +282,6 @@ export function Catalog({ onPurchase }: CatalogProps) {
       )}
 
       {showBurst && <ParticleBurst />}
-
-      <AnimatePresence>
-        {toast && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="fixed bottom-8 left-1/2 -translate-x-1/2 px-6 py-3 rounded-xl bg-stone/20 border border-stone/40 text-stone text-sm backdrop-blur-md z-50"
-          >
-            {toast}
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 }

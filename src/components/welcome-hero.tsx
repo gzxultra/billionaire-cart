@@ -55,7 +55,6 @@ function AnimatedWealth({ target }: { target: number }) {
 export function WelcomeHero() {
   const locale = useLocale((s) => s.locale);
   const mergedBillionaires = useLiveData((s) => s.mergedBillionaires);
-  const [visible, setVisible] = useState(true);
 
   // Calculate total combined wealth
   const totalWealthB = useMemo(() => {
@@ -63,14 +62,11 @@ export function WelcomeHero() {
     return list.reduce((sum, b) => sum + b.netWorthB, 0);
   }, [mergedBillionaires]);
 
-  // Fade in after mount
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     const t = setTimeout(() => setMounted(true), 100);
     return () => clearTimeout(t);
   }, []);
-
-  if (!visible) return null;
 
   return (
     <AnimatePresence>

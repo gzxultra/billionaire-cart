@@ -4,6 +4,7 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { useCartStore } from "@/lib/store";
 import { useLocale } from "@/lib/use-locale";
+import { useUrlParse } from "@/lib/use-url-parse";
 import { t } from "@/lib/i18n";
 import { SavedProduct } from "@/lib/types";
 import { IdentitySelector } from "@/components/identity-selector";
@@ -59,7 +60,9 @@ export default function Home() {
   const stickyInputRef = useRef<HTMLInputElement>(null);
   const [stickyVisible, setStickyVisible] = useState(false);
   const [stickyUrl, setStickyUrl] = useState("");
-  const [stickyLoading, setStickyLoading] = useState(false);
+
+  // Shared parse hook for the sticky OmniBox — same logic as inline OmniBox
+  const { loading: stickyLoading, parseUrl: stickyParse } = useUrlParse();
 
   useEffect(() => {
     const target = omniSectionRef.current;
@@ -96,53 +99,32 @@ export default function Home() {
   const handleStickyParse = useCallback(async () => {
     const target = stickyUrl.trim();
     if (!target) return;
-    setStickyLoading(true);
-    try {
-      const res = await fetch("/api/parse", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url: target }),
-      });
-      const data = await res.json();
-      if (data.success && data.product) {
-        useCartStore.getState().saveProduct(data.product);
-        useCartStore.getState().setActiveParsed(data.product);
+
+    await stickyParse(target, {
+      onSuccess: (product) => {
+        useCartStore.getState().setActiveParsed(product);
         setStickyUrl("");
-        // Scroll to the inline OmniBox to show the parsed product
         omniSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-      }
-    } catch {
-      // Ignore — will use inline OmniBox on failure
-    } finally {
-      setStickyLoading(false);
-    }
-  }, [stickyUrl]);
+      },
+    });
+  }, [stickyUrl, stickyParse]);
 
   const handleStickyPaste = useCallback((e: React.ClipboardEvent) => {
     const pasted = e.clipboardData.getData("text");
     if (pasted && /^https?:\/\//i.test(pasted.trim())) {
-      setStickyUrl(pasted.trim());
-      setTimeout(() => {
-        setStickyLoading(true);
-        fetch("/api/parse", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ url: pasted.trim() }),
-        })
-          .then((r) => r.json())
-          .then((data) => {
-            if (data.success && data.product) {
-              useCartStore.getState().saveProduct(data.product);
-              useCartStore.getState().setActiveParsed(data.product);
-              setStickyUrl("");
-              omniSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-            }
-          })
-          .catch(() => {})
-          .finally(() => setStickyLoading(false));
+      const cleanUrl = pasted.trim();
+      setStickyUrl(cleanUrl);
+      setTimeout(async () => {
+        await stickyParse(cleanUrl, {
+          onSuccess: (product) => {
+            useCartStore.getState().setActiveParsed(product);
+            setStickyUrl("");
+            omniSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+          },
+        });
       }, 50);
     }
-  }, []);
+  }, [stickyParse]);
 
   const handlePurchase = useCallback((totalPrice: number) => {
     setLastPurchasePrice(totalPrice);

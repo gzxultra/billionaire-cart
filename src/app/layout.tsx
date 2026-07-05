@@ -1,8 +1,8 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Inter, Playfair_Display, JetBrains_Mono } from "next/font/google";
+import { LocaleHead } from "@/components/locale-head";
+import { ToastContainer } from "@/components/toast-container";
 import "./globals.css";
-
-import { JetBrains_Mono } from "next/font/google";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -67,8 +67,7 @@ export const viewport: Viewport = {
   themeColor: "#A89279",
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
+  maximumScale: 5,
 };
 
 export default function RootLayout({
@@ -77,7 +76,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh" className={`dark ${inter.variable} ${playfair.variable} ${jetbrainsMono.variable}`}>
+    <html lang="en" className={`${inter.variable} ${playfair.variable} ${jetbrainsMono.variable}`}>
       <head>
         <script
           type="application/ld+json"
@@ -100,6 +99,8 @@ export default function RootLayout({
           }}
         />
       </head>      <body className="min-h-screen font-sans">
+        {/* Dynamic lang attribute sync */}
+        <LocaleHead />
         {/* Skip to main content — accessibility */}
         <a
           href="#main-content"
@@ -113,6 +114,8 @@ export default function RootLayout({
           Skip to main content
         </a>
         {children}
+        {/* Global toast container */}
+        <ToastContainer />
       </body>
     </html>
   );

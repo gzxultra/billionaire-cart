@@ -6,6 +6,7 @@ import { useCartStore } from "@/lib/store";
 import { useLocale } from "@/lib/use-locale";
 import { t, Locale } from "@/lib/i18n";
 import { formatCurrency, generateId } from "@/lib/format";
+import { toast } from "@/lib/use-toast";
 import { Skeleton } from "@/components/skeleton";
 import {
   Billionaire,
@@ -422,7 +423,6 @@ export function BillionaireProfile() {
   const soundEnabled = useCartStore((s) => s.soundEnabled);
   const locale = useLocale((s) => s.locale);
   const [expanded, setExpanded] = useState(false);
-  const [buyToast, setBuyToast] = useState<string | null>(null);
 
   const id = selectedBillionaire?.id;
   const { filings, loading: secLoading } = useSecFilings(id);
@@ -466,15 +466,14 @@ export function BillionaireProfile() {
       timestamp: Date.now(),
     });
     if (newlyUnlocked.length > 0) {
-      setBuyToast(`🏆 ${newlyUnlocked.join(", ")}`);
+      toast(`🏆 ${newlyUnlocked.join(", ")}`, 4000);
     } else {
-      setBuyToast(
+      toast(
         locale === "zh"
           ? `✓ 已购买 ${purchase.nameZh}`
           : `✓ Acquired ${purchase.name}`
       );
     }
-    setTimeout(() => setBuyToast(null), 3000);
   };
 
   return (
@@ -534,20 +533,6 @@ export function BillionaireProfile() {
                 locale={locale}
               />
             )}
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Signature purchase toast */}
-      <AnimatePresence>
-        {buyToast && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="fixed bottom-8 left-1/2 -translate-x-1/2 px-6 py-3 rounded-xl bg-stone/20 border border-stone/40 text-stone text-sm backdrop-blur-md z-50"
-          >
-            {buyToast}
           </motion.div>
         )}
       </AnimatePresence>
