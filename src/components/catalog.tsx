@@ -87,7 +87,7 @@ export function Catalog({ onPurchase }: CatalogProps) {
   }, [displayItems, selectedBillionaire]);
 
   const handleBuy = useCallback(
-    (item: CatalogItem) => {
+    (item: CatalogItem, qty: number = 1) => {
       if (!selectedBillionaire) return;
 
       const dna = applyWealthDna(
@@ -95,6 +95,8 @@ export function Catalog({ onPurchase }: CatalogProps) {
         selectedBillionaire
       );
       const effectivePrice = dna.adjustedPrice;
+      const actualQty = Math.max(1, qty);
+      const totalCost = effectivePrice * actualQty;
 
       if (soundEnabled) {
         playAuthorize();
@@ -103,26 +105,33 @@ export function Catalog({ onPurchase }: CatalogProps) {
       setShowBurst(true);
       setTimeout(() => setShowBurst(false), 1500);
 
-      const unlocked = addPurchase({
-        id: generateId(),
-        product: {
-          title: item.name,
-          price: effectivePrice,
-          imageUrl: null,
-          description: item.description,
-          sourceUrl: `catalog://${item.id}`,
-          assetClass: item.assetClass,
-          monthlyOverhead: item.monthlyOverhead,
-        },
-        billionaireId: selectedBillionaire.id,
-        timestamp: Date.now(),
-      });
+      // Batch add purchases
+      let lastUnlocked: string[] = [];
+      for (let i = 0; i < actualQty; i++) {
+        lastUnlocked = addPurchase({
+          id: generateId(),
+          product: {
+            title: item.name,
+            price: effectivePrice,
+            imageUrl: null,
+            description: item.description,
+            sourceUrl: `catalog://${item.id}`,
+            assetClass: item.assetClass,
+            monthlyOverhead: item.monthlyOverhead,
+          },
+          billionaireId: selectedBillionaire.id,
+          timestamp: Date.now(),
+        });
+      }
 
-      onPurchase?.(effectivePrice);
+      onPurchase?.(totalCost);
 
-      if (unlocked.length > 0) {
-        setToast(`🏆 ${unlocked.join(", ")}`);
+      if (lastUnlocked.length > 0) {
+        setToast(`🏆 ${lastUnlocked.join(", ")}`);
         setTimeout(() => setToast(null), 4000);
+      } else if (actualQty > 1) {
+        setToast(`✓ ${actualQty.toLocaleString()}× ${item.name}`);
+        setTimeout(() => setToast(null), 3000);
       }
     },
     [selectedBillionaire, soundEnabled, addPurchase, onPurchase]

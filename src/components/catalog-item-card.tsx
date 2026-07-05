@@ -88,7 +88,7 @@ interface CatalogItemCardProps {
   modifier: number | null | undefined;
   canAfford: boolean;
   remaining: number;
-  onBuy: (item: CatalogItem) => void;
+  onBuy: (item: CatalogItem, qty: number) => void;
 }
 
 function CatalogItemCardInner({
@@ -120,9 +120,9 @@ function CatalogItemCardInner({
   const handleBuyClick = useCallback(() => {
     if (!canAfford && !isFree) return;
     setBuyingFlash(true);
-    onBuy(item);
+    onBuy(item, qty);
     setTimeout(() => setBuyingFlash(false), 600);
-  }, [canAfford, isFree, onBuy, item]);
+  }, [canAfford, isFree, onBuy, item, qty]);
 
   const accent = TIER_ACCENTS[item.tier] || TIER_ACCENTS.everyday;
 
