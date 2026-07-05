@@ -28,6 +28,7 @@ import { CategoryBreakdown } from "@/components/category-breakdown";
 import { GuiltMeter } from "@/components/guilt-meter";
 import { PurchaseFeed } from "@/components/purchase-feed";
 import { KeyboardShortcuts } from "@/components/keyboard-shortcuts";
+import { ScrollToTop } from "@/components/scroll-to-top";
 import {
   checkEasterEggs,
   resetEasterEggs,
@@ -395,6 +396,9 @@ export default function Home() {
 
       {/* Keyboard shortcuts overlay (press ?) */}
       <KeyboardShortcuts />
+
+      {/* Floating scroll-to-top with progress ring */}
+      <ScrollToTop />
     </main>
   );
 }
