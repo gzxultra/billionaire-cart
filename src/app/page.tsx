@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect, lazy, Suspense } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
+import dynamic from "next/dynamic";
 import { useCartStore } from "@/lib/store";
 import { useLocale } from "@/lib/use-locale";
 import { t } from "@/lib/i18n";
@@ -23,7 +24,6 @@ import { KeyboardShortcuts } from "@/components/keyboard-shortcuts";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { WelcomeHero } from "@/components/welcome-hero";
 import { ShareReceipt } from "@/components/share-receipt";
-import { Skeleton } from "@/components/skeleton";
 import {
   checkEasterEggs,
   resetEasterEggs,
@@ -31,23 +31,13 @@ import {
 } from "@/data/easter-eggs";
 
 // ─── Lazy-loaded below-fold components ────────────────────────────
-const Vault = lazy(() => import("@/components/vault").then(m => ({ default: m.Vault })));
-const Achievements = lazy(() => import("@/components/achievements").then(m => ({ default: m.Achievements })));
-const SpeedrunTimer = lazy(() => import("@/components/speedrun-timer").then(m => ({ default: m.SpeedrunTimer })));
-const BillionaireReactions = lazy(() => import("@/components/billionaire-reactions").then(m => ({ default: m.BillionaireReactions })));
-const CategoryBreakdown = lazy(() => import("@/components/category-breakdown").then(m => ({ default: m.CategoryBreakdown })));
-const GuiltMeter = lazy(() => import("@/components/guilt-meter").then(m => ({ default: m.GuiltMeter })));
-const PurchaseFeed = lazy(() => import("@/components/purchase-feed").then(m => ({ default: m.PurchaseFeed })));
-
-/** Minimal loading fallback for lazy sections */
-function SectionFallback() {
-  return (
-    <div className="p-5 sm:p-8 space-y-3">
-      <Skeleton.Line className="w-24" />
-      <Skeleton.Block className="h-20" />
-    </div>
-  );
-}
+const Vault = dynamic(() => import("@/components/vault").then(m => ({ default: m.Vault })), { ssr: false });
+const Achievements = dynamic(() => import("@/components/achievements").then(m => ({ default: m.Achievements })), { ssr: false });
+const SpeedrunTimer = dynamic(() => import("@/components/speedrun-timer").then(m => ({ default: m.SpeedrunTimer })), { ssr: false });
+const BillionaireReactions = dynamic(() => import("@/components/billionaire-reactions").then(m => ({ default: m.BillionaireReactions })), { ssr: false });
+const CategoryBreakdown = dynamic(() => import("@/components/category-breakdown").then(m => ({ default: m.CategoryBreakdown })), { ssr: false });
+const GuiltMeter = dynamic(() => import("@/components/guilt-meter").then(m => ({ default: m.GuiltMeter })), { ssr: false });
+const PurchaseFeed = dynamic(() => import("@/components/purchase-feed").then(m => ({ default: m.PurchaseFeed })), { ssr: false });
 
 export default function Home() {
   const selectedBillionaire = useCartStore((s) => s.selectedBillionaire);
@@ -318,11 +308,9 @@ export default function Home() {
             </section>
 
             {/* Purchase Feed — recent parsed & bought items */}
-            <Suspense fallback={<div className="card-panel"><SectionFallback /></div>}>
-              <section className="card-panel p-5 sm:p-8 stagger-section">
-                <PurchaseFeed onRepurchase={handleRepurchase} />
-              </section>
-            </Suspense>
+            <section className="card-panel p-5 sm:p-8 stagger-section">
+              <PurchaseFeed onRepurchase={handleRepurchase} />
+            </section>
 
             {/* Stats row — two cards side by side */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 stagger-section">
@@ -340,11 +328,9 @@ export default function Home() {
             </section>
 
             {/* Billionaire Reactions */}
-            <Suspense fallback={<div className="card-panel"><SectionFallback /></div>}>
-              <section className="card-panel p-5 sm:p-8 stagger-section">
-                <BillionaireReactions />
-              </section>
-            </Suspense>
+            <section className="card-panel p-5 sm:p-8 stagger-section">
+              <BillionaireReactions />
+            </section>
 
             {/* Quick Buy Catalog — full width */}
             <section className="card-panel p-5 sm:p-8 stagger-section">
@@ -352,37 +338,29 @@ export default function Home() {
             </section>
 
             {/* Speedrun Mode */}
-            <Suspense fallback={<div className="card-panel-accent"><SectionFallback /></div>}>
-              <section className="card-panel-accent p-5 sm:p-8 stagger-section">
-                <SpeedrunTimer />
-              </section>
-            </Suspense>
+            <section className="card-panel-accent p-5 sm:p-8 stagger-section">
+              <SpeedrunTimer />
+            </section>
 
             {/* Analytics row */}
-            <Suspense fallback={<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5"><div className="card-panel"><SectionFallback /></div><div className="card-panel"><SectionFallback /></div></div>}>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 stagger-section">
-                <section className="card-panel p-5">
-                  <CategoryBreakdown />
-                </section>
-                <section className="card-panel p-5">
-                  <GuiltMeter />
-                </section>
-              </div>
-            </Suspense>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 stagger-section">
+              <section className="card-panel p-5">
+                <CategoryBreakdown />
+              </section>
+              <section className="card-panel p-5">
+                <GuiltMeter />
+              </section>
+            </div>
 
             {/* The Vault */}
-            <Suspense fallback={<div className="card-panel-champagne"><SectionFallback /></div>}>
-              <section className="card-panel-champagne p-5 sm:p-8 stagger-section">
-                <Vault />
-              </section>
-            </Suspense>
+            <section className="card-panel-champagne p-5 sm:p-8 stagger-section">
+              <Vault />
+            </section>
 
             {/* Achievements */}
-            <Suspense fallback={<div className="card-panel"><SectionFallback /></div>}>
-              <section className="card-panel p-5 sm:p-8 stagger-section">
-                <Achievements />
-              </section>
-            </Suspense>
+            <section className="card-panel p-5 sm:p-8 stagger-section">
+              <Achievements />
+            </section>
           </>
         )}
       </div>
