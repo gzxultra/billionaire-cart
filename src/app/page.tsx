@@ -25,6 +25,9 @@ import { KeyboardShortcuts } from "@/components/keyboard-shortcuts";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { WelcomeHero } from "@/components/welcome-hero";
 import { ShareReceipt } from "@/components/share-receipt";
+import { FloatingHud } from "@/components/floating-hud";
+import { ConfettiBurst } from "@/components/confetti-burst";
+import { MilestoneCelebration } from "@/components/milestone-celebration";
 import {
   checkEasterEggs,
   resetEasterEggs,
@@ -55,6 +58,12 @@ export default function Home() {
 
   // Easter egg state
   const [activeEgg, setActiveEgg] = useState<EasterEgg | null>(null);
+
+  // Confetti celebration state
+  const [confettiTriggerId, setConfettiTriggerId] = useState(0);
+  const triggerConfetti = useCallback(() => {
+    setConfettiTriggerId((prev) => prev + 1);
+  }, []);
 
   // Sticky OmniBox — shows a compact input bar in the header when the inline OmniBox scrolls out of view
   const omniSectionRef = useRef<HTMLElement>(null);
@@ -392,6 +401,15 @@ export default function Home() {
 
       {/* Floating scroll-to-top with progress ring */}
       <ScrollToTop />
+
+      {/* Floating balance HUD — bottom left, shows when scrolled past balance */}
+      <FloatingHud />
+
+      {/* Milestone celebration tracker — invisible, fires toasts + confetti */}
+      <MilestoneCelebration onConfetti={triggerConfetti} />
+
+      {/* Confetti burst overlay */}
+      <ConfettiBurst triggerId={confettiTriggerId} />
     </main>
   );
 }

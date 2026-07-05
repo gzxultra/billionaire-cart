@@ -427,6 +427,14 @@ const strings: Record<string, Record<Locale, string>> = {
   "profile.secLoading": { en: "Loading SEC filings…", zh: "加载 SEC 文件中…" },
   "profile.noSec": { en: "No SEC filings (non-US listed)", zh: "无 SEC 数据（非美国上市）" },
 
+  // ─── Milestones ─────────────────────────────────────────────────
+  "milestone.reached": { en: "Milestone Reached!", zh: "里程碑达成！" },
+  "milestone.progress": { en: "{reached}/{total} milestones", zh: "{reached}/{total} 个里程碑" },
+
+  // ─── Floating HUD ──────────────────────────────────────────────
+  "hud.remaining": { en: "Remaining", zh: "剩余" },
+  "hud.spent": { en: "spent", zh: "已花" },
+
   // ─── Wealth DNA Price Modifiers ────────────────────────────────
   "dna.discount": { en: "{name} Discount", zh: "{name}折扣" },
   "dna.surcharge": { en: "{name} Surcharge", zh: "{name}加价" },
