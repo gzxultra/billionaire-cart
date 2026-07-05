@@ -26,6 +26,8 @@ export function Catalog({ onPurchase }: CatalogProps) {
   const soundEnabled = useCartStore((s) => s.soundEnabled);
   const remaining = useCartStore(selectRemaining);
 
+  const purchases = useCartStore((s) => s.purchases);
+
   const [activeTier, setActiveTier] = useState<CatalogItem["tier"] | "all">(
     "everyday"
   );
@@ -42,7 +44,9 @@ export function Catalog({ onPurchase }: CatalogProps) {
       items = items.filter(
         (item) =>
           item.name.toLowerCase().includes(q) ||
+          item.nameZh.includes(q) ||
           item.description.toLowerCase().includes(q) ||
+          item.descriptionZh.includes(q) ||
           item.emoji.includes(q)
       );
     } else if (activeTier !== "all") {
@@ -65,6 +69,18 @@ export function Catalog({ onPurchase }: CatalogProps) {
 
     return items;
   }, [searchQuery, activeTier, sortMode]);
+
+  // Count how many of each catalog item has been purchased
+  const purchaseCountMap = useMemo(() => {
+    const map = new Map<string, number>();
+    for (const p of purchases) {
+      const match = p.product.sourceUrl.match(/^catalog:\/\/(.+)$/);
+      if (match) {
+        map.set(match[1], (map.get(match[1]) || 0) + 1);
+      }
+    }
+    return map;
+  }, [purchases]);
 
   // Pre-compute DNA data for each visible item
   const itemDnaMap = useMemo(() => {
@@ -265,6 +281,7 @@ export function Catalog({ onPurchase }: CatalogProps) {
                 canAfford={canAfford}
                 remaining={remaining}
                 onBuy={handleBuy}
+                purchaseCount={purchaseCountMap.get(item.id) || 0}
               />
             );
           })}

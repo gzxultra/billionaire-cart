@@ -90,6 +90,7 @@ interface CatalogItemCardProps {
   canAfford: boolean;
   remaining: number;
   onBuy: (item: CatalogItem, qty: number) => void;
+  purchaseCount: number;
 }
 
 function CatalogItemCardInner({
@@ -100,6 +101,7 @@ function CatalogItemCardInner({
   canAfford,
   remaining,
   onBuy,
+  purchaseCount,
 }: CatalogItemCardProps) {
   const locale = useLocale((s) => s.locale);
   const [buyingFlash, setBuyingFlash] = useState(false);
@@ -189,8 +191,13 @@ function CatalogItemCardInner({
         )}
       </AnimatePresence>
 
-      {/* Tier badge — subtle top-right indicator */}
-      <div className="absolute top-2 right-2">
+      {/* Tier badge + purchase count */}
+      <div className="absolute top-2 right-2 flex items-center gap-1">
+        {purchaseCount > 0 && (
+          <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-champagne/15 text-champagne border border-champagne/25 font-mono font-medium tabular-nums">
+            ×{purchaseCount.toLocaleString()}
+          </span>
+        )}
         <span
           className={`text-[8px] px-1.5 py-0.5 rounded-full border font-medium uppercase tracking-wider ${accent.badge}`}
         >
@@ -201,10 +208,10 @@ function CatalogItemCardInner({
       {/* Emoji + Name */}
       <div className="text-2xl mb-1">{item.emoji}</div>
       <div className="text-xs text-sand font-medium truncate pr-14">
-        {item.name}
+        {locale === "zh" ? item.nameZh : item.name}
       </div>
       <div className="text-[10px] text-ash/70 mt-0.5 truncate">
-        {item.description}
+        {locale === "zh" ? item.descriptionZh : item.description}
       </div>
 
       {/* Price + DNA modifier */}
@@ -350,6 +357,7 @@ export const CatalogItemCard = memo(CatalogItemCardInner, (prev, next) => {
     prev.isFree === next.isFree &&
     prev.modifier === next.modifier &&
     prev.canAfford === next.canAfford &&
-    prev.remaining === next.remaining
+    prev.remaining === next.remaining &&
+    prev.purchaseCount === next.purchaseCount
   );
 });

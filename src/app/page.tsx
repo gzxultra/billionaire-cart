@@ -6,6 +6,7 @@ import { useCartStore } from "@/lib/store";
 import { useLocale } from "@/lib/use-locale";
 import { t } from "@/lib/i18n";
 import { SavedProduct } from "@/lib/types";
+import { catalogItems } from "@/data/catalog";
 import { IdentitySelector } from "@/components/identity-selector";
 import { BalanceDisplay } from "@/components/balance-display";
 import { EarningsTicker } from "@/components/earnings-ticker";
@@ -310,10 +311,41 @@ export default function Home() {
       {/* Footer */}
       <footer className="mt-20 relative z-10" role="contentinfo">
         <div className="h-px bg-gradient-to-r from-transparent via-line/15 to-transparent" />
-        <div className="max-w-3xl mx-auto px-4 py-8 text-center">
-          <p className="text-[10px] text-ash/72 tracking-wide">
-            {t("app.footer", locale)}
-          </p>
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+          {/* Fun stats row — only when a billionaire is selected */}
+          {selectedBillionaire && (
+            <div className="grid grid-cols-3 gap-4 mb-8">
+              <div className="text-center">
+                <div className="text-[10px] text-ash/50 uppercase tracking-wider font-mono mb-1">
+                  {locale === "zh" ? "商品目录" : "Catalog"}
+                </div>
+                <div className="text-sm font-serif text-stone/70">{catalogItems.length}</div>
+                <div className="text-[9px] text-ash/45">{locale === "zh" ? "件商品" : "items"}</div>
+              </div>
+              <div className="text-center">
+                <div className="text-[10px] text-ash/50 uppercase tracking-wider font-mono mb-1">
+                  {locale === "zh" ? "价格范围" : "Price Range"}
+                </div>
+                <div className="text-sm font-serif text-stone/70">$2.90 — $220B</div>
+                <div className="text-[9px] text-ash/45">{locale === "zh" ? "从地铁票到世界杯" : "subway to World Cup"}</div>
+              </div>
+              <div className="text-center">
+                <div className="text-[10px] text-ash/50 uppercase tracking-wider font-mono mb-1">
+                  {locale === "zh" ? "快捷键" : "Shortcuts"}
+                </div>
+                <div className="text-sm font-serif text-stone/70 kbd-hint">?</div>
+                <div className="text-[9px] text-ash/45">{locale === "zh" ? "按 ? 查看" : "press to view"}</div>
+              </div>
+            </div>
+          )}
+          <div className="text-center space-y-2">
+            <p className="text-[10px] text-ash/50 tracking-wide">
+              {t("app.footer", locale)}
+            </p>
+            <p className="text-[9px] text-ash/35 font-mono">
+              {locale === "zh" ? "用 ❤️ 和大把虚拟钞票制作" : "Made with ❤️ and entirely imaginary money"}
+            </p>
+          </div>
         </div>
       </footer>
 
