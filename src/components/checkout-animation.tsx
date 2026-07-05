@@ -15,12 +15,14 @@ interface CheckoutAnimationProps {
   product: ParsedProduct;
   billionaire: Billionaire;
   onComplete: () => void;
+  qty?: number;
 }
 
 export function CheckoutAnimation({
   product,
   billionaire,
   onComplete,
+  qty = 1,
 }: CheckoutAnimationProps) {
   const [phase, setPhase] = useState<
     "swipe" | "scanning" | "authorize" | "done"
@@ -140,6 +142,7 @@ export function CheckoutAnimation({
         <div className="absolute top-1/2 left-8 -translate-y-1/2">
           <div className="text-[10px] uppercase tracking-[0.15em] text-white/25 mb-1">
             {t("checkout.amount", locale)}
+            {qty > 1 && <span className="ml-1.5 text-[#C5A572]/50">×{qty.toLocaleString()}</span>}
           </div>
           <motion.div
             initial={{ opacity: 0 }}
@@ -156,11 +159,11 @@ export function CheckoutAnimation({
             ) : dna.modifier != null ? (
               <>
                 <div className="text-2xl font-serif text-[#C5A572]">
-                  {formatCurrency(dna.adjustedPrice)}
+                  {formatCurrency(dna.adjustedPrice * qty)}
                 </div>
                 <div className="flex items-center gap-2 mt-0.5">
                   <span className="text-[10px] text-white/30 line-through">
-                    {formatCurrency(product.price)}
+                    {formatCurrency(product.price * qty)}
                   </span>
                   <span
                     className={`text-[10px] font-medium ${
@@ -175,7 +178,7 @@ export function CheckoutAnimation({
               </>
             ) : (
               <div className="text-2xl font-serif text-[#C5A572]">
-                {formatCurrency(product.price)}
+                {formatCurrency(product.price * qty)}
               </div>
             )}
           </motion.div>

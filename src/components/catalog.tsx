@@ -10,6 +10,7 @@ import { toast } from "@/lib/use-toast";
 import { ParticleBurst } from "./particle-burst";
 import { useLocale } from "@/lib/use-locale";
 import { t, tierLabel } from "@/lib/i18n";
+import { getBulkPurchaseFact } from "@/lib/fun-facts";
 import { applyWealthDna } from "@/lib/wealth-dna";
 import { CatalogItemCard } from "./catalog-item-card";
 
@@ -144,11 +145,16 @@ export function Catalog({ onPurchase }: CatalogProps) {
 
       if (lastUnlocked.length > 0) {
         toast(`🏆 ${lastUnlocked.join(", ")}`, 4000);
+      } else if (actualQty >= 10) {
+        const fact = getBulkPurchaseFact(item.name, actualQty, totalCost, locale);
+        toast(fact
+          ? `✓ ${actualQty.toLocaleString()}× ${item.name} — ${fact}`
+          : `✓ ${actualQty.toLocaleString()}× ${item.name}`, 4000);
       } else if (actualQty > 1) {
         toast(`✓ ${actualQty.toLocaleString()}× ${item.name}`);
       }
     },
-    [selectedBillionaire, soundEnabled, addPurchase, onPurchase]
+    [selectedBillionaire, soundEnabled, addPurchase, onPurchase, locale]
   );
 
   const tiers: Array<CatalogItem["tier"] | "all"> = [

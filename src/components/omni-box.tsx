@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect, useRef, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCartStore } from "@/lib/store";
 import { classifyProduct } from "@/lib/asset-classifier";
@@ -13,6 +13,8 @@ import { ProductCard } from "./product-card";
 import { CheckoutAnimation } from "./checkout-animation";
 import { useLocale } from "@/lib/use-locale";
 import { t } from "@/lib/i18n";
+import { catalogItems } from "@/data/catalog";
+import { getBulkPurchaseFact } from "@/lib/fun-facts";
 
 const ASSET_OPTION_VALUES: AssetClass[] = [
   "supercar", "yacht", "aircraft", "real_estate", "rv_trailer",
@@ -30,6 +32,7 @@ export function OmniBox() {
   const [batchUrls, setBatchUrls] = useState<string[]>([]);
   const [batchProgress, setBatchProgress] = useState<{ current: number; total: number; success: number } | null>(null);
   const [batchResult, setBatchResult] = useState<{ success: number; total: number } | null>(null);
+  const [purchaseQty, setPurchaseQty] = useState(1);
   const inputRef = useRef<HTMLInputElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -178,8 +181,9 @@ export function OmniBox() {
     clearError();
   };
 
-  const handleAuthorize = () => {
+  const handleAuthorize = (qty: number = 1) => {
     if (!product || !selectedBillionaire) return;
+    setPurchaseQty(qty);
     setShowCheckout(true);
   };
 
@@ -199,12 +203,17 @@ export function OmniBox() {
       ? { ...product, price: dna.adjustedPrice }
       : product;
 
-    const newlyUnlocked = addPurchase({
-      id: generateId(),
-      product: adjustedProduct,
-      billionaireId: selectedBillionaire.id,
-      timestamp: Date.now(),
-    });
+    // Batch add purchases for selected quantity
+    const actualQty = Math.max(1, purchaseQty);
+    let lastUnlocked: string[] = [];
+    for (let i = 0; i < actualQty; i++) {
+      lastUnlocked = addPurchase({
+        id: generateId(),
+        product: adjustedProduct,
+        billionaireId: selectedBillionaire.id,
+        timestamp: Date.now(),
+      });
+    }
 
     setShowCheckout(false);
     setProduct(null);
@@ -212,9 +221,18 @@ export function OmniBox() {
     setManualTitle("");
     setManualPrice("");
     setManualClass("other");
+    setPurchaseQty(1);
 
-    if (newlyUnlocked.length > 0) {
-      toast(`🏆 ${t("omni.achievementUnlocked", locale)}: ${newlyUnlocked.join(", ")}`, 4000);
+    if (lastUnlocked.length > 0) {
+      toast(`🏆 ${t("omni.achievementUnlocked", locale)}: ${lastUnlocked.join(", ")}`, 4000);
+    } else if (actualQty >= 10) {
+      const totalCost = adjustedProduct.price * actualQty;
+      const fact = getBulkPurchaseFact(adjustedProduct.title, actualQty, totalCost, locale);
+      toast(fact
+        ? `✓ ${actualQty.toLocaleString()}× ${adjustedProduct.title} — ${fact}`
+        : `✓ ${actualQty.toLocaleString()}× ${adjustedProduct.title}`, 4000);
+    } else if (actualQty > 1) {
+      toast(`✓ ${actualQty.toLocaleString()}× ${adjustedProduct.title}`, 3000);
     }
   };
 
@@ -662,6 +680,13 @@ export function OmniBox() {
         )}
       </AnimatePresence>
 
+      {/* Price neighbors — similar-value catalog items */}
+      <AnimatePresence>
+        {product && !showCheckout && !loading && (
+          <PriceNeighbors price={product.price} locale={locale} />
+        )}
+      </AnimatePresence>
+
       {/* Checkout animation */}
       <AnimatePresence>
         {showCheckout && product && (
@@ -669,9 +694,91 @@ export function OmniBox() {
             product={product}
             billionaire={selectedBillionaire}
             onComplete={handleCheckoutComplete}
+            qty={purchaseQty}
           />
         )}
       </AnimatePresence>
     </div>
+  );
+}
+
+// ─── Price Neighbors — catalog items near the parsed product's price ─
+function PriceNeighbors({ price, locale }: { price: number; locale: "en" | "zh" }) {
+  const selectedBillionaire = useCartStore((s) => s.selectedBillionaire);
+  const addPurchase = useCartStore((s) => s.addPurchase);
+  const soundEnabled = useCartStore((s) => s.soundEnabled);
+
+  const neighbors = useMemo(() => {
+    if (price <= 0) return [];
+    // Sort catalog items by closeness to parsed price, take top 3
+    return [...catalogItems]
+      .map((item) => ({ item, dist: Math.abs(Math.log10(item.price + 1) - Math.log10(price + 1)) }))
+      .sort((a, b) => a.dist - b.dist)
+      .slice(0, 3)
+      .map((x) => x.item);
+  }, [price]);
+
+  const handleQuickBuy = useCallback((item: typeof catalogItems[0]) => {
+    if (!selectedBillionaire) return;
+    const dna = applyWealthDna(
+      { title: item.name, price: item.price, assetClass: item.assetClass },
+      selectedBillionaire
+    );
+    addPurchase({
+      id: generateId(),
+      product: {
+        title: item.name,
+        price: dna.adjustedPrice,
+        imageUrl: null,
+        description: item.description,
+        sourceUrl: `catalog://${item.id}`,
+        assetClass: item.assetClass,
+        monthlyOverhead: item.monthlyOverhead,
+      },
+      billionaireId: selectedBillionaire.id,
+      timestamp: Date.now(),
+    });
+    toast(`✓ ${locale === "zh" ? item.nameZh : item.name}`, 2000);
+  }, [selectedBillionaire, addPurchase, locale]);
+
+  if (neighbors.length === 0 || !selectedBillionaire) return null;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 8 }}
+      transition={{ delay: 0.3 }}
+      className="space-y-2"
+    >
+      <div className="flex items-center gap-2 px-1">
+        <span className="text-[10px] uppercase tracking-wider text-ash/50 font-mono">
+          {locale === "zh" ? "同价位推荐" : "Similar Value"}
+        </span>
+        <div className="flex-1 h-px bg-line/20" />
+      </div>
+      <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-0.5 -mx-1 px-1">
+        {neighbors.map((item) => (
+          <button
+            key={item.id}
+            onClick={() => handleQuickBuy(item)}
+            className="shrink-0 flex items-center gap-2 px-3 py-2 rounded-xl bg-surface/60 border border-line/30 hover:border-stone/30 hover:bg-surface/80 transition-all group"
+          >
+            <span className="text-lg">{item.emoji}</span>
+            <div className="text-left min-w-0">
+              <div className="text-[11px] text-sand/85 font-medium truncate max-w-[120px]">
+                {locale === "zh" ? item.nameZh : item.name}
+              </div>
+              <div className="text-[10px] text-champagne font-serif">
+                {formatCurrency(item.price, item.price >= 1_000_000)}
+              </div>
+            </div>
+            <span className="text-[9px] px-1.5 py-0.5 rounded bg-stone/15 text-stone/70 opacity-0 group-hover:opacity-100 transition-opacity font-medium ml-1">
+              {locale === "zh" ? "买" : "Buy"}
+            </span>
+          </button>
+        ))}
+      </div>
+    </motion.div>
   );
 }
