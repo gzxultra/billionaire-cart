@@ -1,10 +1,9 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef } from "react";
 import dynamic from "next/dynamic";
 import { useCartStore } from "@/lib/store";
 import { useLocale } from "@/lib/use-locale";
-import { useUrlParse } from "@/lib/use-url-parse";
 import { t } from "@/lib/i18n";
 import { SavedProduct } from "@/lib/types";
 import { IdentitySelector } from "@/components/identity-selector";
@@ -28,21 +27,24 @@ import { ShareReceipt } from "@/components/share-receipt";
 import { FloatingHud } from "@/components/floating-hud";
 import { ConfettiBurst } from "@/components/confetti-burst";
 import { MilestoneCelebration } from "@/components/milestone-celebration";
+import { StickyOmniBox } from "@/components/sticky-omnibox";
+import { SectionErrorBoundary } from "@/components/error-boundary";
+import { SectionSkeleton, StatCardSkeleton } from "@/components/section-skeleton";
 import {
   checkEasterEggs,
   resetEasterEggs,
   type EasterEgg,
 } from "@/data/easter-eggs";
 
-// ─── Lazy-loaded below-fold components ────────────────────────────
-const Vault = dynamic(() => import("@/components/vault").then(m => ({ default: m.Vault })), { ssr: false });
-const Achievements = dynamic(() => import("@/components/achievements").then(m => ({ default: m.Achievements })), { ssr: false });
-const SpeedrunTimer = dynamic(() => import("@/components/speedrun-timer").then(m => ({ default: m.SpeedrunTimer })), { ssr: false });
-const BillionaireReactions = dynamic(() => import("@/components/billionaire-reactions").then(m => ({ default: m.BillionaireReactions })), { ssr: false });
-const CategoryBreakdown = dynamic(() => import("@/components/category-breakdown").then(m => ({ default: m.CategoryBreakdown })), { ssr: false });
-const GuiltMeter = dynamic(() => import("@/components/guilt-meter").then(m => ({ default: m.GuiltMeter })), { ssr: false });
-const PurchaseFeed = dynamic(() => import("@/components/purchase-feed").then(m => ({ default: m.PurchaseFeed })), { ssr: false });
-const SpendingTimeline = dynamic(() => import("@/components/spending-timeline").then(m => ({ default: m.SpendingTimeline })), { ssr: false });
+// ─── Lazy-loaded below-fold components (with skeleton loading states) ─
+const Vault = dynamic(() => import("@/components/vault").then(m => ({ default: m.Vault })), { ssr: false, loading: () => <SectionSkeleton lines={4} /> });
+const Achievements = dynamic(() => import("@/components/achievements").then(m => ({ default: m.Achievements })), { ssr: false, loading: () => <SectionSkeleton lines={3} /> });
+const SpeedrunTimer = dynamic(() => import("@/components/speedrun-timer").then(m => ({ default: m.SpeedrunTimer })), { ssr: false, loading: () => <SectionSkeleton lines={2} /> });
+const BillionaireReactions = dynamic(() => import("@/components/billionaire-reactions").then(m => ({ default: m.BillionaireReactions })), { ssr: false, loading: () => <SectionSkeleton lines={3} /> });
+const CategoryBreakdown = dynamic(() => import("@/components/category-breakdown").then(m => ({ default: m.CategoryBreakdown })), { ssr: false, loading: () => <StatCardSkeleton /> });
+const GuiltMeter = dynamic(() => import("@/components/guilt-meter").then(m => ({ default: m.GuiltMeter })), { ssr: false, loading: () => <StatCardSkeleton /> });
+const PurchaseFeed = dynamic(() => import("@/components/purchase-feed").then(m => ({ default: m.PurchaseFeed })), { ssr: false, loading: () => <SectionSkeleton lines={4} /> });
+const SpendingTimeline = dynamic(() => import("@/components/spending-timeline").then(m => ({ default: m.SpendingTimeline })), { ssr: false, loading: () => <SectionSkeleton lines={3} height="140px" /> });
 
 export default function Home() {
   const selectedBillionaire = useCartStore((s) => s.selectedBillionaire);
@@ -65,76 +67,8 @@ export default function Home() {
     setConfettiTriggerId((prev) => prev + 1);
   }, []);
 
-  // Sticky OmniBox — shows a compact input bar in the header when the inline OmniBox scrolls out of view
+  // Ref to the inline OmniBox section — shared with StickyOmniBox
   const omniSectionRef = useRef<HTMLElement>(null);
-  const stickyInputRef = useRef<HTMLInputElement>(null);
-  const [stickyVisible, setStickyVisible] = useState(false);
-  const [stickyUrl, setStickyUrl] = useState("");
-
-  // Shared parse hook for the sticky OmniBox — same logic as inline OmniBox
-  const { loading: stickyLoading, parseUrl: stickyParse } = useUrlParse();
-
-  useEffect(() => {
-    const target = omniSectionRef.current;
-    if (!target) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => setStickyVisible(!entry.isIntersecting),
-      { threshold: 0, rootMargin: "-80px 0px 0px 0px" }
-    );
-    obs.observe(target);
-    return () => obs.disconnect();
-  }, [selectedBillionaire]);
-
-  // ⌘K / Ctrl+K — global shortcut to focus OmniBox from anywhere
-  useEffect(() => {
-    if (!selectedBillionaire) return;
-    const handler = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
-        e.preventDefault();
-        if (stickyVisible && stickyInputRef.current) {
-          stickyInputRef.current.focus();
-        } else {
-          const omniInput = document.getElementById("omnibox-input") as HTMLInputElement | null;
-          if (omniInput) {
-            omniInput.scrollIntoView({ behavior: "smooth", block: "center" });
-            setTimeout(() => omniInput.focus(), 300);
-          }
-        }
-      }
-    };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, [selectedBillionaire, stickyVisible]);
-
-  const handleStickyParse = useCallback(async () => {
-    const target = stickyUrl.trim();
-    if (!target) return;
-
-    await stickyParse(target, {
-      onSuccess: (product) => {
-        useCartStore.getState().setActiveParsed(product);
-        setStickyUrl("");
-        omniSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-      },
-    });
-  }, [stickyUrl, stickyParse]);
-
-  const handleStickyPaste = useCallback((e: React.ClipboardEvent) => {
-    const pasted = e.clipboardData.getData("text");
-    if (pasted && /^https?:\/\//i.test(pasted.trim())) {
-      const cleanUrl = pasted.trim();
-      setStickyUrl(cleanUrl);
-      setTimeout(async () => {
-        await stickyParse(cleanUrl, {
-          onSuccess: (product) => {
-            useCartStore.getState().setActiveParsed(product);
-            setStickyUrl("");
-            omniSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-          },
-        });
-      }, 50);
-    }
-  }, [stickyParse]);
 
   const handlePurchase = useCallback((totalPrice: number) => {
     setLastPurchasePrice(totalPrice);
@@ -219,42 +153,8 @@ export default function Home() {
           </div>
         </nav>
 
-        {/* Sticky OmniBox input — slides in when inline OmniBox scrolls out */}
-        {selectedBillionaire && (
-          <div
-            className={`overflow-hidden transition-all duration-300 ease-out ${stickyVisible ? "max-h-14 opacity-100" : "max-h-0 opacity-0"}`}
-          >
-            <div className="max-w-3xl mx-auto px-4 sm:px-6 pb-2.5">
-              <div className="flex items-center bg-surface/70 backdrop-blur-md border border-line/45 rounded-xl overflow-hidden shadow-stone-sm">
-                <div className="pl-3 pr-1 text-ash/72 flex items-center gap-1">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                    <circle cx="11" cy="11" r="8" />
-                    <path d="m21 21-4.35-4.35" />
-                  </svg>
-                  <kbd className="hidden sm:inline-flex text-[8px] px-1 py-px rounded bg-surface-bright/80 text-ash/65 font-mono border border-line/30 leading-none">⌘K</kbd>
-                </div>
-                <input
-                  ref={stickyInputRef}
-                  type="url"
-                  value={stickyUrl}
-                  onChange={(e) => setStickyUrl(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && handleStickyParse()}
-                  onPaste={handleStickyPaste}
-                  placeholder={t("omni.placeholder", locale)}
-                  disabled={stickyLoading}
-                  className="flex-1 px-2 py-2 bg-transparent text-sand/90 placeholder:text-ash/72 focus:outline-none text-xs disabled:opacity-50"
-                />
-                <button
-                  onClick={handleStickyParse}
-                  disabled={stickyLoading || !stickyUrl.trim()}
-                  className="mr-1.5 px-3 py-1 rounded-lg text-[10px] font-semibold uppercase tracking-wider bg-stone/20 text-stone hover:bg-stone/30 disabled:opacity-30 transition-all whitespace-nowrap"
-                >
-                  {stickyLoading ? "…" : t("omni.parse", locale)}
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
+        {/* Sticky OmniBox — slides in when inline OmniBox scrolls out */}
+        <StickyOmniBox omniSectionRef={omniSectionRef} />
 
         {/* Gradient underline */}
         <div className="h-px bg-gradient-to-r from-transparent via-stone/15 to-transparent" />
@@ -264,7 +164,9 @@ export default function Home() {
         {/* Identity selector — with hero intro */}
         {!selectedBillionaire && <WelcomeHero />}
         <section className="card-panel p-5 sm:p-8">
-          <IdentitySelector />
+          <SectionErrorBoundary section="Identity Selector">
+            <IdentitySelector />
+          </SectionErrorBoundary>
         </section>
 
         {/* Main content — after billionaire selection */}
@@ -272,17 +174,23 @@ export default function Home() {
           <>
             {/* Black Card — hero, full bleed feel */}
             <section className="p-5 sm:p-8 stagger-section">
-              <BlackCard />
+              <SectionErrorBoundary section="Black Card" silent>
+                <BlackCard />
+              </SectionErrorBoundary>
             </section>
 
             {/* Billionaire Profile — wealth DNA, signature purchases, SEC filings */}
             <section className="card-panel p-5 sm:p-8 stagger-section">
-              <BillionaireProfile />
+              <SectionErrorBoundary section="Billionaire Profile">
+                <BillionaireProfile />
+              </SectionErrorBoundary>
             </section>
 
             {/* Balance — accent left border */}
             <section className="card-panel-champagne p-5 sm:p-8 stagger-section">
-              <BalanceDisplay />
+              <SectionErrorBoundary section="Balance">
+                <BalanceDisplay />
+              </SectionErrorBoundary>
             </section>
 
             {/* ★ OmniBox — HERO position, the core shopping interaction */}
@@ -295,68 +203,94 @@ export default function Home() {
                     {t("omni.sectionTitle", locale)}
                   </h2>
                 </div>
-                <OmniBox />
+                <SectionErrorBoundary section="OmniBox">
+                  <OmniBox />
+                </SectionErrorBoundary>
               </div>
             </section>
 
             {/* Purchase Feed — recent parsed & bought items */}
             <section className="card-panel p-5 sm:p-8 stagger-section">
-              <PurchaseFeed onRepurchase={handleRepurchase} />
+              <SectionErrorBoundary section="Purchase Feed">
+                <PurchaseFeed onRepurchase={handleRepurchase} />
+              </SectionErrorBoundary>
             </section>
 
             {/* Stats row — two cards side by side */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 stagger-section">
               <section className="card-panel p-5">
-                <SpendingSpeed />
+                <SectionErrorBoundary section="Spending Speed" silent>
+                  <SpendingSpeed />
+                </SectionErrorBoundary>
               </section>
               <section className="card-panel p-5">
-                <EarningsTicker />
+                <SectionErrorBoundary section="Earnings Ticker" silent>
+                  <EarningsTicker />
+                </SectionErrorBoundary>
               </section>
             </div>
 
             {/* Spending Timeline — purchase history sparkline */}
             <section className="card-panel p-5 sm:p-8 stagger-section">
-              <SpendingTimeline />
+              <SectionErrorBoundary section="Spending Timeline">
+                <SpendingTimeline />
+              </SectionErrorBoundary>
             </section>
 
             {/* Wealth Context — accent left border */}
             <section className="card-panel-accent p-5 sm:p-8 stagger-section">
-              <WealthContext />
+              <SectionErrorBoundary section="Wealth Context">
+                <WealthContext />
+              </SectionErrorBoundary>
             </section>
 
             {/* Billionaire Reactions */}
             <section className="card-panel p-5 sm:p-8 stagger-section">
-              <BillionaireReactions />
+              <SectionErrorBoundary section="Billionaire Reactions" silent>
+                <BillionaireReactions />
+              </SectionErrorBoundary>
             </section>
 
             {/* Quick Buy Catalog — full width */}
             <section className="card-panel p-5 sm:p-8 stagger-section">
-              <Catalog onPurchase={handlePurchase} />
+              <SectionErrorBoundary section="Catalog">
+                <Catalog onPurchase={handlePurchase} />
+              </SectionErrorBoundary>
             </section>
 
             {/* Speedrun Mode */}
             <section className="card-panel-accent p-5 sm:p-8 stagger-section">
-              <SpeedrunTimer />
+              <SectionErrorBoundary section="Speedrun Timer" silent>
+                <SpeedrunTimer />
+              </SectionErrorBoundary>
             </section>
 
             {/* Analytics row */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 stagger-section">
               <section className="card-panel p-5">
-                <CategoryBreakdown />
+                <SectionErrorBoundary section="Category Breakdown" silent>
+                  <CategoryBreakdown />
+                </SectionErrorBoundary>
               </section>
               <section className="card-panel p-5">
-                <GuiltMeter />
+                <SectionErrorBoundary section="Guilt Meter" silent>
+                  <GuiltMeter />
+                </SectionErrorBoundary>
               </section>
             </div>
 
             {/* The Vault */}
             <section className="card-panel-champagne p-5 sm:p-8 stagger-section">
-              <Vault />
+              <SectionErrorBoundary section="Vault">
+                <Vault />
+              </SectionErrorBoundary>
             </section>
 
             {/* Achievements */}
             <section className="card-panel p-5 sm:p-8 stagger-section">
-              <Achievements />
+              <SectionErrorBoundary section="Achievements">
+                <Achievements />
+              </SectionErrorBoundary>
             </section>
           </>
         )}
