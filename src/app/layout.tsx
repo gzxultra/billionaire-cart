@@ -99,7 +99,21 @@ export default function RootLayout({
             }),
           }}
         />
-      </head>      <body className="min-h-screen font-sans">{children}</body>
+      </head>      <body className="min-h-screen font-sans">
+        {/* Skip to main content — accessibility */}
+        <a
+          href="#main-content"
+          className="
+            sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[9999]
+            focus:px-4 focus:py-2 focus:rounded-lg focus:bg-stone focus:text-white
+            focus:text-sm focus:font-medium focus:shadow-lg focus:outline-none
+            focus:ring-2 focus:ring-champagne focus:ring-offset-2 focus:ring-offset-base
+          "
+        >
+          Skip to main content
+        </a>
+        {children}
+      </body>
     </html>
   );
 }

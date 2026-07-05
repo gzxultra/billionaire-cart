@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useMemo } from "react";
+import { useEffect, useRef, useMemo, memo } from "react";
 import { useCartStore, selectTotalSpent, selectNetWorth } from "@/lib/store";
 
 interface Particle {
@@ -15,7 +15,7 @@ interface Particle {
   maxLife: number;
 }
 
-export function Atmosphere() {
+function AtmosphereInner() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const selectedBillionaire = useCartStore((s) => s.selectedBillionaire);
   const totalSpent = useCartStore(selectTotalSpent);
@@ -189,3 +189,4 @@ export function Atmosphere() {
     />
   );
 }
+export const Atmosphere = memo(AtmosphereInner);

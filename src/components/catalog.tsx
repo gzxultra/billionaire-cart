@@ -239,7 +239,7 @@ export function Catalog({ onPurchase }: CatalogProps) {
       </div>
 
       {/* Tier tabs */}
-      <div className="flex gap-1 mb-4 overflow-x-auto scrollbar-hide pb-1">
+      <div className="flex gap-1 mb-4 overflow-x-auto scrollbar-hide pb-1 tier-tabs" role="tablist" aria-label={locale === "zh" ? "商品分类" : "Product categories"}>
         {tiers.map((tier) => (
           <button
             key={tier}
@@ -247,6 +247,9 @@ export function Catalog({ onPurchase }: CatalogProps) {
               setActiveTier(tier);
               if (tier !== "all") setSearchQuery("");
             }}
+            role="tab"
+            aria-selected={activeTier === tier}
+            aria-controls="catalog-grid"
             className={`
               px-3 py-1.5 rounded-lg text-xs whitespace-nowrap transition-all
               ${
@@ -262,7 +265,7 @@ export function Catalog({ onPurchase }: CatalogProps) {
       </div>
 
       {/* Item grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2" id="catalog-grid" role="tabpanel">
         <AnimatePresence mode="popLayout">
           {displayItems.map((item) => {
             const itemDna = applyWealthDna(

@@ -1,12 +1,13 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { memo } from "react";
 import { useCartStore, selectTotalSpent, selectMonthlyBurn, selectNetWorth } from "@/lib/store";
 import { formatCurrency } from "@/lib/format";
 import { useLocale } from "@/lib/use-locale";
 import { t } from "@/lib/i18n";
 
-export function BlackCard() {
+function BlackCardInner() {
   const billionaire = useCartStore((s) => s.selectedBillionaire);
   const netWorth = useCartStore(selectNetWorth);
   const totalSpent = useCartStore(selectTotalSpent);
@@ -100,3 +101,4 @@ export function BlackCard() {
     </motion.div>
   );
 }
+export const BlackCard = memo(BlackCardInner);

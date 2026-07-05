@@ -27,6 +27,7 @@ import { ComboStreak } from "@/components/combo-streak";
 import { CategoryBreakdown } from "@/components/category-breakdown";
 import { GuiltMeter } from "@/components/guilt-meter";
 import { PurchaseFeed } from "@/components/purchase-feed";
+import { KeyboardShortcuts } from "@/components/keyboard-shortcuts";
 import {
   checkEasterEggs,
   resetEasterEggs,
@@ -164,7 +165,7 @@ export default function Home() {
   );
 
   return (
-    <main className="min-h-screen bg-base relative">
+    <main className="min-h-screen bg-base relative" id="main-content">
       {/* Film grain overlay — Backlot style */}
       <div className="film-grain" aria-hidden="true" />
 
@@ -175,8 +176,8 @@ export default function Home() {
       <ComboStreak />
 
       {/* Header */}
-      <header className="relative z-10 sticky top-0 bg-base/80 backdrop-blur-xl border-b border-line/45">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
+      <header className="relative z-10 sticky top-0 bg-base/80 backdrop-blur-xl border-b border-line/45" role="banner">
+        <nav className="max-w-3xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between" aria-label={locale === "zh" ? "主导航" : "Main navigation"}>
           <div className="flex items-center gap-3">
             <div className="w-7 h-7 rounded-md bg-surface-bright flex items-center justify-center text-xs border border-line/30">
               💳
@@ -196,6 +197,7 @@ export default function Home() {
               onClick={toggleLocale}
               className="px-2 py-1 rounded-md text-[11px] font-medium text-stone/85 hover:text-stone bg-surface-bright/80 border border-line/40 hover:border-stone/35 transition-all"
               title={locale === "en" ? "切换到中文" : "Switch to English"}
+              aria-label={locale === "en" ? "Switch to Chinese / 切换到中文" : "Switch to English"}
             >
               {locale === "en" ? "中" : "EN"}
             </button>
@@ -204,6 +206,8 @@ export default function Home() {
               onClick={toggleSound}
               className="text-ash/70 hover:text-stone/75 transition-colors text-sm"
               title={soundEnabled ? "Mute" : "Unmute"}
+              aria-label={soundEnabled ? (locale === "zh" ? "关闭声音" : "Mute sounds") : (locale === "zh" ? "开启声音" : "Unmute sounds")}
+              aria-pressed={soundEnabled}
             >
               {soundEnabled ? "🔊" : "🔇"}
             </button>
@@ -216,7 +220,7 @@ export default function Home() {
               </button>
             )}
           </div>
-        </div>
+        </nav>
 
         {/* Sticky OmniBox input — slides in when inline OmniBox scrolls out */}
         {selectedBillionaire && (
@@ -355,8 +359,16 @@ export default function Home() {
         )}
       </div>
 
+      {/* Live region for screen reader purchase announcements */}
+      <div
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+        id="purchase-announcer"
+      />
+
       {/* Footer */}
-      <footer className="mt-20 relative z-10">
+      <footer className="mt-20 relative z-10" role="contentinfo">
         <div className="h-px bg-gradient-to-r from-transparent via-line/15 to-transparent" />
         <div className="max-w-3xl mx-auto px-4 py-8 text-center">
           <p className="text-[10px] text-ash/72 tracking-wide">
@@ -380,6 +392,9 @@ export default function Home() {
 
       {/* Easter egg overlay */}
       <EasterEggOverlay egg={activeEgg} onDismiss={() => setActiveEgg(null)} />
+
+      {/* Keyboard shortcuts overlay (press ?) */}
+      <KeyboardShortcuts />
     </main>
   );
 }

@@ -62,6 +62,8 @@ export function ProductCard({ product, onAuthorize, autoFocusBuy }: ProductCardP
       exit={{ opacity: 0, y: -20, scale: 0.97 }}
       transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
       className="relative rounded-2xl overflow-hidden bg-surface/70 border border-line/40 backdrop-blur-xl"
+      role="article"
+      aria-label={`${product.title} — ${formatCurrency(dna.isFree ? 0 : dna.adjustedPrice)}`}
     >
       {/* Swipe-to-buy background layer */}
       <motion.div

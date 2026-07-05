@@ -12,6 +12,31 @@
     font-feature-settings: "ss01", "ss02", "cv01";
   }
 
+  /* Global focus-visible ring — accessible keyboard navigation */
+  :focus-visible {
+    outline: 2px solid rgba(140, 122, 101, 0.6);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Remove default focus ring for mouse clicks */
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  /* Screen reader only utility */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
   /* Mono font utility */
   .font-mono {
     font-family: var(--font-mono), "JetBrains Mono", ui-monospace, monospace;
@@ -163,3 +188,53 @@
 .stagger-section:nth-child(10) { animation-delay: 540ms; }
 .stagger-section:nth-child(11) { animation-delay: 600ms; }
 .stagger-section:nth-child(12) { animation-delay: 660ms; }
+
+/* ─── Mobile touch target improvements ──────────────────────────── */
+@media (pointer: coarse) {
+  /* Ensure all interactive elements meet 44px minimum */
+  button, [role="radio"], [role="button"], select, input {
+    min-height: 44px;
+  }
+
+  /* Tier tab strip — horizontal scroll snap */
+  .tier-tabs {
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .tier-tabs > button {
+    scroll-snap-align: start;
+  }
+}
+
+/* ─── Reduced motion preference ─────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .stagger-section {
+    animation: none;
+    opacity: 1;
+  }
+
+  .film-grain {
+    display: none;
+  }
+
+  .skeleton-shimmer {
+    animation: none;
+  }
+
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ─── Keyboard shortcut hint ────────────────────────────────────── */
+@keyframes kbd-pulse {
+  0%, 100% { opacity: 0.65; }
+  50% { opacity: 1; }
+}
+
+.kbd-hint {
+  animation: kbd-pulse 2s ease-in-out 1;
+}
