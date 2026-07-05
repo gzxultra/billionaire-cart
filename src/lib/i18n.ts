@@ -165,9 +165,9 @@ const strings: Record<string, Record<Locale, string>> = {
 
   // ─── Share Receipt ─────────────────────────────────────────────
   "share.title": { en: "Share Receipt", zh: "分享" },
-  "share.download": { en: "📥 Download PNG", zh: "📥 下载图片" },
-  "share.copy": { en: "📋 Copy Text", zh: "📋 复制文本" },
-  "share.copied": { en: "✓ Copied!", zh: "✓ 已复制！" },
+  "share.download": { en: "Download PNG", zh: "下载图片" },
+  "share.copy": { en: "Copy Text", zh: "复制文本" },
+  "share.copied": { en: "Copied!", zh: "已复制！" },
   "share.close": { en: "Close", zh: "关闭" },
   "share.receipt": { en: "Transaction Receipt", zh: "消费收据" },
   "share.netWorth": { en: "Net Worth", zh: "净资产" },
@@ -322,6 +322,15 @@ const strings: Record<string, Record<Locale, string>> = {
   // ─── Identity (live data) ──────────────────────────────────────
   "identity.live": { en: "LIVE", zh: "实时" },
   "identity.currency": { en: "Currency", zh: "货币" },
+  "identity.searchPlaceholder": { en: "Search by name, company, or sector…", zh: "按姓名、公司或领域搜索…" },
+  "identity.filterAll": { en: "All", zh: "全部" },
+  "identity.sort": { en: "Sort", zh: "排序" },
+  "identity.sortDefault": { en: "Default", zh: "默认" },
+  "identity.sortWorthDesc": { en: "Richest ↓", zh: "最富 ↓" },
+  "identity.sortWorthAsc": { en: "Least ↑", zh: "最少 ↑" },
+  "identity.sortName": { en: "Name A-Z", zh: "姓名 A-Z" },
+  "identity.noResults": { en: "No billionaires match your search", zh: "没有匹配的亿万富翁" },
+  "identity.resultCount": { en: "{count} found", zh: "找到 {count} 位" },
 
   // ─── Black Card ────────────────────────────────────────────────
   "card.brand": { en: "Billionaire Cart", zh: "亿万富翁购物车" },
@@ -416,6 +425,7 @@ const strings: Record<string, Record<Locale, string>> = {
   "share.moreItems": { en: "and {n} more", zh: "另有 {n} 件" },
   "share.burnMo": { en: "Burn / Mo", zh: "月支出" },
   "share.identity": { en: "Identity", zh: "身份" },
+  "share.button": { en: "Share Receipt", zh: "分享收据" },
 
   // ─── Billionaire Profile ───────────────────────────────────────
   "profile.title": { en: "{name}'s Profile", zh: "{name}的档案" },
