@@ -39,6 +39,7 @@ const BillionaireReactions = dynamic(() => import("@/components/billionaire-reac
 const CategoryBreakdown = dynamic(() => import("@/components/category-breakdown").then(m => ({ default: m.CategoryBreakdown })), { ssr: false });
 const GuiltMeter = dynamic(() => import("@/components/guilt-meter").then(m => ({ default: m.GuiltMeter })), { ssr: false });
 const PurchaseFeed = dynamic(() => import("@/components/purchase-feed").then(m => ({ default: m.PurchaseFeed })), { ssr: false });
+const SpendingTimeline = dynamic(() => import("@/components/spending-timeline").then(m => ({ default: m.SpendingTimeline })), { ssr: false });
 
 export default function Home() {
   const selectedBillionaire = useCartStore((s) => s.selectedBillionaire);
@@ -303,6 +304,11 @@ export default function Home() {
                 <EarningsTicker />
               </section>
             </div>
+
+            {/* Spending Timeline — purchase history sparkline */}
+            <section className="card-panel p-5 sm:p-8 stagger-section">
+              <SpendingTimeline />
+            </section>
 
             {/* Wealth Context — accent left border */}
             <section className="card-panel-accent p-5 sm:p-8 stagger-section">

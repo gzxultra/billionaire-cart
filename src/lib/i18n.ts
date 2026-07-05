@@ -64,6 +64,9 @@ const strings: Record<string, Record<Locale, string>> = {
 
   // ─── Spending Speed ────────────────────────────────────────────
   "speed.title": { en: "Spending Velocity", zh: "消费速度" },
+
+  // ─── Spending Timeline ────────────────────────────────────────
+  "timeline.title": { en: "Spending Timeline", zh: "消费轨迹" },
   "speed.perSec": { en: "/sec", zh: "/秒" },
   "speed.last60": { en: "Last 60s", zh: "过去60秒" },
   "speed.vsEarnings": { en: "vs earnings", zh: "对比收入" },

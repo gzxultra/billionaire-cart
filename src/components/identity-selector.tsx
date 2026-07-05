@@ -56,7 +56,7 @@ export function IdentitySelector() {
             <select
               value={currency}
               onChange={(e) => setCurrency(e.target.value)}
-              className="px-1.5 py-0.5 rounded text-[10px] bg-white border border-line/60 text-sand focus:outline-none focus:border-stone/40 cursor-pointer"
+              className="px-1.5 py-0.5 rounded text-[10px] bg-surface border border-line/60 text-sand focus:outline-none focus:border-stone/40 cursor-pointer"
               aria-label={t("identity.currency", locale)}
             >
               {CURRENCY_OPTIONS.map((opt) => (

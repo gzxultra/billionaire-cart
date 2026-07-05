@@ -4,8 +4,8 @@
   "description": "How fast can you spend a billionaire's fortune? The ultimate wealth checkout simulation.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0C0C0E",
-  "theme_color": "#9B8B7A",
+  "background_color": "#F8F5F0",
+  "theme_color": "#A89279",
   "orientation": "portrait-primary",
   "icons": [
     {

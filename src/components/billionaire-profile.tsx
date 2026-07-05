@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCartStore } from "@/lib/store";
 import { useLocale } from "@/lib/use-locale";
@@ -166,10 +166,14 @@ function SecFilingsPanel({
 function WealthComposition({
   slices,
   locale,
+  netWorthB,
 }: {
   slices: WealthSlice[];
   locale: Locale;
+  netWorthB: number;
 }) {
+  const [activeIdx, setActiveIdx] = useState<number | null>(null);
+
   // Compute donut chart segments
   const segments = useMemo(() => {
     let cumulative = 0;
@@ -183,6 +187,26 @@ function WealthComposition({
   const radius = 40;
   const circumference = 2 * Math.PI * radius;
 
+  const handleSegmentEnter = useCallback((i: number) => setActiveIdx(i), []);
+  const handleSegmentLeave = useCallback(() => setActiveIdx(null), []);
+  const handleLegendClick = useCallback((i: number) => {
+    setActiveIdx((prev) => (prev === i ? null : i));
+  }, []);
+
+  // Format dollar value from percentage
+  const sliceDollar = useCallback(
+    (pct: number) => {
+      const val = pct * netWorthB;
+      if (val >= 1) return `$${val.toFixed(1)}B`;
+      const m = val * 1000;
+      if (m >= 1) return `$${m.toFixed(0)}M`;
+      return `$${(m * 1000).toFixed(0)}K`;
+    },
+    [netWorthB]
+  );
+
+  const activeSlice = activeIdx !== null ? slices[activeIdx] : null;
+
   return (
     <div className="space-y-3">
       <h3 className="text-[10px] font-mono text-ash/70 uppercase tracking-wider flex items-center gap-1.5">
@@ -190,44 +214,122 @@ function WealthComposition({
         {t("profile.wealthTitle", locale)}
       </h3>
       <div className="flex items-center gap-5">
-        {/* Donut chart */}
-        <div className="relative w-24 h-24 shrink-0">
+        {/* Interactive donut chart */}
+        <div
+          className="relative w-28 h-28 shrink-0"
+          onMouseLeave={handleSegmentLeave}
+          role="img"
+          aria-label={locale === "zh" ? "财富构成饼图" : "Wealth composition chart"}
+        >
           <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
-            {segments.map((seg, i) => (
-              <motion.circle
-                key={i}
-                cx="50"
-                cy="50"
-                r={radius}
-                fill="none"
-                stroke={seg.color}
-                strokeWidth="14"
-                strokeDasharray={`${seg.pct * circumference} ${circumference}`}
-                strokeDashoffset={-seg.start * circumference}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: i * 0.15, duration: 0.4 }}
-                style={{ opacity: 0.85 }}
-              />
-            ))}
+            {segments.map((seg, i) => {
+              const isActive = activeIdx === i;
+              const isDimmed = activeIdx !== null && activeIdx !== i;
+              return (
+                <motion.circle
+                  key={i}
+                  cx="50"
+                  cy="50"
+                  r={radius}
+                  fill="none"
+                  stroke={seg.color}
+                  strokeWidth={isActive ? 18 : 14}
+                  strokeDasharray={`${seg.pct * circumference} ${circumference}`}
+                  strokeDashoffset={-seg.start * circumference}
+                  initial={{ opacity: 0 }}
+                  animate={{
+                    opacity: isDimmed ? 0.35 : isActive ? 1 : 0.85,
+                    strokeWidth: isActive ? 18 : 14,
+                  }}
+                  transition={{ duration: 0.2 }}
+                  className="cursor-pointer"
+                  style={{ filter: isActive ? `drop-shadow(0 0 6px ${seg.color}50)` : undefined }}
+                  onMouseEnter={() => handleSegmentEnter(i)}
+                  onClick={() => handleLegendClick(i)}
+                />
+              );
+            })}
           </svg>
+          {/* Center tooltip — shows active slice or default */}
+          <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+            <AnimatePresence mode="wait">
+              {activeSlice ? (
+                <motion.div
+                  key={`active-${activeIdx}`}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.15 }}
+                  className="text-center"
+                >
+                  <div className="text-[13px] font-serif text-sand/90 tabular-nums leading-tight">
+                    {sliceDollar(activeSlice.pct)}
+                  </div>
+                  <div className="text-[8px] text-ash/60 font-mono mt-0.5">
+                    {(activeSlice.pct * 100).toFixed(0)}%
+                  </div>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="default"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                  className="text-center"
+                >
+                  <div className="text-[11px] font-serif text-sand/70 tabular-nums">
+                    ${netWorthB.toFixed(0)}B
+                  </div>
+                  <div className="text-[8px] text-ash/50 font-mono mt-0.5">
+                    {locale === "zh" ? "总计" : "Total"}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
-        {/* Legend */}
+        {/* Interactive legend */}
         <div className="flex-1 space-y-1.5 min-w-0">
-          {slices.map((s, i) => (
-            <div key={i} className="flex items-center gap-2">
-              <div
-                className="w-2.5 h-2.5 rounded-sm shrink-0"
-                style={{ backgroundColor: s.color, opacity: 0.85 }}
-              />
-              <span className="text-[11px] text-ash/70 truncate">
-                {locale === "zh" ? s.labelZh : s.label}
-              </span>
-              <span className="text-[10px] text-ash/60 font-mono ml-auto shrink-0">
-                {(s.pct * 100).toFixed(0)}%
-              </span>
-            </div>
-          ))}
+          {slices.map((s, i) => {
+            const isActive = activeIdx === i;
+            const isDimmed = activeIdx !== null && activeIdx !== i;
+            return (
+              <button
+                key={i}
+                className={`w-full flex items-center gap-2 rounded-md px-1.5 py-0.5 -mx-1.5 transition-all duration-150 text-left ${
+                  isActive
+                    ? "bg-surface-dim/80"
+                    : "hover:bg-surface-dim/50"
+                } ${isDimmed ? "opacity-40" : ""}`}
+                onMouseEnter={() => handleSegmentEnter(i)}
+                onMouseLeave={handleSegmentLeave}
+                onClick={() => handleLegendClick(i)}
+              >
+                <div
+                  className="w-2.5 h-2.5 rounded-sm shrink-0 transition-transform duration-150"
+                  style={{
+                    backgroundColor: s.color,
+                    opacity: isActive ? 1 : 0.85,
+                    transform: isActive ? "scale(1.3)" : "scale(1)",
+                  }}
+                />
+                <span className="text-[11px] text-ash/70 truncate flex-1">
+                  {locale === "zh" ? s.labelZh : s.label}
+                  {s.ticker && (
+                    <span className="text-[9px] text-ash/50 font-mono ml-1">{s.ticker}</span>
+                  )}
+                </span>
+                <span className="text-[10px] font-mono ml-auto shrink-0 tabular-nums">
+                  {isActive ? (
+                    <span className="text-champagne/80">{sliceDollar(s.pct)}</span>
+                  ) : (
+                    <span className="text-ash/60">{(s.pct * 100).toFixed(0)}%</span>
+                  )}
+                </span>
+              </button>
+            );
+          })}
         </div>
       </div>
     </div>
@@ -491,7 +593,7 @@ export function BillionaireProfile() {
 
       {/* Wealth Composition - always visible */}
       {b.wealthBreakdown && (
-        <WealthComposition slices={b.wealthBreakdown} locale={locale} />
+        <WealthComposition slices={b.wealthBreakdown} locale={locale} netWorthB={b.netWorthB} />
       )}
 
       {/* Expandable detailed section */}
