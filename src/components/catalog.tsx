@@ -137,8 +137,6 @@ export function Catalog({ onPurchase }: CatalogProps) {
     [selectedBillionaire, soundEnabled, addPurchase, onPurchase]
   );
 
-  if (!selectedBillionaire) return null;
-
   const tiers: Array<CatalogItem["tier"] | "all"> = [
     "all",
     "everyday",
@@ -155,6 +153,8 @@ export function Catalog({ onPurchase }: CatalogProps) {
     }
     return counts;
   }, []);
+
+  if (!selectedBillionaire) return null;
 
   return (
     <div className="w-full">
