@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { useCartStore, selectTotalSpent, selectMonthlyBurn, selectNetWorth } from "@/lib/store";
 import { formatCurrency } from "@/lib/format";
 import { useLocale } from "@/lib/use-locale";
@@ -22,6 +22,35 @@ export function BalanceDisplay() {
   const [drift, setDrift] = useState(0);
   const driftRef = useRef(0);
 
+  // Purchase impact shake
+  const containerRef = useRef<HTMLDivElement>(null);
+  const prevPurchaseCount = useRef(purchaseCount);
+  const prevTotalSpent = useRef(totalSpent);
+
+  const triggerShake = useCallback((intensity: "light" | "heavy") => {
+    const el = containerRef.current;
+    if (!el) return;
+    const cls = intensity === "heavy" ? "impact-shake-heavy" : "impact-shake";
+    el.classList.remove("impact-shake", "impact-shake-heavy");
+    // Force reflow to restart animation
+    void el.offsetWidth;
+    el.classList.add(cls);
+    const timer = setTimeout(() => el.classList.remove(cls), 700);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Detect new purchases and trigger shake
+  useEffect(() => {
+    if (purchaseCount > prevPurchaseCount.current && prevPurchaseCount.current > 0) {
+      const spentDelta = totalSpent - prevTotalSpent.current;
+      const percentOfWorth = netWorth > 0 ? spentDelta / netWorth : 0;
+      // Heavy shake for purchases > 0.1% of net worth
+      triggerShake(percentOfWorth > 0.001 ? "heavy" : "light");
+    }
+    prevPurchaseCount.current = purchaseCount;
+    prevTotalSpent.current = totalSpent;
+  }, [purchaseCount, totalSpent, netWorth, triggerShake]);
+
   useEffect(() => {
     if (!selectedBillionaire) return;
 
@@ -41,11 +70,15 @@ export function BalanceDisplay() {
   const convertedBalance = formatConverted(displayBalance, true);
 
   return (
-    <div className="w-full" role="region" aria-label={t("balance.title", locale)}>
+    <div ref={containerRef} className="w-full" role="region" aria-label={t("balance.title", locale)}>
       <div className="section-label mb-2">
         {t("balance.title", locale)}
       </div>
-      <AnimatedNumber value={displayBalance} className="text-3xl sm:text-5xl lg:text-6xl font-serif text-sand/95 tracking-tight" />
+      <div className="relative">
+        <AnimatedNumber value={displayBalance} className="text-3xl sm:text-5xl lg:text-6xl font-serif text-sand/95 tracking-tight" />
+        {/* Purchase ripple effect — fires on each purchase */}
+        <PurchaseRipple purchaseCount={purchaseCount} />
+      </div>
       {currency !== "USD" && convertedBalance && (
         <div className="text-sm text-ash/70 font-mono mt-1">
           ≈ {convertedBalance}
@@ -113,5 +146,30 @@ function AnimatedNumber({ value, className }: { value: number; className?: strin
     <span className={className} aria-live="polite" aria-atomic="true">
       {formatCurrency(displayValue, true)}
     </span>
+  );
+}
+
+// Ripple effect that fires on each purchase
+function PurchaseRipple({ purchaseCount }: { purchaseCount: number }) {
+  const [rippleKey, setRippleKey] = useState(0);
+  const prevCount = useRef(purchaseCount);
+
+  useEffect(() => {
+    if (purchaseCount > prevCount.current && prevCount.current > 0) {
+      setRippleKey((k) => k + 1);
+    }
+    prevCount.current = purchaseCount;
+  }, [purchaseCount]);
+
+  if (rippleKey === 0) return null;
+
+  return (
+    <div
+      key={rippleKey}
+      className="purchase-ripple"
+      onAnimationEnd={(e) => {
+        (e.target as HTMLElement).remove();
+      }}
+    />
   );
 }

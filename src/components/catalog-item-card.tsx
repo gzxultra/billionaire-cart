@@ -7,6 +7,7 @@ import { formatCurrency } from "@/lib/format";
 import { useLocale } from "@/lib/use-locale";
 import { t, tierLabel } from "@/lib/i18n";
 import { formatModifier } from "@/lib/wealth-dna";
+import { useTilt } from "@/lib/use-tilt";
 
 const QUANTITY_OPTIONS = [1, 10, 100, 1000, "MAX"] as const;
 type QuantityOption = (typeof QUANTITY_OPTIONS)[number];
@@ -103,6 +104,7 @@ function CatalogItemCardInner({
   const locale = useLocale((s) => s.locale);
   const [buyingFlash, setBuyingFlash] = useState(false);
   const [currentQty, setCurrentQty] = useState<number | "MAX">(1);
+  const tiltRef = useTilt<HTMLDivElement>({ max: 6, scale: 1.015, speed: 350 });
 
   const getQty = useCallback(
     (price: number) => {
@@ -128,12 +130,13 @@ function CatalogItemCardInner({
 
   return (
     <motion.div
+      ref={tiltRef}
       layout
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.9 }}
       className={`
-        relative p-3 rounded-xl border transition-all duration-200 overflow-hidden
+        relative p-3 rounded-xl border transition-all duration-200 overflow-hidden tilt-card
         ${
           buyingFlash
             ? "bg-stone/20 border-champagne/60 scale-[0.97]"

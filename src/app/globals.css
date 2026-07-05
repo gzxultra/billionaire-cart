@@ -264,6 +264,85 @@
   animation: hud-milestone-pulse 0.6s ease-out 2;
 }
 
+/* ─── 3D Tilt Card Glow Effect ───────────────────────────────────── */
+.tilt-card {
+  transform-style: preserve-3d;
+}
+
+.tilt-glow-active::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 1;
+  background: radial-gradient(
+    circle at var(--tilt-glow-x, 50%) var(--tilt-glow-y, 50%),
+    rgba(166, 133, 48, 0.08) 0%,
+    transparent 60%
+  );
+  transition: opacity 0.3s ease;
+}
+
+/* ─── Purchase Impact Shake ─────────────────────────────────────── */
+@keyframes impact-shake {
+  0%, 100% { transform: translateX(0); }
+  10% { transform: translateX(-3px) rotate(-0.5deg); }
+  20% { transform: translateX(3px) rotate(0.5deg); }
+  30% { transform: translateX(-2px) rotate(-0.3deg); }
+  40% { transform: translateX(2px) rotate(0.3deg); }
+  50% { transform: translateX(-1px); }
+  60% { transform: translateX(1px); }
+}
+
+.impact-shake {
+  animation: impact-shake 0.5s ease-out;
+}
+
+/* Heavy impact for big purchases */
+@keyframes impact-shake-heavy {
+  0%, 100% { transform: translateX(0) scale(1); }
+  8% { transform: translateX(-5px) rotate(-0.8deg) scale(0.99); }
+  16% { transform: translateX(5px) rotate(0.8deg) scale(1.005); }
+  24% { transform: translateX(-4px) rotate(-0.5deg); }
+  32% { transform: translateX(4px) rotate(0.5deg); }
+  40% { transform: translateX(-2px) rotate(-0.2deg); }
+  50% { transform: translateX(2px) rotate(0.2deg); }
+  60% { transform: translateX(-1px); }
+}
+
+.impact-shake-heavy {
+  animation: impact-shake-heavy 0.6s ease-out;
+}
+
+/* ─── Purchase ripple effect ────────────────────────────────────── */
+@keyframes purchase-ripple {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0.35;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0;
+  }
+}
+
+.purchase-ripple {
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(166, 133, 48, 0.12) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  animation: purchase-ripple 0.8s ease-out forwards;
+}
+
 /* ─── Keyboard shortcut hint ────────────────────────────────────── */
 @keyframes kbd-pulse {
   0%, 100% { opacity: 0.65; }

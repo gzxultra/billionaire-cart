@@ -30,6 +30,7 @@ import { MilestoneCelebration } from "@/components/milestone-celebration";
 import { StickyOmniBox } from "@/components/sticky-omnibox";
 import { SectionErrorBoundary } from "@/components/error-boundary";
 import { SectionSkeleton, StatCardSkeleton } from "@/components/section-skeleton";
+import { SpendingRing } from "@/components/spending-ring";
 import {
   checkEasterEggs,
   resetEasterEggs,
@@ -123,6 +124,8 @@ export default function Home() {
             </div>
           </div>
           <div className="flex items-center gap-2 sm:gap-3">
+            {/* Spending progress ring */}
+            <SpendingRing />
             {/* Language toggle */}
             <button
               onClick={toggleLocale}
