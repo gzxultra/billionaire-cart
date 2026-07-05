@@ -8,6 +8,7 @@ import { useLocale } from "@/lib/use-locale";
 import { t, tierLabel } from "@/lib/i18n";
 import { formatModifier } from "@/lib/wealth-dna";
 import { useTilt } from "@/lib/use-tilt";
+import { toast } from "@/lib/use-toast";
 
 const QUANTITY_OPTIONS = [1, 10, 100, 1000, "MAX"] as const;
 type QuantityOption = (typeof QUANTITY_OPTIONS)[number];
@@ -121,12 +122,68 @@ function CatalogItemCardInner({
   const qty = getQty(effectivePrice > 0 ? effectivePrice : item.price);
   const totalPrice = effectivePrice * qty;
 
+  // ─── Hold-to-rapid-buy ────────────────────────────────────────
+  const holdIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const holdCountRef = useRef(0);
+  const isHoldingRef = useRef(false);
+
   const handleBuyClick = useCallback(() => {
     if (!canAfford && !isFree) return;
     setBuyingFlash(true);
     onBuy(item, qty);
+    // Haptic feedback on mobile
+    if (typeof navigator !== "undefined" && navigator.vibrate) {
+      navigator.vibrate(12);
+    }
     setTimeout(() => setBuyingFlash(false), 600);
   }, [canAfford, isFree, onBuy, item, qty]);
+
+  const startHoldBuy = useCallback(() => {
+    if (!canAfford && !isFree) return;
+    isHoldingRef.current = true;
+    holdCountRef.current = 0;
+    // Start rapid-fire after a 400ms hold delay
+    holdIntervalRef.current = setTimeout(() => {
+      if (!isHoldingRef.current) return;
+      // Rapid fire every 120ms (accelerates)
+      const fire = () => {
+        if (!isHoldingRef.current) return;
+        holdCountRef.current++;
+        onBuy(item, qty);
+        setBuyingFlash(true);
+        setTimeout(() => setBuyingFlash(false), 100);
+        if (typeof navigator !== "undefined" && navigator.vibrate) {
+          navigator.vibrate(8);
+        }
+        // Accelerate: 120ms → 60ms → 30ms
+        const delay = holdCountRef.current < 5 ? 120 : holdCountRef.current < 15 ? 60 : 30;
+        holdIntervalRef.current = setTimeout(fire, delay);
+      };
+      fire();
+    }, 400);
+  }, [canAfford, isFree, onBuy, item, qty]);
+
+  const stopHoldBuy = useCallback(() => {
+    isHoldingRef.current = false;
+    if (holdIntervalRef.current) {
+      clearTimeout(holdIntervalRef.current);
+      holdIntervalRef.current = null;
+    }
+    if (holdCountRef.current > 0) {
+      toast(
+        `🔥 ×${holdCountRef.current} rapid buy!`,
+        2000
+      );
+    }
+    holdCountRef.current = 0;
+  }, []);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (holdIntervalRef.current) clearTimeout(holdIntervalRef.current);
+    };
+  }, []);
 
   const accent = TIER_ACCENTS[item.tier] || TIER_ACCENTS.everyday;
 
@@ -309,9 +366,15 @@ function CatalogItemCardInner({
         })}
       </div>
 
-      {/* Buy button */}
+      {/* Buy button — click to buy, hold to rapid-buy */}
       <motion.button
         onClick={handleBuyClick}
+        onMouseDown={startHoldBuy}
+        onMouseUp={stopHoldBuy}
+        onMouseLeave={stopHoldBuy}
+        onTouchStart={startHoldBuy}
+        onTouchEnd={stopHoldBuy}
+        onTouchCancel={stopHoldBuy}
         disabled={(!canAfford && !isFree) || buyingFlash}
         whileTap={canAfford || isFree ? { scale: 0.94 } : undefined}
         transition={{ type: "spring", stiffness: 500, damping: 20 }}

@@ -32,6 +32,7 @@ import { StickyOmniBox } from "@/components/sticky-omnibox";
 import { SectionErrorBoundary } from "@/components/error-boundary";
 import { SectionSkeleton, StatCardSkeleton } from "@/components/section-skeleton";
 import { SpendingRing } from "@/components/spending-ring";
+import { UndoToast } from "@/components/undo-toast";
 import {
   checkEasterEggs,
   resetEasterEggs,
@@ -47,6 +48,8 @@ const CategoryBreakdown = dynamic(() => import("@/components/category-breakdown"
 const GuiltMeter = dynamic(() => import("@/components/guilt-meter").then(m => ({ default: m.GuiltMeter })), { ssr: false, loading: () => <StatCardSkeleton /> });
 const PurchaseFeed = dynamic(() => import("@/components/purchase-feed").then(m => ({ default: m.PurchaseFeed })), { ssr: false, loading: () => <SectionSkeleton lines={4} /> });
 const SpendingTimeline = dynamic(() => import("@/components/spending-timeline").then(m => ({ default: m.SpendingTimeline })), { ssr: false, loading: () => <SectionSkeleton lines={3} height="140px" /> });
+const SpendingEquivalences = dynamic(() => import("@/components/spending-equivalences").then(m => ({ default: m.SpendingEquivalences })), { ssr: false, loading: () => <SectionSkeleton lines={2} /> });
+const BudgetChallenge = dynamic(() => import("@/components/budget-challenge").then(m => ({ default: m.BudgetChallenge })), { ssr: false, loading: () => <SectionSkeleton lines={3} /> });
 
 export default function Home() {
   const selectedBillionaire = useCartStore((s) => s.selectedBillionaire);
@@ -241,6 +244,13 @@ export default function Home() {
               </SectionErrorBoundary>
             </section>
 
+            {/* Spending Equivalences — fun "your spending = X Big Macs" comparison */}
+            <section className="card-panel p-5 sm:p-8 stagger-section">
+              <SectionErrorBoundary section="Spending Equivalences" silent>
+                <SpendingEquivalences />
+              </SectionErrorBoundary>
+            </section>
+
             {/* Wealth Context — accent left border */}
             <section className="card-panel-accent p-5 sm:p-8 stagger-section">
               <SectionErrorBoundary section="Wealth Context">
@@ -282,6 +292,13 @@ export default function Home() {
                 </SectionErrorBoundary>
               </section>
             </div>
+
+            {/* Budget Challenge — mini-game: hit the target spending amount */}
+            <section className="card-panel-accent p-5 sm:p-8 stagger-section">
+              <SectionErrorBoundary section="Budget Challenge" silent>
+                <BudgetChallenge />
+              </SectionErrorBoundary>
+            </section>
 
             {/* The Vault */}
             <section className="card-panel-champagne p-5 sm:p-8 stagger-section">
@@ -367,6 +384,9 @@ export default function Home() {
 
       {/* Keyboard shortcuts overlay (press ?) */}
       <KeyboardShortcuts />
+
+      {/* Purchase undo toast — 5s undo window after each purchase */}
+      <UndoToast />
 
       {/* Floating scroll-to-top with progress ring */}
       <ScrollToTop />
