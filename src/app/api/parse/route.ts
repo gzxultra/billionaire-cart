@@ -44,6 +44,60 @@ interface JsonLdProduct {
   sku?: string;
 }
 
+// ─── URL-based fallback extraction (when fetch is blocked) ───────────
+function extractFromUrl(url: string): ParsedProduct | null {
+  try {
+    const parsed = new URL(url);
+    const hostname = parsed.hostname.replace("www.", "");
+
+    // Amazon: extract ASIN, build image URL
+    if (hostname.includes("amazon.")) {
+      const asinMatch = url.match(/\/(?:dp|gp\/product|ASIN)\/([A-Z0-9]{10})/i);
+      if (asinMatch) {
+        const asin = asinMatch[1];
+        return {
+          title: `Amazon Product (${asin})`,
+          price: 0,
+          description: "",
+          imageUrl: `https://images-na.ssl-images-amazon.com/images/I/${asin}._AC_SL1200_.jpg`,
+          sourceDomain: hostname,
+          sourceUrl: url,
+          favicon: `https://www.google.com/s2/favicons?domain=${hostname}&sz=64`,
+          assetClass: "other",
+          monthlyOverhead: 0,
+        };
+      }
+    }
+
+    // Generic fallback with favicon
+    const pathParts = parsed.pathname.split("/").filter(Boolean);
+    const lastPart = pathParts[pathParts.length - 1] || "";
+    const title = decodeURIComponent(lastPart)
+      .replace(/[-_]/g, " ")
+      .replace(/\.[^.]+$/, "")
+      .replace(/\b\w/g, (c) => c.toUpperCase())
+      .slice(0, 80);
+
+    if (title.length > 3) {
+      return {
+        title,
+        price: 0,
+        description: "",
+        imageUrl: null,
+        sourceDomain: hostname,
+        sourceUrl: url,
+        favicon: `https://www.google.com/s2/favicons?domain=${hostname}&sz=64`,
+        assetClass: "other",
+        monthlyOverhead: 0,
+      };
+    }
+
+    return null;
+  } catch {
+    return null;
+  }
+}
+
 function extractJsonLd(html: string): Partial<ParsedProduct> | null {
   const scriptPattern = /<script[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi;
   let match;
@@ -656,16 +710,34 @@ export async function POST(request: NextRequest) {
   }
 
   try {
+    const fetchHeaders: Record<string, string> = {
+      "User-Agent":
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
+      "Accept-Language": "en-US,en;q=0.9",
+      "Accept-Encoding": "gzip, deflate, br",
+      "Cache-Control": "no-cache",
+      "Pragma": "no-cache",
+      "Sec-Fetch-Dest": "document",
+      "Sec-Fetch-Mode": "navigate",
+      "Sec-Fetch-Site": "none",
+      "Sec-Fetch-User": "?1",
+      "Upgrade-Insecure-Requests": "1",
+    };
+
     const res = await fetch(url, {
-      headers: {
-        "User-Agent":
-          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-        Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-      },
-      signal: AbortSignal.timeout(8000),
+      headers: fetchHeaders,
+      redirect: "follow",
+      signal: AbortSignal.timeout(10000),
     });
 
     if (!res.ok) {
+      // Fallback: try to extract basic info from URL structure (e.g. Amazon ASIN)
+      const urlFallback = extractFromUrl(url);
+      if (urlFallback) {
+        cache.set(url, urlFallback);
+        return NextResponse.json({ success: true, product: urlFallback, source: "url-fallback" });
+      }
       return NextResponse.json(
         { success: false, error: `Failed to fetch URL (${res.status})` },
         { status: 422 }

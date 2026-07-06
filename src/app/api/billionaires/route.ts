@@ -24,7 +24,7 @@ async function fetchForbes(): Promise<ForbesBillionaire[]> {
 
   try {
     const res = await fetch(
-      "https://www.forbes.com/forbesapi/person/rtb/0/position/true.json?limit=20",
+      "https://www.forbes.com/forbesapi/person/rtb/0/position/true.json?limit=50",
       {
         headers: {
           "User-Agent":
