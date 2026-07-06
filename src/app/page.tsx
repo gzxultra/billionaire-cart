@@ -77,6 +77,10 @@ const MysteryBox = dynamic(() => import("@/components/mystery-box").then(m => ({
 const InvestmentCost = dynamic(() => import("@/components/investment-cost").then(m => ({ default: m.InvestmentCost })), { ssr: false, loading: () => <SectionSkeleton lines={4} /> });
 const SpendingHeatmap = dynamic(() => import("@/components/spending-heatmap").then(m => ({ default: m.SpendingHeatmap })), { ssr: false, loading: () => <SectionSkeleton lines={3} /> });
 const PurchaseBingo = dynamic(() => import("@/components/purchase-bingo").then(m => ({ default: m.PurchaseBingo })), { ssr: false, loading: () => <SectionSkeleton lines={4} /> });
+const FlashSale = dynamic(() => import("@/components/flash-sale").then(m => ({ default: m.FlashSale })), { ssr: false, loading: () => <SectionSkeleton lines={3} /> });
+const AuctionHouse = dynamic(() => import("@/components/auction-house").then(m => ({ default: m.AuctionHouse })), { ssr: false, loading: () => <SectionSkeleton lines={4} /> });
+const PriceNegotiator = dynamic(() => import("@/components/price-negotiator").then(m => ({ default: m.PriceNegotiator })), { ssr: false, loading: () => <SectionSkeleton lines={4} /> });
+const BurnRate = dynamic(() => import("@/components/burn-rate").then(m => ({ default: m.BurnRate })), { ssr: false, loading: () => <SectionSkeleton lines={3} /> });
 
 export default function Home() {
   const selectedBillionaire = useCartStore((s) => s.selectedBillionaire);
@@ -270,6 +274,11 @@ export default function Home() {
               </div>
             </section>
 
+            {/* Flash Sale — time-limited discounted deals */}
+            <SectionErrorBoundary section="Flash Sale" silent>
+              <FlashSale />
+            </SectionErrorBoundary>
+
             {/* Purchase Feed — recent parsed & bought items */}
             <section className="card-panel p-5 sm:p-8 stagger-section">
               <SectionErrorBoundary section="Purchase Feed">
@@ -280,6 +289,11 @@ export default function Home() {
             {/* Mystery Box — random surprise purchases with tiered loot */}
             <SectionErrorBoundary section="Mystery Box" silent>
               <MysteryBox />
+            </SectionErrorBoundary>
+
+            {/* Auction House — competitive bidding mini-game */}
+            <SectionErrorBoundary section="Auction House" silent>
+              <AuctionHouse />
             </SectionErrorBoundary>
 
             {/* Empire Acquisitions — buy real companies with remaining balance */}
@@ -398,6 +412,11 @@ export default function Home() {
               </SectionErrorBoundary>
             </section>
 
+            {/* Price Negotiator — haggle for deals */}
+            <SectionErrorBoundary section="Price Negotiator" silent>
+              <PriceNegotiator />
+            </SectionErrorBoundary>
+
             {/* Quick Buy Catalog — full width */}
             <section data-section="catalog" className="card-panel p-5 sm:p-8 stagger-section">
               <SectionErrorBoundary section="Catalog">
@@ -451,6 +470,11 @@ export default function Home() {
             {/* Purchase Stats Dashboard — session analytics */}
             <SectionErrorBoundary section="Purchase Stats" silent>
               <PurchaseStats />
+            </SectionErrorBoundary>
+
+            {/* Burn Rate — lifestyle cost ticker */}
+            <SectionErrorBoundary section="Burn Rate" silent>
+              <BurnRate />
             </SectionErrorBoundary>
 
             {/* The Vault */}
