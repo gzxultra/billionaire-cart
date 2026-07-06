@@ -73,6 +73,9 @@ const SpendingMilestoneTracker = dynamic(() => import("@/components/spending-mil
 const SpendingReplay = dynamic(() => import("@/components/spending-replay").then(m => ({ default: m.SpendingReplay })), { ssr: false });
 const EmpireAcquisitions = dynamic(() => import("@/components/empire-acquisitions").then(m => ({ default: m.EmpireAcquisitions })), { ssr: false, loading: () => <SectionSkeleton lines={4} /> });
 const PurchaseStats = dynamic(() => import("@/components/purchase-stats").then(m => ({ default: m.PurchaseStats })), { ssr: false, loading: () => <SectionSkeleton lines={3} /> });
+const MysteryBox = dynamic(() => import("@/components/mystery-box").then(m => ({ default: m.MysteryBox })), { ssr: false, loading: () => <SectionSkeleton lines={3} /> });
+const InvestmentCost = dynamic(() => import("@/components/investment-cost").then(m => ({ default: m.InvestmentCost })), { ssr: false, loading: () => <SectionSkeleton lines={4} /> });
+const SpendingHeatmap = dynamic(() => import("@/components/spending-heatmap").then(m => ({ default: m.SpendingHeatmap })), { ssr: false, loading: () => <SectionSkeleton lines={3} /> });
 
 export default function Home() {
   const selectedBillionaire = useCartStore((s) => s.selectedBillionaire);
@@ -273,6 +276,11 @@ export default function Home() {
               </SectionErrorBoundary>
             </section>
 
+            {/* Mystery Box — random surprise purchases with tiered loot */}
+            <SectionErrorBoundary section="Mystery Box" silent>
+              <MysteryBox />
+            </SectionErrorBoundary>
+
             {/* Empire Acquisitions — buy real companies with remaining balance */}
             <SectionErrorBoundary section="Empire Acquisitions" silent>
               <div data-section="empire">
@@ -319,6 +327,16 @@ export default function Home() {
             {/* Spending Replay — rewatch your spending spree in fast-forward */}
             <SectionErrorBoundary section="Spending Replay" silent>
               <SpendingReplay />
+            </SectionErrorBoundary>
+
+            {/* Investment Opportunity Cost — what if you'd invested instead */}
+            <SectionErrorBoundary section="Investment Cost" silent>
+              <InvestmentCost />
+            </SectionErrorBoundary>
+
+            {/* Spending Heatmap — GitHub-style purchase activity grid */}
+            <SectionErrorBoundary section="Spending Heatmap" silent>
+              <SpendingHeatmap />
             </SectionErrorBoundary>
 
             {/* Purchase Hall of Fame — top purchases ranked with medals */}

@@ -41,6 +41,9 @@ export function OmniBox() {
   const [manualPrice, setManualPrice] = useState("");
   const [manualClass, setManualClass] = useState<AssetClass>("other");
 
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [selectedSuggestionIdx, setSelectedSuggestionIdx] = useState(-1);
+
   // Shared parse hook — replaces duplicated fetch logic
   const { loading, error, parseSource, lastFailedUrl, parseUrl: doParse, clearError } = useUrlParse();
 
@@ -53,6 +56,21 @@ export function OmniBox() {
   const activeParsedProduct = useCartStore((s) => s.activeParsedProduct);
   const setActiveParsed = useCartStore((s) => s.setActiveParsed);
   const locale = useLocale((s) => s.locale);
+
+  // Catalog auto-suggest: match when input looks like text (not a URL)
+  const catalogSuggestions = useMemo(() => {
+    const q = url.trim().toLowerCase();
+    if (!q || q.length < 2 || /^https?:\/\//i.test(q) || /\.\w{2,}/.test(q)) return [];
+    return catalogItems
+      .filter(
+        (item) =>
+          item.name.toLowerCase().includes(q) ||
+          item.nameZh.includes(q) ||
+          item.emoji.includes(q) ||
+          item.description.toLowerCase().includes(q)
+      )
+      .slice(0, 6);
+  }, [url]);
 
   // Watch for external product selection (e.g. from PurchaseFeed)
   useEffect(() => {
@@ -136,6 +154,33 @@ export function OmniBox() {
     setBatchResult({ success: successCount, total: urls.length });
     setTimeout(() => setBatchResult(null), 4000);
   }, [batchUrls, saveProduct]);
+
+  const handleSelectCatalogSuggestion = useCallback(
+    (item: (typeof catalogItems)[number]) => {
+      if (!selectedBillionaire) return;
+      const dna = applyWealthDna(
+        { title: item.name, price: item.price, assetClass: item.assetClass },
+        selectedBillionaire
+      );
+      const parsed: ParsedProduct = {
+        title: item.name,
+        price: dna.adjustedPrice,
+        imageUrl: null,
+        description: item.description,
+        sourceUrl: `catalog://${item.id}`,
+        assetClass: item.assetClass,
+        monthlyOverhead: item.monthlyOverhead,
+      };
+      setProduct(parsed);
+      setUrl("");
+      setShowSuggestions(false);
+      setSelectedSuggestionIdx(-1);
+      setTimeout(() => {
+        cardRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 100);
+    },
+    [selectedBillionaire]
+  );
 
   const handleClipboardPaste = useCallback(async () => {
     try {
@@ -284,12 +329,50 @@ export function OmniBox() {
           <input
             ref={inputRef}
             id="omnibox-input"
-            type="url"
+            type="text"
             value={url}
-            onChange={(e) => setUrl(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && parseUrl()}
+            onChange={(e) => {
+              setUrl(e.target.value);
+              setShowSuggestions(true);
+              setSelectedSuggestionIdx(-1);
+            }}
+            onKeyDown={(e) => {
+              if (catalogSuggestions.length > 0 && showSuggestions) {
+                if (e.key === "ArrowDown") {
+                  e.preventDefault();
+                  setSelectedSuggestionIdx((prev) =>
+                    prev < catalogSuggestions.length - 1 ? prev + 1 : 0
+                  );
+                  return;
+                }
+                if (e.key === "ArrowUp") {
+                  e.preventDefault();
+                  setSelectedSuggestionIdx((prev) =>
+                    prev > 0 ? prev - 1 : catalogSuggestions.length - 1
+                  );
+                  return;
+                }
+                if (e.key === "Enter" && selectedSuggestionIdx >= 0) {
+                  e.preventDefault();
+                  handleSelectCatalogSuggestion(catalogSuggestions[selectedSuggestionIdx]);
+                  return;
+                }
+                if (e.key === "Escape") {
+                  setShowSuggestions(false);
+                  return;
+                }
+              }
+              if (e.key === "Enter") parseUrl();
+            }}
             onPaste={handlePaste}
-            onFocus={() => recentProducts.length > 0 && !product && setShowHistory(true)}
+            onFocus={() => {
+              if (catalogSuggestions.length > 0) setShowSuggestions(true);
+              else if (recentProducts.length > 0 && !product) setShowHistory(true);
+            }}
+            onBlur={() => {
+              // Delay to allow click on suggestion
+              setTimeout(() => setShowSuggestions(false), 200);
+            }}
             placeholder={t("omni.placeholder", locale)}
             disabled={loading}
             className="
@@ -299,6 +382,7 @@ export function OmniBox() {
               transition-all duration-300 text-sm
               disabled:opacity-50
             "
+            autoComplete="off"
           />
           <button
             onClick={handleClipboardPaste}
@@ -324,6 +408,48 @@ export function OmniBox() {
             {loading ? t("omni.parsing", locale) : t("omni.parse", locale)}
           </button>
         </div>
+
+        {/* Catalog auto-suggest dropdown */}
+        <AnimatePresence>
+          {showSuggestions && catalogSuggestions.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: -4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -4 }}
+              transition={{ duration: 0.15 }}
+              className="absolute top-full left-0 right-0 mt-1 z-30 bg-surface border border-line/50 rounded-xl shadow-xl overflow-hidden"
+            >
+              <div className="px-3 py-1.5 border-b border-line/30">
+                <span className="text-[9px] uppercase tracking-wider text-ash/50 font-mono">
+                  {locale === "zh" ? "目录匹配" : "Catalog matches"}
+                </span>
+              </div>
+              {catalogSuggestions.map((item, i) => (
+                <button
+                  key={item.id}
+                  onClick={() => handleSelectCatalogSuggestion(item)}
+                  className={`
+                    w-full flex items-center gap-3 px-3 py-2.5 text-left transition-colors
+                    ${i === selectedSuggestionIdx ? "bg-stone/10" : "hover:bg-surface-dim/50"}
+                  `}
+                >
+                  <span className="text-base shrink-0">{item.emoji}</span>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-[12px] text-sand/90 truncate">
+                      {locale === "zh" ? item.nameZh : item.name}
+                    </div>
+                    <div className="text-[10px] text-ash/50 truncate">
+                      {locale === "zh" ? item.descriptionZh : item.description}
+                    </div>
+                  </div>
+                  <span className="text-[11px] font-serif text-champagne/80 tabular-nums shrink-0">
+                    {formatCurrency(item.price, item.price >= 1_000_000)}
+                  </span>
+                </button>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Parse source badge */}
