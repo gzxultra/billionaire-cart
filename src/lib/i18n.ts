@@ -483,6 +483,32 @@ const strings: Record<string, Record<Locale, string>> = {
     en: "{name} has earned {amount} just while you've been on this page",
     zh: "{name} 在你浏览这个页面的这段时间里已经赚了 {amount}",
   },
+
+  // ─── Fortune Health Bar ────────────────────────────────────────
+  "fortune.title": { en: "Fortune Depletion", zh: "财富消耗" },
+  "fortune.spent": { en: "Spent", zh: "已花费" },
+  "fortune.remaining": { en: "Remaining", zh: "剩余" },
+  "fortune.milestone25": { en: "25% Fortune Deployed!", zh: "25% 财富已部署！" },
+  "fortune.milestone50": { en: "Half the Fortune Gone!", zh: "一半身家已挥霍！" },
+  "fortune.milestone75": { en: "75% Burned Through!", zh: "75% 已灰飞烟灭！" },
+  "fortune.milestone90": { en: "90% — Almost Bankrupt!", zh: "90% — 即将破产！" },
+
+  // ─── Session Report ────────────────────────────────────────────
+  "session.title": { en: "Session Report", zh: "本轮战报" },
+  "session.totalItems": { en: "Items Bought", zh: "购买件数" },
+  "session.avgPrice": { en: "Avg. Price", zh: "均价" },
+  "session.depleted": { en: "Depleted", zh: "消耗" },
+  "session.biggest": { en: "Biggest Purchase", zh: "最大手笔" },
+  "session.topCategory": { en: "Top Category", zh: "最多品类" },
+
+  // ─── Net Worth Race ────────────────────────────────────────────
+  "race.title": { en: "Net Worth Race", zh: "财富竞速" },
+  "race.yourSpending": { en: "Your Spending", zh: "你的消费" },
+  "race.theirEarnings": { en: "Their Earnings", zh: "他的收入" },
+  "race.outspending": { en: "You're outspending them!", zh: "你花得比他赚得快！" },
+  "race.earningFaster": { en: "They're earning faster!", zh: "他赚得比你花得快！" },
+  "race.burning": { en: "BURNING FASTER THAN THEY EARN", zh: "烧钱速度超越赚钱速度" },
+  "race.recovering": { en: "Fortune is recovering…", zh: "财富正在恢复中…" },
 };
 
 

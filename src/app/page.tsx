@@ -33,6 +33,10 @@ import { SectionErrorBoundary } from "@/components/error-boundary";
 import { SectionSkeleton, StatCardSkeleton } from "@/components/section-skeleton";
 import { SpendingRing } from "@/components/spending-ring";
 import { UndoToast } from "@/components/undo-toast";
+import { FortuneBar } from "@/components/fortune-bar";
+import { QuickSwitcher } from "@/components/quick-switcher";
+import { SessionReport } from "@/components/session-report";
+import { WealthRace } from "@/components/wealth-race";
 import {
   checkEasterEggs,
   resetEasterEggs,
@@ -131,6 +135,8 @@ export default function Home() {
           <div className="flex items-center gap-2 sm:gap-3">
             {/* Spending progress ring */}
             <SpendingRing />
+            {/* Quick billionaire switcher */}
+            <QuickSwitcher />
             {/* Language toggle */}
             <button
               onClick={toggleLocale}
@@ -187,6 +193,11 @@ export default function Home() {
               </SectionErrorBoundary>
             </section>
 
+            {/* Fortune Health Bar — spending depletion progress */}
+            <SectionErrorBoundary section="Fortune Bar" silent>
+              <FortuneBar />
+            </SectionErrorBoundary>
+
             {/* Billionaire Profile — wealth DNA, signature purchases, SEC filings */}
             <section className="card-panel p-5 sm:p-8 stagger-section">
               <SectionErrorBoundary section="Billionaire Profile">
@@ -238,12 +249,22 @@ export default function Home() {
               </section>
             </div>
 
+            {/* Net Worth Race — earnings vs spending animated race */}
+            <SectionErrorBoundary section="Wealth Race" silent>
+              <WealthRace />
+            </SectionErrorBoundary>
+
             {/* Spending Timeline — purchase history sparkline */}
             <section className="card-panel p-5 sm:p-8 stagger-section">
               <SectionErrorBoundary section="Spending Timeline">
                 <SpendingTimeline />
               </SectionErrorBoundary>
             </section>
+
+            {/* Session Report — gamified session statistics */}
+            <SectionErrorBoundary section="Session Report" silent>
+              <SessionReport />
+            </SectionErrorBoundary>
 
             {/* Spending Equivalences — fun "your spending = X Big Macs" comparison */}
             <section className="card-panel p-5 sm:p-8 stagger-section">
