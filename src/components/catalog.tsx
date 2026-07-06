@@ -14,6 +14,7 @@ import { getBulkPurchaseFact } from "@/lib/fun-facts";
 import { applyWealthDna } from "@/lib/wealth-dna";
 import { CatalogItemCard } from "./catalog-item-card";
 import { Roulette } from "./roulette";
+import { StaffPicks } from "./staff-picks";
 
 type SortMode = "default" | "priceAsc" | "priceDesc" | "name";
 
@@ -180,6 +181,9 @@ export function Catalog({ onPurchase }: CatalogProps) {
   return (
     <div className="w-full">
       <h2 className="section-label mb-4">{t("catalog.title", locale)}</h2>
+
+      {/* Staff Picks — rotating featured items */}
+      <StaffPicks onBuy={(item) => handleBuy(item, 1)} />
 
       {/* Surprise Buy Roulette */}
       <Roulette items={catalogItems} remaining={remaining} onBuy={handleBuy} />

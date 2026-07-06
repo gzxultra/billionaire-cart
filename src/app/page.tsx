@@ -37,6 +37,8 @@ import { FortuneBar } from "@/components/fortune-bar";
 import { QuickSwitcher } from "@/components/quick-switcher";
 import { SessionReport } from "@/components/session-report";
 import { WealthRace } from "@/components/wealth-race";
+import { ShoppingPersonality } from "@/components/shopping-personality";
+import { CompareCard } from "@/components/compare-card";
 import {
   checkEasterEggs,
   resetEasterEggs,
@@ -205,6 +207,11 @@ export default function Home() {
               </SectionErrorBoundary>
             </section>
 
+            {/* Billionaire Comparison — side-by-side duel */}
+            <SectionErrorBoundary section="Compare Card" silent>
+              <CompareCard />
+            </SectionErrorBoundary>
+
             {/* Balance — accent left border */}
             <section className="card-panel-champagne p-5 sm:p-8 stagger-section">
               <SectionErrorBoundary section="Balance">
@@ -264,6 +271,11 @@ export default function Home() {
             {/* Session Report — gamified session statistics */}
             <SectionErrorBoundary section="Session Report" silent>
               <SessionReport />
+            </SectionErrorBoundary>
+
+            {/* Shopping Personality — fun archetype reveal based on purchase patterns */}
+            <SectionErrorBoundary section="Shopping Personality" silent>
+              <ShoppingPersonality />
             </SectionErrorBoundary>
 
             {/* Spending Equivalences — fun "your spending = X Big Macs" comparison */}

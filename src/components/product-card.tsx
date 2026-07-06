@@ -6,7 +6,7 @@ import { ParsedProduct } from "@/lib/types";
 import { formatCurrency, assetLabel, proxyImage } from "@/lib/format";
 import { useLocale } from "@/lib/use-locale";
 import { t } from "@/lib/i18n";
-import { useCartStore, selectRemaining } from "@/lib/store";
+import { useCartStore, selectRemaining, selectTotalSpent, selectNetWorth } from "@/lib/store";
 import { applyWealthDna, formatModifier } from "@/lib/wealth-dna";
 
 interface ProductCardProps {
@@ -17,6 +17,62 @@ interface ProductCardProps {
 
 const SWIPE_THRESHOLD = 120;
 const QTY_PRESETS = [1, 10, 100, 1000] as const;
+
+/** Mini fortune bar preview showing how a purchase would impact the balance */
+function PriceImpactPreview({ price }: { price: number }) {
+  const locale = useLocale((s) => s.locale);
+  const totalSpent = useCartStore(selectTotalSpent);
+  const netWorth = useCartStore(selectNetWorth);
+
+  if (netWorth <= 0 || price <= 0) return null;
+
+  const currentPct = (totalSpent / netWorth) * 100;
+  const afterPct = Math.min(((totalSpent + price) / netWorth) * 100, 100);
+  const impactPct = afterPct - currentPct;
+
+  // Only show if the impact is visible (> 0.01%)
+  if (impactPct < 0.01) return null;
+
+  const impactColor = impactPct > 10
+    ? "rgba(180,60,60,0.7)"
+    : impactPct > 3
+    ? "rgba(155,107,107,0.7)"
+    : "rgba(166,133,48,0.6)";
+
+  return (
+    <div className="space-y-1.5">
+      <div className="flex items-center justify-between">
+        <span className="text-[9px] uppercase tracking-wider text-ash/50 flex items-center gap-1">
+          <span>📊</span>
+          {locale === "zh" ? "财富影响" : "Fortune Impact"}
+        </span>
+        <span className="text-[9px] font-mono text-ash/50 tabular-nums">
+          {currentPct.toFixed(2)}% → {afterPct.toFixed(2)}%
+        </span>
+      </div>
+      <div className="h-2.5 rounded-full bg-surface-dim/60 overflow-hidden relative">
+        {/* Current spent */}
+        <motion.div
+          className="absolute inset-y-0 left-0 rounded-full bg-stone/30"
+          style={{ width: `${Math.min(currentPct, 100)}%` }}
+        />
+        {/* Impact preview (new spending) */}
+        <motion.div
+          initial={{ width: `${Math.min(currentPct, 100)}%` }}
+          animate={{ width: `${Math.min(afterPct, 100)}%` }}
+          transition={{ type: "spring", stiffness: 100, damping: 20 }}
+          className="absolute inset-y-0 left-0 rounded-full"
+          style={{ backgroundColor: impactColor }}
+        />
+      </div>
+      <div className="text-[9px] text-ash/45 font-mono text-right tabular-nums">
+        {impactPct >= 1
+          ? (locale === "zh" ? `消耗 ${impactPct.toFixed(1)}% 财富` : `${impactPct.toFixed(1)}% of fortune`)
+          : (locale === "zh" ? `消耗 ${impactPct.toFixed(3)}% 财富` : `${impactPct.toFixed(3)}% of fortune`)}
+      </div>
+    </div>
+  );
+}
 
 export function ProductCard({ product, onAuthorize, autoFocusBuy }: ProductCardProps) {
   const locale = useLocale((s) => s.locale);
@@ -266,6 +322,9 @@ export function ProductCard({ product, onAuthorize, autoFocusBuy }: ProductCardP
               </div>
             )}
           </div>
+
+          {/* Price Impact Preview — mini fortune bar showing purchase impact */}
+          <PriceImpactPreview price={totalPrice} />
 
           {/* Quantity selector — visible when can afford > 1 */}
           {!dna.isFree && effectivePrice > 0 && canAffordCount > 1 && (
