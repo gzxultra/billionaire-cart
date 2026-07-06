@@ -48,6 +48,8 @@ import {
 import { SpendingNewsTicker } from "@/components/spending-news-ticker";
 import { EarnBackTimer } from "@/components/earn-back-timer";
 import { SpendingPowerCards } from "@/components/spending-power";
+import { FeverMode } from "@/components/fever-mode";
+import { SectionNav } from "@/components/section-nav";
 
 // ─── Lazy-loaded below-fold components (with skeleton loading states) ─
 const YoloMode = dynamic(() => import("@/components/yolo-mode").then(m => ({ default: m.YoloMode })), { ssr: false, loading: () => <SectionSkeleton lines={3} /> });
@@ -69,6 +71,8 @@ const PurchaseHallOfFame = dynamic(() => import("@/components/purchase-hall-of-f
 const WhatElseCould = dynamic(() => import("@/components/what-else-could").then(m => ({ default: m.WhatElseCould })), { ssr: false });
 const SpendingMilestoneTracker = dynamic(() => import("@/components/spending-milestone-tracker").then(m => ({ default: m.SpendingMilestoneTracker })), { ssr: false, loading: () => <SectionSkeleton lines={4} /> });
 const SpendingReplay = dynamic(() => import("@/components/spending-replay").then(m => ({ default: m.SpendingReplay })), { ssr: false });
+const EmpireAcquisitions = dynamic(() => import("@/components/empire-acquisitions").then(m => ({ default: m.EmpireAcquisitions })), { ssr: false, loading: () => <SectionSkeleton lines={4} /> });
+const PurchaseStats = dynamic(() => import("@/components/purchase-stats").then(m => ({ default: m.PurchaseStats })), { ssr: false, loading: () => <SectionSkeleton lines={3} /> });
 
 export default function Home() {
   const selectedBillionaire = useCartStore((s) => s.selectedBillionaire);
@@ -223,7 +227,7 @@ export default function Home() {
             </SectionErrorBoundary>
 
             {/* Billionaire Profile — wealth DNA, signature purchases, SEC filings */}
-            <section className="card-panel p-5 sm:p-8 stagger-section">
+            <section data-section="profile" className="card-panel p-5 sm:p-8 stagger-section">
               <SectionErrorBoundary section="Billionaire Profile">
                 <BillionaireProfile />
               </SectionErrorBoundary>
@@ -235,7 +239,7 @@ export default function Home() {
             </SectionErrorBoundary>
 
             {/* Balance — accent left border */}
-            <section className="card-panel-champagne p-5 sm:p-8 stagger-section">
+            <section data-section="balance" className="card-panel-champagne p-5 sm:p-8 stagger-section">
               <SectionErrorBoundary section="Balance">
                 <BalanceDisplay />
               </SectionErrorBoundary>
@@ -247,7 +251,7 @@ export default function Home() {
             </SectionErrorBoundary>
 
             {/* ★ OmniBox — HERO position, the core shopping interaction */}
-            <section ref={omniSectionRef} className="card-panel-champagne p-5 sm:p-8 stagger-section relative overflow-hidden">
+            <section data-section="omnibox" ref={omniSectionRef} className="card-panel-champagne p-5 sm:p-8 stagger-section relative overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-stone/[0.03] to-transparent pointer-events-none" />
               <div className="relative">
                 <div className="flex items-center gap-2 mb-4">
@@ -268,6 +272,13 @@ export default function Home() {
                 <PurchaseFeed onRepurchase={handleRepurchase} />
               </SectionErrorBoundary>
             </section>
+
+            {/* Empire Acquisitions — buy real companies with remaining balance */}
+            <SectionErrorBoundary section="Empire Acquisitions" silent>
+              <div data-section="empire">
+                <EmpireAcquisitions />
+              </div>
+            </SectionErrorBoundary>
 
             {/* What Else Could You Buy — alternatives for same price as last purchase */}
             <SectionErrorBoundary section="What Else Could" silent>
@@ -364,7 +375,7 @@ export default function Home() {
             </section>
 
             {/* Quick Buy Catalog — full width */}
-            <section className="card-panel p-5 sm:p-8 stagger-section">
+            <section data-section="catalog" className="card-panel p-5 sm:p-8 stagger-section">
               <SectionErrorBoundary section="Catalog">
                 <Catalog onPurchase={handlePurchase} />
               </SectionErrorBoundary>
@@ -393,7 +404,7 @@ export default function Home() {
             </section>
 
             {/* Analytics row */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 stagger-section">
+            <div data-section="analytics" className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 stagger-section">
               <section className="card-panel p-5">
                 <SectionErrorBoundary section="Category Breakdown" silent>
                   <CategoryBreakdown />
@@ -413,15 +424,20 @@ export default function Home() {
               </SectionErrorBoundary>
             </section>
 
+            {/* Purchase Stats Dashboard — session analytics */}
+            <SectionErrorBoundary section="Purchase Stats" silent>
+              <PurchaseStats />
+            </SectionErrorBoundary>
+
             {/* The Vault */}
-            <section className="card-panel-champagne p-5 sm:p-8 stagger-section">
+            <section data-section="vault" className="card-panel-champagne p-5 sm:p-8 stagger-section">
               <SectionErrorBoundary section="Vault">
                 <Vault />
               </SectionErrorBoundary>
             </section>
 
             {/* Achievements */}
-            <section className="card-panel p-5 sm:p-8 stagger-section">
+            <section data-section="achievements" className="card-panel p-5 sm:p-8 stagger-section">
               <SectionErrorBoundary section="Achievements">
                 <Achievements />
               </SectionErrorBoundary>
@@ -512,6 +528,12 @@ export default function Home() {
 
       {/* Confetti burst overlay */}
       <ConfettiBurst triggerId={confettiTriggerId} />
+
+      {/* Fever Mode — visual escalation during rapid purchases */}
+      <FeverMode />
+
+      {/* Section Navigator — floating minimap */}
+      <SectionNav />
     </main>
   );
 }
