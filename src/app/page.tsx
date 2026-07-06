@@ -46,6 +46,8 @@ import {
   type EasterEgg,
 } from "@/data/easter-eggs";
 import { SpendingNewsTicker } from "@/components/spending-news-ticker";
+import { EarnBackTimer } from "@/components/earn-back-timer";
+import { SpendingPowerCards } from "@/components/spending-power";
 
 // ─── Lazy-loaded below-fold components (with skeleton loading states) ─
 const YoloMode = dynamic(() => import("@/components/yolo-mode").then(m => ({ default: m.YoloMode })), { ssr: false, loading: () => <SectionSkeleton lines={3} /> });
@@ -65,6 +67,8 @@ const BudgetChallenge = dynamic(() => import("@/components/budget-challenge").th
 const BankruptcyCountdown = dynamic(() => import("@/components/bankruptcy-countdown").then(m => ({ default: m.BankruptcyCountdown })), { ssr: false });
 const PurchaseHallOfFame = dynamic(() => import("@/components/purchase-hall-of-fame").then(m => ({ default: m.PurchaseHallOfFame })), { ssr: false, loading: () => <SectionSkeleton lines={4} /> });
 const WhatElseCould = dynamic(() => import("@/components/what-else-could").then(m => ({ default: m.WhatElseCould })), { ssr: false });
+const SpendingMilestoneTracker = dynamic(() => import("@/components/spending-milestone-tracker").then(m => ({ default: m.SpendingMilestoneTracker })), { ssr: false, loading: () => <SectionSkeleton lines={4} /> });
+const SpendingReplay = dynamic(() => import("@/components/spending-replay").then(m => ({ default: m.SpendingReplay })), { ssr: false });
 
 export default function Home() {
   const selectedBillionaire = useCartStore((s) => s.selectedBillionaire);
@@ -213,6 +217,11 @@ export default function Home() {
               <BankruptcyCountdown />
             </SectionErrorBoundary>
 
+            {/* Earn-Back Timer — live countdown for billionaire to earn back spending */}
+            <SectionErrorBoundary section="Earn-Back Timer" silent>
+              <EarnBackTimer />
+            </SectionErrorBoundary>
+
             {/* Billionaire Profile — wealth DNA, signature purchases, SEC filings */}
             <section className="card-panel p-5 sm:p-8 stagger-section">
               <SectionErrorBoundary section="Billionaire Profile">
@@ -296,9 +305,19 @@ export default function Home() {
               </SectionErrorBoundary>
             </section>
 
+            {/* Spending Replay — rewatch your spending spree in fast-forward */}
+            <SectionErrorBoundary section="Spending Replay" silent>
+              <SpendingReplay />
+            </SectionErrorBoundary>
+
             {/* Purchase Hall of Fame — top purchases ranked with medals */}
             <SectionErrorBoundary section="Purchase Hall of Fame" silent>
               <PurchaseHallOfFame />
+            </SectionErrorBoundary>
+
+            {/* Spending Milestone Tracker — world-scale spending progress track */}
+            <SectionErrorBoundary section="Spending Milestone Tracker" silent>
+              <SpendingMilestoneTracker />
             </SectionErrorBoundary>
 
             {/* Session Report — gamified session statistics */}
@@ -324,6 +343,11 @@ export default function Home() {
                 <WealthPerspective />
               </SectionErrorBoundary>
             </section>
+
+            {/* Spending Power Cards — animated carousel of real-world equivalents */}
+            <SectionErrorBoundary section="Spending Power Cards" silent>
+              <SpendingPowerCards />
+            </SectionErrorBoundary>
 
             {/* Wealth Context — accent left border */}
             <section className="card-panel-accent p-5 sm:p-8 stagger-section">
