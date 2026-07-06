@@ -5,7 +5,7 @@ import { AnimatePresence } from "framer-motion";
 import { useCartStore, selectRemaining } from "@/lib/store";
 import { catalogItems, CatalogItem } from "@/data/catalog";
 import { generateId } from "@/lib/format";
-import { playAuthorize, playSparkle } from "@/lib/sounds";
+import { playTieredPurchase } from "@/lib/sounds";
 import { toast } from "@/lib/use-toast";
 import { ParticleBurst } from "./particle-burst";
 import { useLocale } from "@/lib/use-locale";
@@ -15,6 +15,8 @@ import { applyWealthDna } from "@/lib/wealth-dna";
 import { CatalogItemCard } from "./catalog-item-card";
 import { Roulette } from "./roulette";
 import { StaffPicks } from "./staff-picks";
+import { PriceRangeSlider } from "./price-range-slider";
+import { CoinFlip } from "./coin-flip";
 
 type SortMode = "default" | "priceAsc" | "priceDesc" | "name";
 
@@ -38,6 +40,20 @@ export function Catalog({ onPurchase }: CatalogProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortMode, setSortMode] = useState<SortMode>("default");
 
+  // Price range slider state
+  const priceExtent = useMemo(() => {
+    const prices = catalogItems.map(i => i.price).filter(p => p > 0);
+    return { min: Math.min(...prices), max: Math.max(...prices) };
+  }, []);
+  const [priceLow, setPriceLow] = useState(priceExtent.min);
+  const [priceHigh, setPriceHigh] = useState(priceExtent.max);
+  const priceFiltered = priceLow > priceExtent.min || priceHigh < priceExtent.max;
+
+  // Coin flip gamble state
+  const [coinFlipTrigger, setCoinFlipTrigger] = useState(0);
+  const [lastBoughtItem, setLastBoughtItem] = useState<CatalogItem | null>(null);
+  const [lastBoughtPrice, setLastBoughtPrice] = useState(0);
+
   // Filtered + sorted items
   const displayItems = useMemo(() => {
     let items = catalogItems;
@@ -56,6 +72,11 @@ export function Catalog({ onPurchase }: CatalogProps) {
       items = items.filter((item) => item.tier === activeTier);
     }
 
+    // Apply price range filter
+    if (priceFiltered) {
+      items = items.filter((item) => item.price >= priceLow && item.price <= priceHigh);
+    }
+
     switch (sortMode) {
       case "priceAsc":
         items = [...items].sort((a, b) => a.price - b.price);
@@ -71,7 +92,7 @@ export function Catalog({ onPurchase }: CatalogProps) {
     }
 
     return items;
-  }, [searchQuery, activeTier, sortMode]);
+  }, [searchQuery, activeTier, sortMode, priceFiltered, priceLow, priceHigh]);
 
   // Count how many of each catalog item has been purchased
   const purchaseCountMap = useMemo(() => {
@@ -118,8 +139,7 @@ export function Catalog({ onPurchase }: CatalogProps) {
       const totalCost = effectivePrice * actualQty;
 
       if (soundEnabled) {
-        playAuthorize();
-        playSparkle();
+        playTieredPurchase(totalCost);
       }
       setShowBurst(true);
       setTimeout(() => setShowBurst(false), 1500);
@@ -144,6 +164,13 @@ export function Catalog({ onPurchase }: CatalogProps) {
       }
 
       onPurchase?.(totalCost);
+
+      // Trigger coin flip gamble (only for single-item purchases)
+      if (actualQty === 1 && effectivePrice > 0 && Math.random() < 0.3) {
+        setLastBoughtItem(item);
+        setLastBoughtPrice(effectivePrice);
+        setCoinFlipTrigger(prev => prev + 1);
+      }
 
       if (lastUnlocked.length > 0) {
         toast(`🏆 ${lastUnlocked.join(", ")}`, 4000);
@@ -233,6 +260,17 @@ export function Catalog({ onPurchase }: CatalogProps) {
         </select>
       </div>
 
+      {/* Price range slider */}
+      <div className="mb-4 px-1">
+        <PriceRangeSlider
+          min={priceExtent.min}
+          max={priceExtent.max}
+          low={priceLow}
+          high={priceHigh}
+          onRangeChange={(lo, hi) => { setPriceLow(lo); setPriceHigh(hi); }}
+        />
+      </div>
+
       {/* Tier tabs with item counts */}
       <div
         className="flex gap-1 mb-4 overflow-x-auto scrollbar-hide pb-1 tier-tabs"
@@ -315,6 +353,18 @@ export function Catalog({ onPurchase }: CatalogProps) {
       )}
 
       {showBurst && <ParticleBurst />}
+
+      {/* Double-or-Nothing coin flip gamble */}
+      {lastBoughtItem && selectedBillionaire && (
+        <CoinFlip
+          itemName={lastBoughtItem.name}
+          price={lastBoughtPrice}
+          assetClass={lastBoughtItem.assetClass}
+          billionaireId={selectedBillionaire.id}
+          onComplete={() => setLastBoughtItem(null)}
+          triggerId={coinFlipTrigger}
+        />
+      )}
     </div>
   );
 }

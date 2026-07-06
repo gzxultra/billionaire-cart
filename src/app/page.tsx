@@ -76,6 +76,7 @@ const PurchaseStats = dynamic(() => import("@/components/purchase-stats").then(m
 const MysteryBox = dynamic(() => import("@/components/mystery-box").then(m => ({ default: m.MysteryBox })), { ssr: false, loading: () => <SectionSkeleton lines={3} /> });
 const InvestmentCost = dynamic(() => import("@/components/investment-cost").then(m => ({ default: m.InvestmentCost })), { ssr: false, loading: () => <SectionSkeleton lines={4} /> });
 const SpendingHeatmap = dynamic(() => import("@/components/spending-heatmap").then(m => ({ default: m.SpendingHeatmap })), { ssr: false, loading: () => <SectionSkeleton lines={3} /> });
+const PurchaseBingo = dynamic(() => import("@/components/purchase-bingo").then(m => ({ default: m.PurchaseBingo })), { ssr: false, loading: () => <SectionSkeleton lines={4} /> });
 
 export default function Home() {
   const selectedBillionaire = useCartStore((s) => s.selectedBillionaire);
@@ -337,6 +338,11 @@ export default function Home() {
             {/* Spending Heatmap — GitHub-style purchase activity grid */}
             <SectionErrorBoundary section="Spending Heatmap" silent>
               <SpendingHeatmap />
+            </SectionErrorBoundary>
+
+            {/* Purchase Bingo — complete rows by buying across categories */}
+            <SectionErrorBoundary section="Purchase Bingo" silent>
+              <PurchaseBingo />
             </SectionErrorBoundary>
 
             {/* Purchase Hall of Fame — top purchases ranked with medals */}
