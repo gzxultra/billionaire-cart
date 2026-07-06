@@ -45,8 +45,12 @@ import {
   resetEasterEggs,
   type EasterEgg,
 } from "@/data/easter-eggs";
+import { SpendingNewsTicker } from "@/components/spending-news-ticker";
 
 // ─── Lazy-loaded below-fold components (with skeleton loading states) ─
+const YoloMode = dynamic(() => import("@/components/yolo-mode").then(m => ({ default: m.YoloMode })), { ssr: false, loading: () => <SectionSkeleton lines={3} /> });
+const PriceIsRight = dynamic(() => import("@/components/price-is-right").then(m => ({ default: m.PriceIsRight })), { ssr: false, loading: () => <SectionSkeleton lines={4} /> });
+const ImpulseAisle = dynamic(() => import("@/components/impulse-aisle").then(m => ({ default: m.ImpulseAisle })), { ssr: false, loading: () => <SectionSkeleton lines={3} /> });
 const Vault = dynamic(() => import("@/components/vault").then(m => ({ default: m.Vault })), { ssr: false, loading: () => <SectionSkeleton lines={4} /> });
 const Achievements = dynamic(() => import("@/components/achievements").then(m => ({ default: m.Achievements })), { ssr: false, loading: () => <SectionSkeleton lines={3} /> });
 const SpeedrunTimer = dynamic(() => import("@/components/speedrun-timer").then(m => ({ default: m.SpeedrunTimer })), { ssr: false, loading: () => <SectionSkeleton lines={2} /> });
@@ -228,6 +232,11 @@ export default function Home() {
               </SectionErrorBoundary>
             </section>
 
+            {/* Spending News Ticker — live scrolling headlines */}
+            <SectionErrorBoundary section="Spending News Ticker" silent>
+              <SpendingNewsTicker />
+            </SectionErrorBoundary>
+
             {/* ★ OmniBox — HERO position, the core shopping interaction */}
             <section ref={omniSectionRef} className="card-panel-champagne p-5 sm:p-8 stagger-section relative overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-stone/[0.03] to-transparent pointer-events-none" />
@@ -336,6 +345,21 @@ export default function Home() {
                 <Catalog onPurchase={handlePurchase} />
               </SectionErrorBoundary>
             </section>
+
+            {/* Impulse Aisle — smart recommendations based on purchase history */}
+            <SectionErrorBoundary section="Impulse Aisle" silent>
+              <ImpulseAisle onPurchase={handlePurchase} />
+            </SectionErrorBoundary>
+
+            {/* YOLO Mode — auto-buy madness */}
+            <SectionErrorBoundary section="YOLO Mode" silent>
+              <YoloMode onPurchase={handlePurchase} />
+            </SectionErrorBoundary>
+
+            {/* Price Is Right — guess the price mini-game */}
+            <SectionErrorBoundary section="Price Is Right" silent>
+              <PriceIsRight />
+            </SectionErrorBoundary>
 
             {/* Speedrun Mode */}
             <section className="card-panel-accent p-5 sm:p-8 stagger-section">
