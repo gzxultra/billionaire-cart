@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useState, useCallback, useRef, useEffect } from "react";
+import { memo, useState, useCallback, useRef, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CatalogItem } from "@/data/catalog";
 import { formatCurrency } from "@/lib/format";
@@ -92,6 +92,8 @@ interface CatalogItemCardProps {
   remaining: number;
   onBuy: (item: CatalogItem, qty: number) => void;
   purchaseCount: number;
+  billionaireNetWorth: number;
+  earningsPerSecond: number;
 }
 
 function CatalogItemCardInner({
@@ -103,6 +105,8 @@ function CatalogItemCardInner({
   remaining,
   onBuy,
   purchaseCount,
+  billionaireNetWorth,
+  earningsPerSecond,
 }: CatalogItemCardProps) {
   const locale = useLocale((s) => s.locale);
   const [buyingFlash, setBuyingFlash] = useState(false);
@@ -186,6 +190,40 @@ function CatalogItemCardInner({
   }, []);
 
   const accent = TIER_ACCENTS[item.tier] || TIER_ACCENTS.everyday;
+
+  // ─── Salary Perspective ───────────────────────────────────────
+  const salaryLabel = useMemo(() => {
+    if (isFree || effectivePrice <= 0 || billionaireNetWorth <= 0) return null;
+    const normalEquiv = (effectivePrice / billionaireNetWorth) * 75000;
+    if (normalEquiv < 0.01) {
+      return t("salary.lessThanPenny", locale);
+    }
+    const formatted = locale === "zh"
+      ? `¥${(normalEquiv * 7.2).toFixed(normalEquiv * 7.2 < 1 ? 2 : 1)}`
+      : `$${normalEquiv.toFixed(normalEquiv < 1 ? 2 : normalEquiv < 100 ? 1 : 0)}`;
+    return t("salary.likeYouSpending", locale, { amount: formatted });
+  }, [effectivePrice, billionaireNetWorth, isFree, locale]);
+
+  // ─── Time to Earn ─────────────────────────────────────────────
+  const earnLabel = useMemo(() => {
+    if (isFree || effectivePrice <= 0 || earningsPerSecond <= 0) return null;
+    const perSecCount = earningsPerSecond / effectivePrice;
+    if (perSecCount >= 1) {
+      return t("earn.buysPerSec", locale, { count: Math.floor(perSecCount).toLocaleString() });
+    }
+    const seconds = effectivePrice / earningsPerSecond;
+    let timeStr: string;
+    if (seconds < 1) {
+      timeStr = locale === "zh" ? `${(seconds * 1000).toFixed(0)}毫秒` : `${(seconds * 1000).toFixed(0)}ms`;
+    } else if (seconds < 60) {
+      timeStr = locale === "zh" ? `${seconds.toFixed(1)}秒` : `${seconds.toFixed(1)}s`;
+    } else if (seconds < 3600) {
+      timeStr = locale === "zh" ? `${(seconds / 60).toFixed(1)}分钟` : `${(seconds / 60).toFixed(1)}m`;
+    } else {
+      timeStr = locale === "zh" ? `${(seconds / 3600).toFixed(1)}小时` : `${(seconds / 3600).toFixed(1)}h`;
+    }
+    return t("earn.earnsIn", locale, { time: timeStr });
+  }, [effectivePrice, earningsPerSecond, isFree, locale]);
 
   return (
     <motion.div
@@ -307,6 +345,18 @@ function CatalogItemCardInner({
         )}
       </div>
 
+      {/* Salary Perspective + Time to Earn */}
+      {(salaryLabel || earnLabel) && (
+        <div className="mt-0.5 space-y-0">
+          {salaryLabel && (
+            <div className="text-[9px] text-ash/55 font-mono italic truncate">{salaryLabel}</div>
+          )}
+          {earnLabel && (
+            <div className="text-[9px] text-ash/50 font-mono truncate">{earnLabel}</div>
+          )}
+        </div>
+      )}
+
       {/* Quantity selector */}
       <div className="flex gap-1 mt-2 flex-wrap">
         {QUANTITY_OPTIONS.map((q) => {
@@ -421,6 +471,8 @@ export const CatalogItemCard = memo(CatalogItemCardInner, (prev, next) => {
     prev.modifier === next.modifier &&
     prev.canAfford === next.canAfford &&
     prev.remaining === next.remaining &&
-    prev.purchaseCount === next.purchaseCount
+    prev.purchaseCount === next.purchaseCount &&
+    prev.billionaireNetWorth === next.billionaireNetWorth &&
+    prev.earningsPerSecond === next.earningsPerSecond
   );
 });

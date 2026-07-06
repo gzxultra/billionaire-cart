@@ -49,6 +49,7 @@ const GuiltMeter = dynamic(() => import("@/components/guilt-meter").then(m => ({
 const PurchaseFeed = dynamic(() => import("@/components/purchase-feed").then(m => ({ default: m.PurchaseFeed })), { ssr: false, loading: () => <SectionSkeleton lines={4} /> });
 const SpendingTimeline = dynamic(() => import("@/components/spending-timeline").then(m => ({ default: m.SpendingTimeline })), { ssr: false, loading: () => <SectionSkeleton lines={3} height="140px" /> });
 const SpendingEquivalences = dynamic(() => import("@/components/spending-equivalences").then(m => ({ default: m.SpendingEquivalences })), { ssr: false, loading: () => <SectionSkeleton lines={2} /> });
+const WealthPerspective = dynamic(() => import("@/components/wealth-perspective").then(m => ({ default: m.WealthPerspective })), { ssr: false, loading: () => <SectionSkeleton lines={2} /> });
 const BudgetChallenge = dynamic(() => import("@/components/budget-challenge").then(m => ({ default: m.BudgetChallenge })), { ssr: false, loading: () => <SectionSkeleton lines={3} /> });
 
 export default function Home() {
@@ -248,6 +249,13 @@ export default function Home() {
             <section className="card-panel p-5 sm:p-8 stagger-section">
               <SectionErrorBoundary section="Spending Equivalences" silent>
                 <SpendingEquivalences />
+              </SectionErrorBoundary>
+            </section>
+
+            {/* Wealth Perspective — mind-blowing wealth comparisons */}
+            <section className="card-panel p-5 sm:p-8 stagger-section">
+              <SectionErrorBoundary section="Wealth Perspective" silent>
+                <WealthPerspective />
               </SectionErrorBoundary>
             </section>
 

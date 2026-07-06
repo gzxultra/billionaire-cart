@@ -451,6 +451,38 @@ const strings: Record<string, Record<Locale, string>> = {
   "dna.free": { en: "FREE — {item}", zh: "免费 — {item}" },
   "dna.originalPrice": { en: "was {price}", zh: "原价 {price}" },
   "dna.modifier": { en: "{pct} on {category}", zh: "{category} {pct}" },
+
+  // ─── Salary Perspective ────────────────────────────────────────
+  "salary.likeYouSpending": { en: "≈ you spending {amount}", zh: "≈ 你花 {amount}" },
+  "salary.lessThanPenny": { en: "≈ you spending less than a penny", zh: "≈ 你花不到一分钱" },
+
+  // ─── Time to Earn ──────────────────────────────────────────────
+  "earn.earnsIn": { en: "Earns this in {time}", zh: "赚回只需 {time}" },
+  "earn.buysPerSec": { en: "Buys {count}/sec", zh: "每秒能买 {count} 个" },
+
+  // ─── Roulette ──────────────────────────────────────────────────
+  "roulette.button": { en: "🎰 Surprise Buy", zh: "🎰 随机购买" },
+  "roulette.youGot": { en: "You got: {item}!", zh: "抽到了：{item}！" },
+  "roulette.cooldown": { en: "Wait…", zh: "等等…" },
+
+  // ─── Wealth Perspective ────────────────────────────────────────
+  "perspective.title": { en: "Wealth Perspective", zh: "财富透视" },
+  "perspective.yearsToEarn": {
+    en: "If you made $75K/year, it would take you {years} years to earn what {name} makes in 1 second",
+    zh: "如果你年薪 $75K，你需要 {years} 年才能赚到 {name} 一秒钟的收入",
+  },
+  "perspective.earnedBack": {
+    en: "Your spending of {amount} is {name}'s equivalent of {time} of earnings — they earned it back before you finished reading this",
+    zh: "你花的 {amount} 只是 {name} {time} 的收入 — 你还没读完这句话，人家已经赚回来了",
+  },
+  "perspective.fountain": {
+    en: "To {name}, spending {amount} on this cart is like you dropping {coin} in a fountain",
+    zh: "对 {name} 来说，在这个购物车花 {amount} 就像你往许愿池丢了{coin}",
+  },
+  "perspective.secondsOfLife": {
+    en: "{name} has earned {amount} just while you've been on this page",
+    zh: "{name} 在你浏览这个页面的这段时间里已经赚了 {amount}",
+  },
 };
 
 

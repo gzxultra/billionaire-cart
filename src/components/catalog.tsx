@@ -13,6 +13,7 @@ import { t, tierLabel } from "@/lib/i18n";
 import { getBulkPurchaseFact } from "@/lib/fun-facts";
 import { applyWealthDna } from "@/lib/wealth-dna";
 import { CatalogItemCard } from "./catalog-item-card";
+import { Roulette } from "./roulette";
 
 type SortMode = "default" | "priceAsc" | "priceDesc" | "name";
 
@@ -180,6 +181,9 @@ export function Catalog({ onPurchase }: CatalogProps) {
     <div className="w-full">
       <h2 className="section-label mb-4">{t("catalog.title", locale)}</h2>
 
+      {/* Surprise Buy Roulette */}
+      <Roulette items={catalogItems} remaining={remaining} onBuy={handleBuy} />
+
       {/* Search + Sort bar */}
       <div className="flex gap-2 mb-3">
         <div className="relative flex-1">
@@ -288,6 +292,8 @@ export function Catalog({ onPurchase }: CatalogProps) {
                 remaining={remaining}
                 onBuy={handleBuy}
                 purchaseCount={purchaseCountMap.get(item.id) || 0}
+                billionaireNetWorth={selectedBillionaire.netWorthB * 1_000_000_000}
+                earningsPerSecond={selectedBillionaire.earningsPerSecond}
               />
             );
           })}
