@@ -81,6 +81,10 @@ const FlashSale = dynamic(() => import("@/components/flash-sale").then(m => ({ d
 const AuctionHouse = dynamic(() => import("@/components/auction-house").then(m => ({ default: m.AuctionHouse })), { ssr: false, loading: () => <SectionSkeleton lines={4} /> });
 const PriceNegotiator = dynamic(() => import("@/components/price-negotiator").then(m => ({ default: m.PriceNegotiator })), { ssr: false, loading: () => <SectionSkeleton lines={4} /> });
 const BurnRate = dynamic(() => import("@/components/burn-rate").then(m => ({ default: m.BurnRate })), { ssr: false, loading: () => <SectionSkeleton lines={3} /> });
+const SpendingGauge = dynamic(() => import("@/components/spending-gauge").then(m => ({ default: m.SpendingGauge })), { ssr: false, loading: () => <SectionSkeleton lines={4} /> });
+const ScratchCard = dynamic(() => import("@/components/scratch-card").then(m => ({ default: m.ScratchCard })), { ssr: false, loading: () => <SectionSkeleton lines={4} /> });
+const ErosionChart = dynamic(() => import("@/components/erosion-chart").then(m => ({ default: m.ErosionChart })), { ssr: false, loading: () => <SectionSkeleton lines={3} /> });
+const PhilanthropicImpact = dynamic(() => import("@/components/philanthropic-impact").then(m => ({ default: m.PhilanthropicImpact })), { ssr: false, loading: () => <SectionSkeleton lines={3} /> });
 
 export default function Home() {
   const selectedBillionaire = useCartStore((s) => s.selectedBillionaire);
@@ -286,6 +290,11 @@ export default function Home() {
               </SectionErrorBoundary>
             </section>
 
+            {/* Scratch Card — interactive scratch-to-reveal discounts */}
+            <SectionErrorBoundary section="Scratch Card" silent>
+              <ScratchCard />
+            </SectionErrorBoundary>
+
             {/* Mystery Box — random surprise purchases with tiered loot */}
             <SectionErrorBoundary section="Mystery Box" silent>
               <MysteryBox />
@@ -325,6 +334,16 @@ export default function Home() {
             {/* Spending Pulse — heartbeat visualization of spending intensity */}
             <SectionErrorBoundary section="Spending Pulse" silent>
               <SpendingPulse />
+            </SectionErrorBoundary>
+
+            {/* Spending Velocity Gauge — real-time speedometer */}
+            <SectionErrorBoundary section="Spending Gauge" silent>
+              <SpendingGauge />
+            </SectionErrorBoundary>
+
+            {/* Fortune Erosion Chart — net worth dropping like a stock crash */}
+            <SectionErrorBoundary section="Erosion Chart" silent>
+              <ErosionChart />
             </SectionErrorBoundary>
 
             {/* Net Worth Race — earnings vs spending animated race */}
@@ -385,6 +404,11 @@ export default function Home() {
                 <SpendingEquivalences />
               </SectionErrorBoundary>
             </section>
+
+            {/* Philanthropic Impact — what your spending could have done for charity */}
+            <SectionErrorBoundary section="Philanthropic Impact" silent>
+              <PhilanthropicImpact />
+            </SectionErrorBoundary>
 
             {/* Wealth Perspective — mind-blowing wealth comparisons */}
             <section className="card-panel p-5 sm:p-8 stagger-section">
