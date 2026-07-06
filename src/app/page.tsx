@@ -39,6 +39,7 @@ import { SessionReport } from "@/components/session-report";
 import { WealthRace } from "@/components/wealth-race";
 import { ShoppingPersonality } from "@/components/shopping-personality";
 import { CompareCard } from "@/components/compare-card";
+import { SpendingPulse } from "@/components/spending-pulse";
 import {
   checkEasterEggs,
   resetEasterEggs,
@@ -57,6 +58,9 @@ const SpendingTimeline = dynamic(() => import("@/components/spending-timeline").
 const SpendingEquivalences = dynamic(() => import("@/components/spending-equivalences").then(m => ({ default: m.SpendingEquivalences })), { ssr: false, loading: () => <SectionSkeleton lines={2} /> });
 const WealthPerspective = dynamic(() => import("@/components/wealth-perspective").then(m => ({ default: m.WealthPerspective })), { ssr: false, loading: () => <SectionSkeleton lines={2} /> });
 const BudgetChallenge = dynamic(() => import("@/components/budget-challenge").then(m => ({ default: m.BudgetChallenge })), { ssr: false, loading: () => <SectionSkeleton lines={3} /> });
+const BankruptcyCountdown = dynamic(() => import("@/components/bankruptcy-countdown").then(m => ({ default: m.BankruptcyCountdown })), { ssr: false });
+const PurchaseHallOfFame = dynamic(() => import("@/components/purchase-hall-of-fame").then(m => ({ default: m.PurchaseHallOfFame })), { ssr: false, loading: () => <SectionSkeleton lines={4} /> });
+const WhatElseCould = dynamic(() => import("@/components/what-else-could").then(m => ({ default: m.WhatElseCould })), { ssr: false });
 
 export default function Home() {
   const selectedBillionaire = useCartStore((s) => s.selectedBillionaire);
@@ -200,6 +204,11 @@ export default function Home() {
               <FortuneBar />
             </SectionErrorBoundary>
 
+            {/* Bankruptcy Countdown — time until broke at current pace */}
+            <SectionErrorBoundary section="Bankruptcy Countdown" silent>
+              <BankruptcyCountdown />
+            </SectionErrorBoundary>
+
             {/* Billionaire Profile — wealth DNA, signature purchases, SEC filings */}
             <section className="card-panel p-5 sm:p-8 stagger-section">
               <SectionErrorBoundary section="Billionaire Profile">
@@ -242,6 +251,11 @@ export default function Home() {
               </SectionErrorBoundary>
             </section>
 
+            {/* What Else Could You Buy — alternatives for same price as last purchase */}
+            <SectionErrorBoundary section="What Else Could" silent>
+              <WhatElseCould />
+            </SectionErrorBoundary>
+
             {/* Stats row — two cards side by side */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 stagger-section">
               <section className="card-panel p-5">
@@ -256,6 +270,11 @@ export default function Home() {
               </section>
             </div>
 
+            {/* Spending Pulse — heartbeat visualization of spending intensity */}
+            <SectionErrorBoundary section="Spending Pulse" silent>
+              <SpendingPulse />
+            </SectionErrorBoundary>
+
             {/* Net Worth Race — earnings vs spending animated race */}
             <SectionErrorBoundary section="Wealth Race" silent>
               <WealthRace />
@@ -267,6 +286,11 @@ export default function Home() {
                 <SpendingTimeline />
               </SectionErrorBoundary>
             </section>
+
+            {/* Purchase Hall of Fame — top purchases ranked with medals */}
+            <SectionErrorBoundary section="Purchase Hall of Fame" silent>
+              <PurchaseHallOfFame />
+            </SectionErrorBoundary>
 
             {/* Session Report — gamified session statistics */}
             <SectionErrorBoundary section="Session Report" silent>
