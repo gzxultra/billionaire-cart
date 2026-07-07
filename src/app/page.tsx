@@ -55,6 +55,7 @@ import { PurchaseImpact } from "@/components/purchase-impact";
 import { SpendingSummaryPopup } from "@/components/spending-summary-popup";
 import { SocialProof } from "@/components/social-proof";
 import { DoubleOrNothing } from "@/components/double-or-nothing";
+import { WealthTicker } from "@/components/wealth-ticker";
 
 // ─── Lazy-loaded below-fold components (with skeleton loading states) ─
 const YoloMode = dynamic(() => import("@/components/yolo-mode").then(m => ({ default: m.YoloMode })), { ssr: false, loading: () => <SectionSkeleton lines={3} /> });
@@ -91,6 +92,9 @@ const ScratchCard = dynamic(() => import("@/components/scratch-card").then(m => 
 const ErosionChart = dynamic(() => import("@/components/erosion-chart").then(m => ({ default: m.ErosionChart })), { ssr: false, loading: () => <SectionSkeleton lines={3} /> });
 const PhilanthropicImpact = dynamic(() => import("@/components/philanthropic-impact").then(m => ({ default: m.PhilanthropicImpact })), { ssr: false, loading: () => <SectionSkeleton lines={3} /> });
 const SpendingLeaderboard = dynamic(() => import("@/components/spending-leaderboard").then(m => ({ default: m.SpendingLeaderboard })), { ssr: false, loading: () => <SectionSkeleton lines={4} /> });
+const WealthTrivia = dynamic(() => import("@/components/wealth-trivia").then(m => ({ default: m.WealthTrivia })), { ssr: false, loading: () => <SectionSkeleton lines={4} /> });
+const SpendingSlotMachine = dynamic(() => import("@/components/slot-machine").then(m => ({ default: m.SpendingSlotMachine })), { ssr: false, loading: () => <SectionSkeleton lines={4} /> });
+const BillionaireGiftExchange = dynamic(() => import("@/components/billionaire-gifts").then(m => ({ default: m.BillionaireGiftExchange })), { ssr: false, loading: () => <SectionSkeleton lines={4} /> });
 
 export default function Home() {
   const selectedBillionaire = useCartStore((s) => s.selectedBillionaire);
@@ -250,6 +254,11 @@ export default function Home() {
               <SpendingLevel />
             </SectionErrorBoundary>
 
+            {/* Wealth Ticker — Bloomberg-style real-time net worth tape */}
+            <SectionErrorBoundary section="Wealth Ticker" silent>
+              <WealthTicker />
+            </SectionErrorBoundary>
+
             {/* Bankruptcy Countdown — time until broke at current pace */}
             <SectionErrorBoundary section="Bankruptcy Countdown" silent>
               <BankruptcyCountdown />
@@ -305,6 +314,11 @@ export default function Home() {
               <FlashSale />
             </SectionErrorBoundary>
 
+            {/* Spending Slot Machine — 3-reel random purchase mini-game */}
+            <SectionErrorBoundary section="Slot Machine" silent>
+              <SpendingSlotMachine />
+            </SectionErrorBoundary>
+
             {/* Purchase Feed — recent parsed & bought items */}
             <section className="card-panel p-5 sm:p-8 stagger-section">
               <SectionErrorBoundary section="Purchase Feed">
@@ -332,6 +346,11 @@ export default function Home() {
               <div data-section="empire">
                 <EmpireAcquisitions />
               </div>
+            </SectionErrorBoundary>
+
+            {/* Billionaire Gift Exchange — buy gifts for other billionaires */}
+            <SectionErrorBoundary section="Billionaire Gifts" silent>
+              <BillionaireGiftExchange />
             </SectionErrorBoundary>
 
             {/* What Else Could You Buy — alternatives for same price as last purchase */}
@@ -418,6 +437,11 @@ export default function Home() {
             {/* Shopping Personality — fun archetype reveal based on purchase patterns */}
             <SectionErrorBoundary section="Shopping Personality" silent>
               <ShoppingPersonality />
+            </SectionErrorBoundary>
+
+            {/* Wealth Trivia — billionaire knowledge quiz */}
+            <SectionErrorBoundary section="Wealth Trivia" silent>
+              <WealthTrivia />
             </SectionErrorBoundary>
 
             {/* Spending Leaderboard — competitive fake global rankings */}
