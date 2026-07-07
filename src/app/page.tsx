@@ -4,6 +4,7 @@ import { useState, useCallback, useRef } from "react";
 import dynamic from "next/dynamic";
 import { useCartStore } from "@/lib/store";
 import { useLocale } from "@/lib/use-locale";
+import { useLiveTitle } from "@/lib/use-live-title";
 import { t } from "@/lib/i18n";
 import { SavedProduct } from "@/lib/types";
 import { catalogItems } from "@/data/catalog";
@@ -103,6 +104,9 @@ const SpendingConfessions = dynamic(() => import("@/components/spending-confessi
 const RegretMeter = dynamic(() => import("@/components/regret-meter").then(m => ({ default: m.RegretMeter })), { ssr: false });
 const BlindBuyReveal = dynamic(() => import("@/components/blind-buy-reveal").then(m => ({ default: m.BlindBuyReveal })), { ssr: false });
 const MoneyRain = dynamic(() => import("@/components/money-rain").then(m => ({ default: m.MoneyRain })), { ssr: false });
+const SpendingPace = dynamic(() => import("@/components/spending-pace").then(m => ({ default: m.SpendingPace })), { ssr: false, loading: () => <SectionSkeleton lines={3} /> });
+const FortuneWeather = dynamic(() => import("@/components/fortune-weather").then(m => ({ default: m.FortuneWeather })), { ssr: false, loading: () => <SectionSkeleton lines={3} /> });
+const WhatIfCalculator = dynamic(() => import("@/components/what-if-calculator").then(m => ({ default: m.WhatIfCalculator })), { ssr: false, loading: () => <SectionSkeleton lines={4} /> });
 
 export default function Home() {
   const selectedBillionaire = useCartStore((s) => s.selectedBillionaire);
@@ -114,6 +118,9 @@ export default function Home() {
   const toggleBlindMode = useCartStore((s) => s.toggleBlindMode);
   const reset = useCartStore((s) => s.reset);
   const locale = useLocale((s) => s.locale);
+
+  // Live tab title — shows billionaire + balance in browser tab
+  useLiveTitle();
   const toggleLocale = useLocale((s) => s.toggleLocale);
 
   // Absurd toast state
@@ -288,6 +295,11 @@ export default function Home() {
               <BankruptcyCountdown />
             </SectionErrorBoundary>
 
+            {/* Fortune Weather — playful financial weather gauge */}
+            <SectionErrorBoundary section="Fortune Weather" silent>
+              <FortuneWeather />
+            </SectionErrorBoundary>
+
             {/* Earn-Back Timer — live countdown for billionaire to earn back spending */}
             <SectionErrorBoundary section="Earn-Back Timer" silent>
               <EarnBackTimer />
@@ -392,6 +404,11 @@ export default function Home() {
               <WhatElseCould />
             </SectionErrorBoundary>
 
+            {/* What If Calculator — absurd purchase multiplication scenarios */}
+            <SectionErrorBoundary section="What If Calculator" silent>
+              <WhatIfCalculator />
+            </SectionErrorBoundary>
+
             {/* Stats row — two cards side by side */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 stagger-section">
               <section className="card-panel p-5">
@@ -409,6 +426,11 @@ export default function Home() {
             {/* Spending Pulse — heartbeat visualization of spending intensity */}
             <SectionErrorBoundary section="Spending Pulse" silent>
               <SpendingPulse />
+            </SectionErrorBoundary>
+
+            {/* Spending Pace — real-time comparison to world-scale money flows */}
+            <SectionErrorBoundary section="Spending Pace" silent>
+              <SpendingPace />
             </SectionErrorBoundary>
 
             {/* Spending Velocity Gauge — real-time speedometer */}
