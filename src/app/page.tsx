@@ -50,6 +50,9 @@ import { EarnBackTimer } from "@/components/earn-back-timer";
 import { SpendingPowerCards } from "@/components/spending-power";
 import { FeverMode } from "@/components/fever-mode";
 import { SectionNav } from "@/components/section-nav";
+import { SpendingLevel } from "@/components/spending-level";
+import { PurchaseImpact } from "@/components/purchase-impact";
+import { SpendingSummaryPopup } from "@/components/spending-summary-popup";
 
 // ─── Lazy-loaded below-fold components (with skeleton loading states) ─
 const YoloMode = dynamic(() => import("@/components/yolo-mode").then(m => ({ default: m.YoloMode })), { ssr: false, loading: () => <SectionSkeleton lines={3} /> });
@@ -226,6 +229,11 @@ export default function Home() {
             {/* Fortune Health Bar — spending depletion progress */}
             <SectionErrorBoundary section="Fortune Bar" silent>
               <FortuneBar />
+            </SectionErrorBoundary>
+
+            {/* Spending Level — dynamic title based on spending percentage */}
+            <SectionErrorBoundary section="Spending Level" silent>
+              <SpendingLevel />
             </SectionErrorBoundary>
 
             {/* Bankruptcy Countdown — time until broke at current pace */}
@@ -569,6 +577,12 @@ export default function Home() {
 
       {/* Overlays */}
       <BankruptOverlay />
+
+      {/* Purchase impact effects — screen flash + money rain scaled by purchase size */}
+      <PurchaseImpact />
+
+      {/* Spending summary popup — fun stats card every 5 purchases */}
+      <SpendingSummaryPopup />
 
       {/* Absurd purchase toasts */}
       {selectedBillionaire && (

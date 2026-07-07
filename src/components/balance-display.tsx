@@ -64,9 +64,35 @@ export function BalanceDisplay() {
     return () => clearInterval(interval);
   }, [selectedBillionaire, netWorth]);
 
+  // Live earnings accumulator — ticks up at earningsPerSecond
+  const [liveEarnings, setLiveEarnings] = useState(0);
+  const earningsStartRef = useRef<number>(Date.now());
+  const rafRef = useRef<number>(0);
+
+  const eps = selectedBillionaire?.earningsPerSecond ?? 0;
+
+  // Reset earnings counter when billionaire changes
+  useEffect(() => {
+    earningsStartRef.current = Date.now();
+    setLiveEarnings(0);
+  }, [selectedBillionaire?.id]);
+
+  // Animate earnings ticking up
+  useEffect(() => {
+    if (!selectedBillionaire || eps <= 0) return;
+
+    const tick = () => {
+      const elapsed = (Date.now() - earningsStartRef.current) / 1000;
+      setLiveEarnings(elapsed * eps);
+      rafRef.current = requestAnimationFrame(tick);
+    };
+    rafRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [selectedBillionaire, eps]);
+
   if (!selectedBillionaire) return null;
 
-  const displayBalance = remaining + drift;
+  const displayBalance = remaining + drift + liveEarnings;
   const convertedBalance = formatConverted(displayBalance, true);
 
   return (
@@ -82,6 +108,21 @@ export function BalanceDisplay() {
       {currency !== "USD" && convertedBalance && (
         <div className="text-sm text-ash/70 font-mono mt-1">
           ≈ {convertedBalance}
+        </div>
+      )}
+
+      {/* Live earnings indicator */}
+      {eps > 0 && (
+        <div className="flex items-center gap-2 mt-2">
+          <div className="live-earnings-dot" />
+          <span className="text-[10px] font-mono text-sage/70 tabular-nums">
+            +{formatCurrency(eps)}{locale === "zh" ? "/秒" : "/sec"}
+          </span>
+          {liveEarnings > 1000 && (
+            <span className="text-[10px] font-mono text-sage/50 tabular-nums">
+              ({locale === "zh" ? "本次已赚" : "earned"} +{formatCurrency(liveEarnings, liveEarnings >= 1_000_000)})
+            </span>
+          )}
         </div>
       )}
 

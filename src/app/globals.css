@@ -352,3 +352,57 @@
 .kbd-hint {
   animation: kbd-pulse 2s ease-in-out 1;
 }
+
+/* ─── Live earnings dot ─────────────────────────────────────────── */
+@keyframes earnings-pulse {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.3); }
+}
+
+.live-earnings-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(90, 138, 104, 0.7);
+  animation: earnings-pulse 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+/* ─── Money rain overlay ────────────────────────────────────────── */
+@keyframes money-fall {
+  0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+}
+
+.money-rain-piece {
+  position: fixed;
+  top: -30px;
+  z-index: 55;
+  pointer-events: none;
+  font-size: 20px;
+  animation: money-fall linear forwards;
+}
+
+/* ─── Purchase flash overlay ────────────────────────────────────── */
+@keyframes purchase-flash {
+  0% { opacity: 0.15; }
+  100% { opacity: 0; }
+}
+
+.purchase-flash-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  pointer-events: none;
+  animation: purchase-flash 0.4s ease-out forwards;
+}
+
+/* ─── Spending level glow ───────────────────────────────────────── */
+@keyframes level-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(166, 133, 48, 0); }
+  50% { box-shadow: 0 0 12px 2px rgba(166, 133, 48, 0.15); }
+}
+
+.level-up-glow {
+  animation: level-glow 1s ease-in-out 2;
+}
