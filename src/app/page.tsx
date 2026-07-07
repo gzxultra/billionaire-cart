@@ -58,6 +58,7 @@ import { SocialProof } from "@/components/social-proof";
 import { DoubleOrNothing } from "@/components/double-or-nothing";
 import { WealthTicker } from "@/components/wealth-ticker";
 import { WealthRelativity } from "@/components/wealth-relativity";
+import { KonamiCode } from "@/components/konami-code";
 
 // ─── Lazy-loaded below-fold components (with skeleton loading states) ─
 const FortuneEvents = dynamic(() => import("@/components/fortune-events").then(m => ({ default: m.FortuneEvents })), { ssr: false, loading: () => <SectionSkeleton lines={4} /> });
@@ -107,6 +108,10 @@ const MoneyRain = dynamic(() => import("@/components/money-rain").then(m => ({ d
 const SpendingPace = dynamic(() => import("@/components/spending-pace").then(m => ({ default: m.SpendingPace })), { ssr: false, loading: () => <SectionSkeleton lines={3} /> });
 const FortuneWeather = dynamic(() => import("@/components/fortune-weather").then(m => ({ default: m.FortuneWeather })), { ssr: false, loading: () => <SectionSkeleton lines={3} /> });
 const WhatIfCalculator = dynamic(() => import("@/components/what-if-calculator").then(m => ({ default: m.WhatIfCalculator })), { ssr: false, loading: () => <SectionSkeleton lines={4} /> });
+const SpendingAutopilot = dynamic(() => import("@/components/spending-autopilot").then(m => ({ default: m.SpendingAutopilot })), { ssr: false, loading: () => <SectionSkeleton lines={3} /> });
+const TimeMachine = dynamic(() => import("@/components/time-machine").then(m => ({ default: m.TimeMachine })), { ssr: false, loading: () => <SectionSkeleton lines={3} /> });
+const FortuneWheel = dynamic(() => import("@/components/fortune-wheel").then(m => ({ default: m.FortuneWheel })), { ssr: false, loading: () => <SectionSkeleton lines={4} /> });
+const SpendingSnapshot = dynamic(() => import("@/components/spending-snapshot").then(m => ({ default: m.SpendingSnapshot })), { ssr: false, loading: () => <SectionSkeleton lines={3} /> });
 
 export default function Home() {
   const selectedBillionaire = useCartStore((s) => s.selectedBillionaire);
@@ -409,6 +414,16 @@ export default function Home() {
               <WhatIfCalculator />
             </SectionErrorBoundary>
 
+            {/* Fortune Wheel — spin to randomly spend */}
+            <SectionErrorBoundary section="Fortune Wheel" silent>
+              <FortuneWheel />
+            </SectionErrorBoundary>
+
+            {/* Spending Autopilot — auto-buy on repeat */}
+            <SectionErrorBoundary section="Spending Autopilot" silent>
+              <SpendingAutopilot />
+            </SectionErrorBoundary>
+
             {/* Stats row — two cards side by side */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 stagger-section">
               <section className="card-panel p-5">
@@ -493,6 +508,16 @@ export default function Home() {
             {/* Session Report — gamified session statistics */}
             <SectionErrorBoundary section="Session Report" silent>
               <SessionReport />
+            </SectionErrorBoundary>
+
+            {/* Price Time Machine — inflation-adjusted price across decades */}
+            <SectionErrorBoundary section="Time Machine" silent>
+              <TimeMachine />
+            </SectionErrorBoundary>
+
+            {/* Spending Snapshot — shareable summary card */}
+            <SectionErrorBoundary section="Spending Snapshot" silent>
+              <SpendingSnapshot />
             </SectionErrorBoundary>
 
             {/* Spending Confessions — humorous auto-generated confession cards */}
@@ -746,6 +771,9 @@ export default function Home() {
 
       {/* Money Rain — animated cash falling on large purchases */}
       <MoneyRain />
+
+      {/* Konami Code — secret God Mode easter egg (↑↑↓↓←→←→BA) */}
+      <KonamiCode />
     </main>
   );
 }

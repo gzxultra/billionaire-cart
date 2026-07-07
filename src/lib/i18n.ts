@@ -509,6 +509,22 @@ const strings: Record<string, Record<Locale, string>> = {
   "race.earningFaster": { en: "They're earning faster!", zh: "他赚得比你花得快！" },
   "race.burning": { en: "BURNING FASTER THAN THEY EARN", zh: "烧钱速度超越赚钱速度" },
   "race.recovering": { en: "Fortune is recovering…", zh: "财富正在恢复中…" },
+
+  // ─── Spending Autopilot ────────────────────────────────────────
+  "autopilot.title": { en: "Spending Autopilot", zh: "自动消费" },
+  "autopilot.start": { en: "Autopilot", zh: "自动购买" },
+
+  // ─── Buy All Tier ──────────────────────────────────────────────
+  "catalog.buyAllTier": { en: "Buy All {tier}", zh: "买光{tier}" },
+  "catalog.buyAllConfirm": { en: "Buy {count} items for {total}?", zh: "购买 {count} 件共 {total}？" },
+  "catalog.buyAllDone": { en: "Bought all {count} items!", zh: "已买光 {count} 件！" },
+
+  // ─── Spending Milestones Popup ─────────────────────────────────
+  "milestone.popup.title": { en: "Milestone Reached!", zh: "里程碑达成！" },
+  "milestone.popup.spent": { en: "Total Spent", zh: "累计消费" },
+  "milestone.popup.items": { en: "Items", zh: "商品数" },
+  "milestone.popup.speed": { en: "Avg Speed", zh: "平均速度" },
+  "milestone.popup.perSec": { en: "{n}/sec", zh: "{n}/秒" },
 };
 
 

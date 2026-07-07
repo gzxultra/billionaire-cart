@@ -4,7 +4,7 @@ import { useState, useCallback, useMemo } from "react";
 import { AnimatePresence } from "framer-motion";
 import { useCartStore, selectRemaining } from "@/lib/store";
 import { catalogItems, CatalogItem } from "@/data/catalog";
-import { generateId } from "@/lib/format";
+import { generateId, formatCurrency } from "@/lib/format";
 import { playTieredPurchase } from "@/lib/sounds";
 import { toast } from "@/lib/use-toast";
 import { ParticleBurst } from "./particle-burst";
@@ -310,6 +310,39 @@ export function Catalog({ onPurchase }: CatalogProps) {
           </button>
         ))}
       </div>
+
+      {/* Buy All in Tier — nuclear option */}
+      {activeTier !== "all" && displayItems.length > 0 && (() => {
+        const totalCost = displayItems.reduce((sum, item) => {
+          const dna = itemDnaMap.get(item.id);
+          return sum + (dna?.effectivePrice ?? item.price);
+        }, 0);
+        const canAffordAll = totalCost <= remaining;
+        return canAffordAll ? (
+          <div className="flex justify-end mb-2">
+            <button
+              onClick={() => {
+                for (const item of displayItems) {
+                  handleBuy(item, 1);
+                }
+                toast(
+                  t("catalog.buyAllDone", locale, { count: displayItems.length }),
+                  3000
+                );
+              }}
+              className="px-3 py-1.5 rounded-lg text-[10px] font-medium uppercase tracking-wider
+                bg-[#9B6B6B]/10 text-[#9B6B6B] border border-[#9B6B6B]/20
+                hover:bg-[#9B6B6B]/15 transition-all flex items-center gap-1.5"
+            >
+              <span>💥</span>
+              {t("catalog.buyAllTier", locale, { tier: tierLabel(activeTier, locale) })}
+              <span className="font-mono text-[9px] text-[#9B6B6B]/70">
+                ({formatCurrency(totalCost, true)})
+              </span>
+            </button>
+          </div>
+        ) : null;
+      })()}
 
       {/* Item grid */}
       <div
