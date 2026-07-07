@@ -56,8 +56,12 @@ import { SpendingSummaryPopup } from "@/components/spending-summary-popup";
 import { SocialProof } from "@/components/social-proof";
 import { DoubleOrNothing } from "@/components/double-or-nothing";
 import { WealthTicker } from "@/components/wealth-ticker";
+import { WealthRelativity } from "@/components/wealth-relativity";
 
 // ─── Lazy-loaded below-fold components (with skeleton loading states) ─
+const FortuneEvents = dynamic(() => import("@/components/fortune-events").then(m => ({ default: m.FortuneEvents })), { ssr: false, loading: () => <SectionSkeleton lines={4} /> });
+const MoneyScale = dynamic(() => import("@/components/money-scale").then(m => ({ default: m.MoneyScale })), { ssr: false, loading: () => <SectionSkeleton lines={3} /> });
+const WishlistSection = dynamic(() => import("@/components/wishlist").then(m => ({ default: m.Wishlist })), { ssr: false, loading: () => <SectionSkeleton lines={3} /> });
 const YoloMode = dynamic(() => import("@/components/yolo-mode").then(m => ({ default: m.YoloMode })), { ssr: false, loading: () => <SectionSkeleton lines={3} /> });
 const PriceIsRight = dynamic(() => import("@/components/price-is-right").then(m => ({ default: m.PriceIsRight })), { ssr: false, loading: () => <SectionSkeleton lines={4} /> });
 const ImpulseAisle = dynamic(() => import("@/components/impulse-aisle").then(m => ({ default: m.ImpulseAisle })), { ssr: false, loading: () => <SectionSkeleton lines={3} /> });
@@ -269,6 +273,11 @@ export default function Home() {
               <EarnBackTimer />
             </SectionErrorBoundary>
 
+            {/* Fortune Events — random wealth events that affect the fortune */}
+            <SectionErrorBoundary section="Fortune Events" silent>
+              <FortuneEvents />
+            </SectionErrorBoundary>
+
             {/* Billionaire Profile — wealth DNA, signature purchases, SEC filings */}
             <section data-section="profile" className="card-panel p-5 sm:p-8 stagger-section">
               <SectionErrorBoundary section="Billionaire Profile">
@@ -279,6 +288,11 @@ export default function Home() {
             {/* Billionaire Comparison — side-by-side duel */}
             <SectionErrorBoundary section="Compare Card" silent>
               <CompareCard />
+            </SectionErrorBoundary>
+
+            {/* Wealth Relativity — enter your salary, see spending in your terms */}
+            <SectionErrorBoundary section="Wealth Relativity" silent>
+              <WealthRelativity />
             </SectionErrorBoundary>
 
             {/* Balance — accent left border */}
@@ -414,6 +428,11 @@ export default function Home() {
               <SpendingHeatmap />
             </SectionErrorBoundary>
 
+            {/* Money Scale — physical size of your spending in $100 bills */}
+            <SectionErrorBoundary section="Money Scale" silent>
+              <MoneyScale />
+            </SectionErrorBoundary>
+
             {/* Purchase Bingo — complete rows by buying across categories */}
             <SectionErrorBoundary section="Purchase Bingo" silent>
               <PurchaseBingo />
@@ -490,6 +509,11 @@ export default function Home() {
             {/* Price Negotiator — haggle for deals */}
             <SectionErrorBoundary section="Price Negotiator" silent>
               <PriceNegotiator />
+            </SectionErrorBoundary>
+
+            {/* Wishlist — starred catalog items for batch buying */}
+            <SectionErrorBoundary section="Wishlist" silent>
+              <WishlistSection onPurchase={handlePurchase} />
             </SectionErrorBoundary>
 
             {/* Quick Buy Catalog — full width */}

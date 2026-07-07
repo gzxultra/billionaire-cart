@@ -9,9 +9,40 @@ import { t, tierLabel } from "@/lib/i18n";
 import { formatModifier } from "@/lib/wealth-dna";
 import { useTilt } from "@/lib/use-tilt";
 import { toast } from "@/lib/use-toast";
+import { useWishlistStore } from "@/components/wishlist";
 
 const QUANTITY_OPTIONS = [1, 10, 100, 1000, "MAX"] as const;
 type QuantityOption = (typeof QUANTITY_OPTIONS)[number];
+
+// ─── Wishlist Star Button ─────────────────────────────────────────
+function WishlistStar({ itemId }: { itemId: string }) {
+  const add = useWishlistStore((s) => s.add);
+  const remove = useWishlistStore((s) => s.remove);
+  const has = useWishlistStore((s) => s.has);
+  const isInWishlist = has(itemId);
+
+  return (
+    <motion.button
+      onClick={(e) => {
+        e.stopPropagation();
+        if (isInWishlist) {
+          remove(itemId);
+        } else {
+          add(itemId);
+        }
+      }}
+      whileTap={{ scale: 0.8 }}
+      className={`text-sm transition-colors ${
+        isInWishlist
+          ? "text-champagne"
+          : "text-ash/25 hover:text-champagne/50"
+      }`}
+      title={isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
+    >
+      {isInWishlist ? "★" : "☆"}
+    </motion.button>
+  );
+}
 
 // ─── Animated Price Counter ───────────────────────────────────────
 function AnimatedPrice({
@@ -286,8 +317,9 @@ function CatalogItemCardInner({
         )}
       </AnimatePresence>
 
-      {/* Tier badge + purchase count */}
+      {/* Tier badge + purchase count + wishlist star */}
       <div className="absolute top-2 right-2 flex items-center gap-1">
+        <WishlistStar itemId={item.id} />
         {purchaseCount > 0 && (
           <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-champagne/15 text-champagne border border-champagne/25 font-mono font-medium tabular-nums">
             ×{purchaseCount.toLocaleString()}
