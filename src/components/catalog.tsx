@@ -17,6 +17,7 @@ import { Roulette } from "./roulette";
 import { StaffPicks } from "./staff-picks";
 import { PriceRangeSlider } from "./price-range-slider";
 import { CoinFlip } from "./coin-flip";
+import { triggerHaptic } from "@/lib/haptics";
 
 type SortMode = "default" | "priceAsc" | "priceDesc" | "name";
 
@@ -142,6 +143,7 @@ export function Catalog({ onPurchase }: CatalogProps) {
       if (soundEnabled) {
         playTieredPurchase(totalCost);
       }
+      triggerHaptic(totalCost > 1_000_000 ? "heavy" : "medium");
       setShowBurst(true);
       setTimeout(() => setShowBurst(false), 1500);
 

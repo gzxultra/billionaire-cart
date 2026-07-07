@@ -10,6 +10,7 @@ import { ParticleBurst } from "@/components/particle-burst";
 import { useLocale } from "@/lib/use-locale";
 import { t } from "@/lib/i18n";
 import { applyWealthDna, formatModifier } from "@/lib/wealth-dna";
+import { triggerHaptic } from "@/lib/haptics";
 
 interface CheckoutAnimationProps {
   product: ParsedProduct;
@@ -39,12 +40,14 @@ export function CheckoutAnimation({
     const t2 = setTimeout(() => {
       setPhase("authorize");
       if (soundEnabled) playAuthorize();
+      triggerHaptic("medium");
     }, 1600);
 
     // Phase 3: Authorized + particle burst (1.8s)
     const t3 = setTimeout(() => {
       setPhase("done");
       if (soundEnabled) playSparkle();
+      triggerHaptic("success");
     }, 1800);
 
     // Phase 4: Dismiss (2.8s)

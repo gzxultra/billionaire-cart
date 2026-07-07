@@ -59,6 +59,7 @@ import { DoubleOrNothing } from "@/components/double-or-nothing";
 import { WealthTicker } from "@/components/wealth-ticker";
 import { WealthRelativity } from "@/components/wealth-relativity";
 import { KonamiCode } from "@/components/konami-code";
+import { DangerZone } from "@/components/danger-zone";
 
 // ─── Lazy-loaded below-fold components (with skeleton loading states) ─
 const FortuneEvents = dynamic(() => import("@/components/fortune-events").then(m => ({ default: m.FortuneEvents })), { ssr: false, loading: () => <SectionSkeleton lines={4} /> });
@@ -112,6 +113,7 @@ const SpendingAutopilot = dynamic(() => import("@/components/spending-autopilot"
 const TimeMachine = dynamic(() => import("@/components/time-machine").then(m => ({ default: m.TimeMachine })), { ssr: false, loading: () => <SectionSkeleton lines={3} /> });
 const FortuneWheel = dynamic(() => import("@/components/fortune-wheel").then(m => ({ default: m.FortuneWheel })), { ssr: false, loading: () => <SectionSkeleton lines={4} /> });
 const SpendingSnapshot = dynamic(() => import("@/components/spending-snapshot").then(m => ({ default: m.SpendingSnapshot })), { ssr: false, loading: () => <SectionSkeleton lines={3} /> });
+const SpeedShop = dynamic(() => import("@/components/speed-shop").then(m => ({ default: m.SpeedShop })), { ssr: false, loading: () => <SectionSkeleton lines={4} /> });
 
 export default function Home() {
   const selectedBillionaire = useCartStore((s) => s.selectedBillionaire);
@@ -412,6 +414,11 @@ export default function Home() {
             {/* What If Calculator — absurd purchase multiplication scenarios */}
             <SectionErrorBoundary section="What If Calculator" silent>
               <WhatIfCalculator />
+            </SectionErrorBoundary>
+
+            {/* Speed Shopping — Tinder-style swipe card mini-game */}
+            <SectionErrorBoundary section="Speed Shop" silent>
+              <SpeedShop />
             </SectionErrorBoundary>
 
             {/* Fortune Wheel — spin to randomly spend */}
@@ -771,6 +778,9 @@ export default function Home() {
 
       {/* Money Rain — animated cash falling on large purchases */}
       <MoneyRain />
+
+      {/* Spending Danger Zone — pulsing visual warning at high spend thresholds */}
+      <DangerZone />
 
       {/* Konami Code — secret God Mode easter egg (↑↑↓↓←→←→BA) */}
       <KonamiCode />
