@@ -229,10 +229,16 @@ export function OmniBox() {
   const handleAuthorize = (qty: number = 1) => {
     if (!product || !selectedBillionaire) return;
     setPurchaseQty(qty);
+    // Fast checkout: skip animation, process immediately
+    const fastCheckout = useCartStore.getState().fastCheckout;
+    if (fastCheckout) {
+      handleCheckoutComplete(qty);
+      return;
+    }
     setShowCheckout(true);
   };
 
-  const handleCheckoutComplete = () => {
+  const handleCheckoutComplete = (overrideQty?: number) => {
     if (!product || !selectedBillionaire) return;
 
     // Apply Wealth DNA modifiers to the price
@@ -249,7 +255,7 @@ export function OmniBox() {
       : product;
 
     // Batch add purchases for selected quantity
-    const actualQty = Math.max(1, purchaseQty);
+    const actualQty = Math.max(1, overrideQty ?? purchaseQty);
     let lastUnlocked: string[] = [];
     for (let i = 0; i < actualQty; i++) {
       lastUnlocked = addPurchase({

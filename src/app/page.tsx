@@ -53,6 +53,8 @@ import { SectionNav } from "@/components/section-nav";
 import { SpendingLevel } from "@/components/spending-level";
 import { PurchaseImpact } from "@/components/purchase-impact";
 import { SpendingSummaryPopup } from "@/components/spending-summary-popup";
+import { SocialProof } from "@/components/social-proof";
+import { DoubleOrNothing } from "@/components/double-or-nothing";
 
 // ─── Lazy-loaded below-fold components (with skeleton loading states) ─
 const YoloMode = dynamic(() => import("@/components/yolo-mode").then(m => ({ default: m.YoloMode })), { ssr: false, loading: () => <SectionSkeleton lines={3} /> });
@@ -88,11 +90,14 @@ const SpendingGauge = dynamic(() => import("@/components/spending-gauge").then(m
 const ScratchCard = dynamic(() => import("@/components/scratch-card").then(m => ({ default: m.ScratchCard })), { ssr: false, loading: () => <SectionSkeleton lines={4} /> });
 const ErosionChart = dynamic(() => import("@/components/erosion-chart").then(m => ({ default: m.ErosionChart })), { ssr: false, loading: () => <SectionSkeleton lines={3} /> });
 const PhilanthropicImpact = dynamic(() => import("@/components/philanthropic-impact").then(m => ({ default: m.PhilanthropicImpact })), { ssr: false, loading: () => <SectionSkeleton lines={3} /> });
+const SpendingLeaderboard = dynamic(() => import("@/components/spending-leaderboard").then(m => ({ default: m.SpendingLeaderboard })), { ssr: false, loading: () => <SectionSkeleton lines={4} /> });
 
 export default function Home() {
   const selectedBillionaire = useCartStore((s) => s.selectedBillionaire);
   const soundEnabled = useCartStore((s) => s.soundEnabled);
   const toggleSound = useCartStore((s) => s.toggleSound);
+  const fastCheckout = useCartStore((s) => s.fastCheckout);
+  const toggleFastCheckout = useCartStore((s) => s.toggleFastCheckout);
   const reset = useCartStore((s) => s.reset);
   const locale = useLocale((s) => s.locale);
   const toggleLocale = useLocale((s) => s.toggleLocale);
@@ -180,6 +185,15 @@ export default function Home() {
               {locale === "en" ? "中" : "EN"}
             </button>
             <ShareReceipt />
+            <button
+              onClick={toggleFastCheckout}
+              className={`text-sm transition-colors ${fastCheckout ? "text-champagne/80" : "text-ash/70 hover:text-stone/75"}`}
+              title={fastCheckout ? (locale === "zh" ? "关闭快速结账" : "Disable fast checkout") : (locale === "zh" ? "开启快速结账" : "Enable fast checkout")}
+              aria-label={fastCheckout ? (locale === "zh" ? "关闭快速结账" : "Disable fast checkout") : (locale === "zh" ? "开启快速结账" : "Enable fast checkout")}
+              aria-pressed={fastCheckout}
+            >
+              {fastCheckout ? "⚡" : "🐌"}
+            </button>
             <button
               onClick={toggleSound}
               className="text-ash/70 hover:text-stone/75 transition-colors text-sm"
@@ -406,6 +420,11 @@ export default function Home() {
               <ShoppingPersonality />
             </SectionErrorBoundary>
 
+            {/* Spending Leaderboard — competitive fake global rankings */}
+            <SectionErrorBoundary section="Spending Leaderboard" silent>
+              <SpendingLeaderboard />
+            </SectionErrorBoundary>
+
             {/* Spending Equivalences — fun "your spending = X Big Macs" comparison */}
             <section className="card-panel p-5 sm:p-8 stagger-section">
               <SectionErrorBoundary section="Spending Equivalences" silent>
@@ -620,6 +639,12 @@ export default function Home() {
 
       {/* Section Navigator — floating minimap */}
       <SectionNav />
+
+      {/* Social proof — fake "other shoppers" activity bubbles */}
+      <SocialProof />
+
+      {/* Double or Nothing — coin flip gamble after every 3rd purchase */}
+      <DoubleOrNothing />
     </main>
   );
 }
