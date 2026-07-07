@@ -125,6 +125,7 @@ interface CatalogItemCardProps {
   purchaseCount: number;
   billionaireNetWorth: number;
   earningsPerSecond: number;
+  blindMode?: boolean;
 }
 
 function CatalogItemCardInner({
@@ -138,6 +139,7 @@ function CatalogItemCardInner({
   purchaseCount,
   billionaireNetWorth,
   earningsPerSecond,
+  blindMode,
 }: CatalogItemCardProps) {
   const locale = useLocale((s) => s.locale);
   const [buyingFlash, setBuyingFlash] = useState(false);
@@ -343,7 +345,11 @@ function CatalogItemCardInner({
 
       {/* Price + DNA modifier */}
       <div className="mt-2">
-        {isFree ? (
+        {blindMode ? (
+          <span className="text-sm font-serif text-stone/60 tracking-wider animate-pulse">
+            ???
+          </span>
+        ) : isFree ? (
           <div className="flex items-center gap-1.5">
             <span className="text-sm font-serif text-sage font-medium">
               FREE
@@ -378,7 +384,7 @@ function CatalogItemCardInner({
       </div>
 
       {/* Salary Perspective + Time to Earn */}
-      {(salaryLabel || earnLabel) && (
+      {!blindMode && (salaryLabel || earnLabel) && (
         <div className="mt-0.5 space-y-0">
           {salaryLabel && (
             <div className="text-[9px] text-ash/55 font-mono italic truncate">{salaryLabel}</div>
@@ -390,6 +396,7 @@ function CatalogItemCardInner({
       )}
 
       {/* Quantity selector */}
+      {!blindMode && (
       <div className="flex gap-1 mt-2 flex-wrap">
         {QUANTITY_OPTIONS.map((q) => {
           if (q === "MAX") {
@@ -447,6 +454,7 @@ function CatalogItemCardInner({
           );
         })}
       </div>
+      )}
 
       {/* Buy button — click to buy, hold to rapid-buy */}
       <motion.button
@@ -473,6 +481,8 @@ function CatalogItemCardInner({
       >
         {buyingFlash ? (
           "✓"
+        ) : blindMode ? (
+          locale === "zh" ? "🙈 盲买" : "🙈 Blind Buy"
         ) : currentQty === "MAX" ? (
           <>
             {t("catalog.buyMax", locale)} ({qty.toLocaleString()}) —{" "}
@@ -505,6 +515,7 @@ export const CatalogItemCard = memo(CatalogItemCardInner, (prev, next) => {
     prev.remaining === next.remaining &&
     prev.purchaseCount === next.purchaseCount &&
     prev.billionaireNetWorth === next.billionaireNetWorth &&
-    prev.earningsPerSecond === next.earningsPerSecond
+    prev.earningsPerSecond === next.earningsPerSecond &&
+    prev.blindMode === next.blindMode
   );
 });

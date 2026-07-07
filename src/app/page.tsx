@@ -99,6 +99,10 @@ const SpendingLeaderboard = dynamic(() => import("@/components/spending-leaderbo
 const WealthTrivia = dynamic(() => import("@/components/wealth-trivia").then(m => ({ default: m.WealthTrivia })), { ssr: false, loading: () => <SectionSkeleton lines={4} /> });
 const SpendingSlotMachine = dynamic(() => import("@/components/slot-machine").then(m => ({ default: m.SpendingSlotMachine })), { ssr: false, loading: () => <SectionSkeleton lines={4} /> });
 const BillionaireGiftExchange = dynamic(() => import("@/components/billionaire-gifts").then(m => ({ default: m.BillionaireGiftExchange })), { ssr: false, loading: () => <SectionSkeleton lines={4} /> });
+const SpendingConfessions = dynamic(() => import("@/components/spending-confessions").then(m => ({ default: m.SpendingConfessions })), { ssr: false, loading: () => <SectionSkeleton lines={4} /> });
+const RegretMeter = dynamic(() => import("@/components/regret-meter").then(m => ({ default: m.RegretMeter })), { ssr: false });
+const BlindBuyReveal = dynamic(() => import("@/components/blind-buy-reveal").then(m => ({ default: m.BlindBuyReveal })), { ssr: false });
+const MoneyRain = dynamic(() => import("@/components/money-rain").then(m => ({ default: m.MoneyRain })), { ssr: false });
 
 export default function Home() {
   const selectedBillionaire = useCartStore((s) => s.selectedBillionaire);
@@ -106,6 +110,8 @@ export default function Home() {
   const toggleSound = useCartStore((s) => s.toggleSound);
   const fastCheckout = useCartStore((s) => s.fastCheckout);
   const toggleFastCheckout = useCartStore((s) => s.toggleFastCheckout);
+  const blindMode = useCartStore((s) => s.blindMode);
+  const toggleBlindMode = useCartStore((s) => s.toggleBlindMode);
   const reset = useCartStore((s) => s.reset);
   const locale = useLocale((s) => s.locale);
   const toggleLocale = useLocale((s) => s.toggleLocale);
@@ -203,6 +209,15 @@ export default function Home() {
               {fastCheckout ? "⚡" : "🐌"}
             </button>
             <button
+              onClick={toggleBlindMode}
+              className={`text-sm transition-colors ${blindMode ? "text-champagne/80" : "text-ash/70 hover:text-stone/75"}`}
+              title={blindMode ? (locale === "zh" ? "关闭盲买模式" : "Disable blind buy") : (locale === "zh" ? "开启盲买模式" : "Enable blind buy")}
+              aria-label={blindMode ? (locale === "zh" ? "关闭盲买模式" : "Disable blind buy") : (locale === "zh" ? "开启盲买模式" : "Enable blind buy")}
+              aria-pressed={blindMode}
+            >
+              {blindMode ? "🙈" : "👁"}
+            </button>
+            <button
               onClick={toggleSound}
               className="text-ash/70 hover:text-stone/75 transition-colors text-sm"
               title={soundEnabled ? "Mute" : "Unmute"}
@@ -256,6 +271,11 @@ export default function Home() {
             {/* Spending Level — dynamic title based on spending percentage */}
             <SectionErrorBoundary section="Spending Level" silent>
               <SpendingLevel />
+            </SectionErrorBoundary>
+
+            {/* Regret Meter — escalating buyer's remorse visualization */}
+            <SectionErrorBoundary section="Regret Meter" silent>
+              <RegretMeter />
             </SectionErrorBoundary>
 
             {/* Wealth Ticker — Bloomberg-style real-time net worth tape */}
@@ -451,6 +471,11 @@ export default function Home() {
             {/* Session Report — gamified session statistics */}
             <SectionErrorBoundary section="Session Report" silent>
               <SessionReport />
+            </SectionErrorBoundary>
+
+            {/* Spending Confessions — humorous auto-generated confession cards */}
+            <SectionErrorBoundary section="Spending Confessions" silent>
+              <SpendingConfessions />
             </SectionErrorBoundary>
 
             {/* Shopping Personality — fun archetype reveal based on purchase patterns */}
@@ -693,6 +718,12 @@ export default function Home() {
 
       {/* Double or Nothing — coin flip gamble after every 3rd purchase */}
       <DoubleOrNothing />
+
+      {/* Blind Buy Reveal — dramatic price reveal when buying in blind mode */}
+      <BlindBuyReveal />
+
+      {/* Money Rain — animated cash falling on large purchases */}
+      <MoneyRain />
     </main>
   );
 }

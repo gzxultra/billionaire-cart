@@ -16,6 +16,7 @@ interface CartState {
   achievements: Achievement[];
   soundEnabled: boolean;
   fastCheckout: boolean;
+  blindMode: boolean;
   savedProducts: SavedProduct[];
   activeParsedProduct: ParsedProduct | null;
   selectBillionaire: (id: string) => void;
@@ -23,6 +24,7 @@ interface CartState {
   removePurchase: (id: string) => void;
   toggleSound: () => void;
   toggleFastCheckout: () => void;
+  toggleBlindMode: () => void;
   reset: () => void;
   saveProduct: (product: ParsedProduct) => void;
   removeSavedProduct: (id: string) => void;
@@ -50,6 +52,7 @@ export const useCartStore = create<CartState>()(
       achievements: defaultAchievements,
       soundEnabled: true,
       fastCheckout: false,
+      blindMode: false,
       savedProducts: [],
       activeParsedProduct: null,
 
@@ -75,6 +78,8 @@ export const useCartStore = create<CartState>()(
       toggleSound: () => set({ soundEnabled: !get().soundEnabled }),
 
       toggleFastCheckout: () => set({ fastCheckout: !get().fastCheckout }),
+
+      toggleBlindMode: () => set({ blindMode: !get().blindMode }),
 
       reset: () =>
         set({
@@ -138,6 +143,7 @@ export const useCartStore = create<CartState>()(
         achievements: state.achievements,
         soundEnabled: state.soundEnabled,
         fastCheckout: state.fastCheckout,
+        blindMode: state.blindMode,
         savedProducts: state.savedProducts,
       }),
     }

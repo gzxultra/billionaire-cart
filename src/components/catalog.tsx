@@ -29,6 +29,7 @@ export function Catalog({ onPurchase }: CatalogProps) {
   const selectedBillionaire = useCartStore((s) => s.selectedBillionaire);
   const addPurchase = useCartStore((s) => s.addPurchase);
   const soundEnabled = useCartStore((s) => s.soundEnabled);
+  const blindMode = useCartStore((s) => s.blindMode);
   const remaining = useCartStore(selectRemaining);
 
   const purchases = useCartStore((s) => s.purchases);
@@ -336,6 +337,7 @@ export function Catalog({ onPurchase }: CatalogProps) {
                 purchaseCount={purchaseCountMap.get(item.id) || 0}
                 billionaireNetWorth={selectedBillionaire.netWorthB * 1_000_000_000}
                 earningsPerSecond={selectedBillionaire.earningsPerSecond}
+                blindMode={blindMode}
               />
             );
           })}
